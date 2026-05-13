@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createServerClient } from '@/lib/supabase'
-import { InquiryModal } from '@/features/inquiries'
 import { formatPrice, getWhatsAppUrl } from '@/lib/utils'
 import type { TrainerProfile } from '@/features/trainers/types'
+import { InquiryButtonClient } from '@/features/search/components/InquiryButtonClient'
 
 // ISR: revalidate each profile page every hour
 export const revalidate = 3600
@@ -15,15 +15,8 @@ interface PageProps {
 
 /* ── Generate static params for top trainers at build time ── */
 export async function generateStaticParams() {
-  const supabase = await createServerClient()
-  const { data } = await supabase
-    .from('trainer_profiles')
-    .select('slug')
-    .eq('is_published', true)
-    .eq('approval_status', 'approved')
-    .order('avg_rating', { ascending: false })
-    .limit(100)
-  return (data ?? []).map(t => ({ slug: t.slug }))
+  // Skip static generation for now — use ISR instead
+  return []
 }
 
 /* ── Dynamic SEO metadata per trainer ───────────────────── */
@@ -272,20 +265,6 @@ export default async function TrainerProfilePage({ params }: PageProps) {
           </div>
         </div>
       </div>
-    </>
-  )
-}
-
-/* ── Inquiry button — client component ──────────────────── */
-function InquiryButtonClient({ trainerName, trainerId }: { trainerName: string; trainerId: string }) {
-  'use client'
-  const [open, setOpen] = (typeof window !== 'undefined' ? require('react') : { useState: () => [false, () => {}] }).useState(false)
-  return (
-    <>
-      <button onClick={() => setOpen(true)} className="btn btn-outline" style={{ width: '100%', justifyContent: 'center', borderRadius: 'var(--radius-md)' }}>
-        📩 Send inquiry
-      </button>
-      <InquiryModal trainerName={trainerName} trainerId={trainerId} isOpen={open} onClose={() => setOpen(false)} />
     </>
   )
 }

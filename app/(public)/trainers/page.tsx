@@ -17,17 +17,20 @@ interface PageProps {
 }
 
 async function getTrainers(filters: TrainerSearchFilters): Promise<{ data: TrainerCardType[]; total: number }> {
+  console.log('🔍 getTrainers called with filters:', filters)
+  
   try {
     const supabase = await createServerClient()
 
     let query = supabase
       .from('trainer_profiles')
       .select(`
-        id, slug, tagline, avatar_url, location_state, location_city,
+        id, slug, tagline, location_state, location_city,
         is_online, is_offline, is_verified_hrdf, is_featured,
         pricing_mode, pricing_from, pricing_to, whatsapp_number,
         avg_rating, review_count, years_experience,
-        users!inner(full_name),
+        user_id,
+        users(full_name),
         trainer_topics(topics(id, name, slug))
       `, { count: 'exact' })
       .eq('is_published', true)
@@ -53,9 +56,17 @@ async function getTrainers(filters: TrainerSearchFilters): Promise<{ data: Train
     const limit = filters.limit ?? 12
     query = query.range((page - 1) * limit, page * limit - 1)
 
-    const { data, count } = await query
+    const { data, count, error } = await query
+    
+    if (error) {
+      console.error('❌ SUPABASE ERROR:', JSON.stringify(error, null, 2))
+    } else {
+      console.log('✅ Query OK — count:', count, 'rows:', data?.length)
+    }
+    
     return { data: (data ?? []) as unknown as TrainerCardType[], total: count ?? 0 }
-  } catch {
+  } catch (err) {
+    console.error('❌ EXCEPTION:', err)
     return { data: [], total: 0 }
   }
 }
@@ -137,22 +148,21 @@ export default async function TrainersPage({ searchParams }: PageProps) {
 
             <div className="section-label">Verification</div>
             {[
-              { label: 'HRDF verified', name: 'verified', value: 'true' },
-              { label: 'Top rated (4.8+)', name: 'top', value: 'true' },
+              { label: 'HRDF verified', name: 'verified' },
+              { label: 'Top rated (4.8+)', name: 'top' },
             ].map(f => (
               <label key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer' }}>
-                <input type="checkbox" name={f.name} value={f.value} style={{ accentColor: 'var(--color-accent)' }} />
+                <input type="checkbox" name={f.name} style={{ accentColor: 'var(--color-accent)' }} />
                 {f.label}
               </label>
             ))}
-
             <div className="section-label" style={{ marginTop: 'var(--space-4)' }}>Delivery</div>
             {[
               { label: 'Online', name: 'online' },
               { label: 'Offline / On-site', name: 'offline' },
             ].map(f => (
               <label key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer' }}>
-                <input type="checkbox" name={f.name} value="true" style={{ accentColor: 'var(--color-accent)' }} />
+                <input type="checkbox" name={f.name} style={{ accentColor: 'var(--color-accent)' }} />
                 {f.label}
               </label>
             ))}
@@ -191,3 +201,5 @@ export default async function TrainersPage({ searchParams }: PageProps) {
     </div>
   )
 }
+
+

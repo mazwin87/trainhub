@@ -57,10 +57,7 @@ export interface TrainerProfile {
 export interface TrainerCard {
   id: string
   slug: string
-  full_name: string
   tagline: string
-  avatar_url: string | null
-  initials: string
   location_state: string
   location_city: string
   is_online: boolean
@@ -74,8 +71,11 @@ export interface TrainerCard {
   avg_rating: number
   review_count: number
   years_experience: number
-  topics: Pick<Topic, 'id' | 'name' | 'slug'>[]
+  topics: { id: string; name: string; slug: string }[]
   languages: string[]
+  // Add these:
+  full_name?: string
+  users?: { full_name: string }
 }
 
 /* ── TOPIC / SPECIALISATION ──────────────────────────────── */

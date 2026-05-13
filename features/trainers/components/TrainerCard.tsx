@@ -9,8 +9,9 @@ interface Props {
 }
 
 export function TrainerCard({ trainer }: Props) {
-  const visibleTopics = trainer.topics.slice(0, 3)
-  const extraCount = trainer.topics.length - 3
+  const topics = trainer.topics ?? []
+  const visibleTopics = topics.slice(0, 3)
+  const extraCount = topics.length - 3
 
   return (
     <Link href={`/trainers/${trainer.slug}`} className="block">
@@ -33,7 +34,7 @@ export function TrainerCard({ trainer }: Props) {
               />
             ) : (
               <span style={{ fontFamily: 'var(--font-display)' }}>
-                {trainer.full_name.slice(0, 2).toUpperCase()}
+                {(trainer.full_name || trainer.users?.full_name || 'T').slice(0, 2).toUpperCase()}
               </span>
             )}
           </div>
@@ -45,7 +46,7 @@ export function TrainerCard({ trainer }: Props) {
                 fontSize: 'var(--text-md)',
               }}
             >
-              {trainer.full_name}
+              {trainer.full_name || trainer.users?.full_name || 'Trainer'}
             </h3>
             <p
               className="text-muted mt-0.5"
@@ -71,7 +72,7 @@ export function TrainerCard({ trainer }: Props) {
 
         {/* Topics */}
         <div className="flex flex-wrap gap-1.5 mb-4">
-          {visibleTopics.map((topic) => (
+          {visibleTopics.map((topic: any) => (
             <span key={topic.id} className="badge badge-tag">
               {topic.name}
             </span>
@@ -111,19 +112,23 @@ export function TrainerCard({ trainer }: Props) {
           </div>
 
           {trainer.whatsapp_number && (
-            <a
-              href={getWhatsAppUrl(
-                trainer.whatsapp_number,
-                `Hi, I found your profile on TrainHub Malaysia and I'm interested in your training services.`
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                window.open(
+                  getWhatsAppUrl(
+                    trainer.whatsapp_number!,
+                    `Hi, I found your profile on TrainHub Malaysia and I'm interested in your training services.`
+                  ),
+                  '_blank'
+                )
+              }}
               className="btn btn-cta"
               style={{ fontSize: 'var(--text-xs)', padding: '0.35rem 0.85rem' }}
             >
               WhatsApp
-            </a>
+            </button>
           )}
         </div>
       </article>
