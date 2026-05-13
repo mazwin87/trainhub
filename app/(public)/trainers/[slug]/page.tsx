@@ -23,11 +23,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const supabase = await createServerClient()
-  const { data: trainer } = await supabase
+  const { data: trainer } = (await supabase
     .from('trainer_profiles')
     .select('users!inner(full_name), tagline, bio, location_state, trainer_topics(topics(name))')
     .eq('slug', slug)
-    .single()
+    .single()) as { data: any }
 
   if (!trainer) return { title: 'Trainer not found' }
 

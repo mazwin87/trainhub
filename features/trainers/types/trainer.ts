@@ -71,11 +71,11 @@ export interface TrainerCard {
   avg_rating: number
   review_count: number
   years_experience: number
-  topics: { id: string; name: string; slug: string }[]
-  languages: string[]
-  // Add these:
+  avatar_url?: string
   full_name?: string
   users?: { full_name: string }
+  topics: { id: string; name: string; slug: string }[]
+  languages: string[]
 }
 
 /* ── TOPIC / SPECIALISATION ──────────────────────────────── */
