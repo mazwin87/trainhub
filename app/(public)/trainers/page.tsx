@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { createServerClient } from '@/lib/supabase'
+import { createServerClient } from '@/lib/supabase/server'
 import { TrainerCard } from '@/features/trainers/components'
 import { FilterBarClient } from '@/features/search/components/FilterBarClient'
 import type { TrainerCard as TrainerCardType, TrainerSearchFilters } from '@/features/trainers/types'

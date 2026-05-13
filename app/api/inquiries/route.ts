@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@/lib/supabase'
+import { createServerClient } from '@/lib/supabase/server'
 
 // Rate limit: simple in-memory store (use Upstash Redis in production)
 const rateLimitMap = new Map<string, { count: number; reset: number }>()

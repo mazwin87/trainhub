@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { createServerClient } from '@/lib/supabase'
+import { createServerClient } from '@/lib/supabase/server'
 import { TrainerCard } from '@/features/trainers/components'
 import type { TrainerCard as TrainerCardType } from '@/features/trainers/types'
 import { TRAINER_TOPICS, MALAYSIAN_STATES } from '@/types'
