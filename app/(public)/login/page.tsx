@@ -18,7 +18,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    // Auto-dismiss success message after 5 seconds
     if (registered) {
       const timer = setTimeout(() => {
         window.history.replaceState({}, '', '/login')
@@ -42,15 +41,26 @@ export default function LoginPage() {
     try {
       const supabase = createBrowserClient()
 
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       })
 
       if (signInError) throw signInError
+      if (!authData.user) throw new Error('Login failed')
 
-      // Redirect to dashboard
-      router.push('/trainer/dashboard')
+      // Check if trainer profile is approved
+      const { data: profile } = await supabase
+        .from('trainer_profiles' as any)
+        .select('approval_status')
+        .eq('user_id', authData.user.id)
+        .single() as { data: { approval_status: string } | null }
+
+      if (profile?.approval_status === 'approved') {
+        router.push('/trainer/dashboard')
+      } else {
+        router.push('/trainer/pending')
+      }
     } catch (err) {
       setError((err as Error).message)
     } finally {
