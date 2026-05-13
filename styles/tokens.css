@@ -1,0 +1,154 @@
+/* ============================================================
+   TRAINHUB MALAYSIA — DESIGN TOKENS
+   Single source of truth. To retheme the entire site,
+   only edit values in this file.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+
+  /* ── COLOURS: Brand ─────────────────────────────────────── */
+  --color-accent:           #c17d3c;   /* amber — primary brand */
+  --color-accent-light:     #f5ebe0;   /* amber tint */
+  --color-accent-dark:      #9a5e28;   /* amber shade (hover) */
+
+  --color-cta:              #1D9E75;   /* green — CTA / WhatsApp */
+  --color-cta-dark:         #0f6e56;   /* green shade (hover) */
+  --color-cta-light:        #e1f5ee;   /* green tint */
+
+  /* ── COLOURS: Neutrals ──────────────────────────────────── */
+  --color-bg:               #faf8f4;   /* warm cream — page background */
+  --color-surface:          #ffffff;   /* card / panel background */
+  --color-surface-alt:      #f0ebe4;   /* subtle surface (tags, inputs) */
+  --color-ink:              #1a1714;   /* near-black — primary text */
+  --color-muted:            #6b6560;   /* secondary text */
+  --color-subtle:           #a09890;   /* tertiary text / placeholders */
+  --color-border:           #e8e3db;   /* default border */
+  --color-border-strong:    #d4cec6;   /* stronger border (focus, hover) */
+
+  /* ── COLOURS: Semantic ──────────────────────────────────── */
+  --color-verified:         #e1f5ee;   /* HRDF badge background */
+  --color-verified-text:    #085041;
+  --color-featured:         #eeedfe;   /* featured badge background */
+  --color-featured-text:    #3c3489;
+  --color-top:              #faeeda;   /* top-rated badge background */
+  --color-top-text:         #633806;
+  --color-error:            #fcebeb;
+  --color-error-text:       #791f1f;
+
+  /* ── TYPOGRAPHY ─────────────────────────────────────────── */
+  --font-display:           'Playfair Display', Georgia, serif;
+  --font-body:              'DM Sans', system-ui, sans-serif;
+  --font-mono:              'Fira Code', 'Courier New', monospace;
+
+  --text-xs:                0.72rem;   /* 11.5px — labels, badges */
+  --text-sm:                0.82rem;   /* 13px   — secondary body */
+  --text-base:              0.92rem;   /* 14.7px — primary body */
+  --text-md:                1.05rem;   /* 16.8px — large body */
+  --text-lg:                1.25rem;   /* 20px   — section headings */
+  --text-xl:                1.6rem;    /* 25.6px — page headings */
+  --text-2xl:               2.2rem;    /* 35px   — hero headings */
+  --text-3xl:               3rem;      /* 48px   — display */
+
+  --leading-tight:          1.25;
+  --leading-body:           1.65;
+  --leading-relaxed:        1.8;
+
+  --weight-light:           300;
+  --weight-regular:         400;
+  --weight-medium:          500;
+
+  /* ── SPACING ────────────────────────────────────────────── */
+  --space-1:                0.25rem;   /* 4px  */
+  --space-2:                0.5rem;    /* 8px  */
+  --space-3:                0.75rem;   /* 12px */
+  --space-4:                1rem;      /* 16px */
+  --space-5:                1.25rem;   /* 20px */
+  --space-6:                1.5rem;    /* 24px */
+  --space-8:                2rem;      /* 32px */
+  --space-10:               2.5rem;    /* 40px */
+  --space-12:               3rem;      /* 48px */
+  --space-16:               4rem;      /* 64px */
+
+  /* ── RADII ──────────────────────────────────────────────── */
+  --radius-sm:              4px;
+  --radius-md:              8px;
+  --radius-lg:              12px;
+  --radius-xl:              16px;
+  --radius-pill:            999px;
+  --radius-circle:          50%;
+
+  /* ── SHADOWS ────────────────────────────────────────────── */
+  --shadow-sm:              0 1px 3px rgba(26, 23, 20, 0.06);
+  --shadow-md:              0 4px 12px rgba(26, 23, 20, 0.08);
+  --shadow-hover:           0 4px 24px rgba(193, 125, 60, 0.12);
+  --shadow-focus:           0 0 0 3px rgba(193, 125, 60, 0.2);
+
+  /* ── TRANSITIONS ────────────────────────────────────────── */
+  --transition-fast:        150ms ease;
+  --transition-base:        200ms ease;
+  --transition-slow:        300ms ease;
+
+  /* ── LAYOUT ─────────────────────────────────────────────── */
+  --max-width-content:      1100px;
+  --max-width-narrow:       720px;
+  --nav-height:             64px;
+  --sidebar-width:          220px;
+
+  /* ── Z-INDEX ─────────────────────────────────────────────── */
+  --z-base:                 0;
+  --z-above:                10;
+  --z-sticky:               100;
+  --z-modal:                200;
+  --z-toast:                300;
+}
+
+/* ── GLOBAL RESETS & BASE STYLES ──────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-body);
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  color: var(--color-ink);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img, video {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+}
