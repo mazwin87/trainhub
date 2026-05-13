@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { createServerClient } from '@/lib/supabase'
 import { TrainerCard } from '@/features/trainers/components'
-import { FilterBar } from '@/features/search'
+import { FilterBarClient } from '@/features/search/components/FilterBarClient'
 import type { TrainerCard as TrainerCardType, TrainerSearchFilters } from '@/features/trainers/types'
 import { MALAYSIAN_STATES, TRAINER_TOPICS } from '@/types'
 
@@ -190,10 +190,4 @@ export default async function TrainersPage({ searchParams }: PageProps) {
       </div>
     </div>
   )
-}
-
-/* ── Client component for interactive topic filter ────── */
-function FilterBarClient({ activeTopic }: { activeTopic: string }) {
-  'use client'
-  return <FilterBar activeTopic={activeTopic} onChange={() => {}} />
 }
