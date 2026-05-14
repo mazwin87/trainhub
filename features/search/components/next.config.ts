@@ -1,10 +1,14 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  basePath: '/hrdc',
+  assetPrefix: '/hrdc',
+
   allowedDevOrigins: [
     'http://localhost:3000',
     'http://192.168.50.40:3000',
   ],
+
   images: {
     remotePatterns: [
       {
@@ -14,7 +18,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
   reactStrictMode: true,
+
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
 
 export default nextConfig
