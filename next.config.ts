@@ -1,8 +1,25 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  reactStrictMode: true,
+
   typescript: {
     ignoreBuildErrors: true,
+  },
+
+  allowedDevOrigins: [
+    'http://localhost:3000',
+    'http://192.168.50.40:3000',
+  ],
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
+    ],
   },
 }
 
