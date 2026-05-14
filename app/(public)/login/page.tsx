@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createBrowserClient } from '@/lib/supabase/client'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const registered = searchParams.get('registered') === 'true'
@@ -49,15 +49,13 @@ export default function LoginPage() {
       if (signInError) throw signInError
       if (!authData.user) throw new Error('Login failed')
 
-      // Check user role first - try to get existing user
       let { data: userProfile, error: profileError } = await supabase
         .from('users')
         .select('role')
         .eq('id', authData.user.id)
-        .single() as { data: { role: string } | null; error: any }
+        .single() as { data: { role: string } | null; error: unknown }
 
-      // If user doesn't exist in public.users table, create them
-      if (profileError?.code === 'PGRST116') {
+      if ((profileError as { code?: string } | null)?.code === 'PGRST116') {
         const { data: newUser, error: insertError } = await supabase
           .from('users')
           .insert({
@@ -67,11 +65,9 @@ export default function LoginPage() {
             role: authData.user.user_metadata?.role || 'trainer',
           })
           .select('role')
-          .single() as { data: { role: string } | null; error: any }
+          .single() as { data: { role: string } | null; error: unknown }
 
-        if (insertError) {
-          throw insertError
-        }
+        if (insertError) throw insertError
         userProfile = newUser
       }
 
@@ -80,9 +76,8 @@ export default function LoginPage() {
         return
       }
 
-      // Check if trainer profile is approved
       const { data: profile } = await supabase
-        .from('trainer_profiles' as any)
+        .from('trainer_profiles' as never)
         .select('approval_status')
         .eq('user_id', authData.user.id)
         .single() as { data: { approval_status: string } | null }
@@ -164,5 +159,13 @@ export default function LoginPage() {
         </Link>
       </p>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   )
 }
