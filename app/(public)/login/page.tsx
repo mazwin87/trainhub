@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createBrowserClient } from '@/lib/supabase/client'
+import type { TablesInsert } from '@/lib/supabase/database.types'
 
 function LoginForm() {
   const router = useRouter()
@@ -56,14 +57,17 @@ function LoginForm() {
         .single()
 
       if ((profileError as { code?: string } | null)?.code === 'PGRST116') {
+        const newUserData = {
+          id: authData.user.id,
+          email: authData.user.email!,
+          full_name: authData.user.user_metadata?.full_name || 'User',
+          role: authData.user.user_metadata?.role || 'trainer',
+        } satisfies TablesInsert<'users'>
+
         const { data: newUser, error: insertError } = await supabase
           .from('users')
-          .insert({
-            id: authData.user.id,
-            email: authData.user.email!,
-            full_name: authData.user.user_metadata?.full_name || 'User',
-            role: authData.user.user_metadata?.role || 'trainer',
-          })
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .insert(newUserData as any)
           .select('role')
           .single()
 
