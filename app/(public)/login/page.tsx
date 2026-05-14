@@ -49,14 +49,19 @@ function LoginForm() {
       if (signInError) throw signInError
       if (!authData.user) throw new Error('Login failed')
 
+      type UserRow = { role: string }
+      type ProfileRow = { approval_status: string }
+      type PgError = { code?: string } | null
+
       let { data: userProfile, error: profileError } = await supabase
         .from('users')
         .select('role')
         .eq('id', authData.user.id)
-        .single() as { data: { role: string } | null; error: unknown }
+        .single() as { data: UserRow | null; error: PgError }
 
-      if ((profileError as { code?: string } | null)?.code === 'PGRST116') {
-        const { data: newUser, error: insertError } = await supabase
+      if (profileError?.code === 'PGRST116') {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: newUser, error: insertError } = await (supabase as any)
           .from('users')
           .insert({
             id: authData.user.id,
@@ -65,7 +70,7 @@ function LoginForm() {
             role: authData.user.user_metadata?.role || 'trainer',
           })
           .select('role')
-          .single() as { data: { role: string } | null; error: unknown }
+          .single() as { data: UserRow | null; error: unknown }
 
         if (insertError) throw insertError
         userProfile = newUser
@@ -77,10 +82,10 @@ function LoginForm() {
       }
 
       const { data: profile } = await supabase
-        .from('trainer_profiles' as never)
+        .from('trainer_profiles')
         .select('approval_status')
         .eq('user_id', authData.user.id)
-        .single() as { data: { approval_status: string } | null }
+        .single() as { data: ProfileRow | null; error: unknown }
 
       if (profile?.approval_status === 'approved') {
         router.push('/trainer/dashboard')
