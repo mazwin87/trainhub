@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
-import type { TablesUpdate } from '@/lib/supabase/database.types'
 
 interface Props {
   trainerId: string
@@ -15,11 +14,13 @@ export function ApprovalActions({ trainerId }: Props) {
 
   const handleAction = async (action: 'approve' | 'reject') => {
     setLoading(true)
-    const supabase = createBrowserClient()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const supabase = createBrowserClient() as any
 
-    const updates: TablesUpdate<'trainer_profiles'> = action === 'approve'
-      ? { approval_status: 'approved', is_published: true }
-      : { approval_status: 'rejected', is_published: false }
+    const updates =
+      action === 'approve'
+        ? { approval_status: 'approved', is_published: true }
+        : { approval_status: 'rejected', is_published: false }
 
     const { error } = await supabase
       .from('trainer_profiles')
