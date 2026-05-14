@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json()
-    const { trainer_id, contact_name, contact_email, message, ...rest } = body
+    const { trainer_id, contact_name, contact_email, message } = body
 
     // Basic validation
     if (!trainer_id || !contact_name || !contact_email || !message) {
@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
         contact_email,
         message,
         status: 'new',
-        ...rest,
       })
       .select('id')
       .single()
@@ -58,14 +57,14 @@ export async function POST(req: NextRequest) {
 
     // TODO: send email notification via Resend (Phase 2)
 
-    return NextResponse.json({ success: true, id: data.id })
+    return NextResponse.json({ success: true, id: data!.id })
   } catch (err) {
     console.error('Inquiry error:', err)
     return NextResponse.json({ error: 'Failed to send inquiry.' }, { status: 500 })
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   // Trainer fetches their own inquiries (requires auth)
   const supabase = await createServerClient()
   const { data: { user } } = await supabase.auth.getUser()

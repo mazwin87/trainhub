@@ -1,2 +1,18 @@
 export * from './components'
-export * from './types'
+export type {
+  ApprovalStatus,
+  PricingMode,
+  DeliveryMode,
+  LanguageProficiency,
+  TrainerProfile,
+  TrainerCard as TrainerCardData,
+  Topic,
+  TrainerLanguage,
+  Industry,
+  Certification,
+  Course,
+  TrainerSearchFilters,
+  TrainerSearchResult,
+  UserPublic,
+  CompletenessItem,
+} from './types'

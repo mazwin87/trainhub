@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { createBrowserClient } from '@/lib/supabase'
+import { createBrowserClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -48,6 +48,37 @@ export default function LoginPage() {
 
       if (signInError) throw signInError
       if (!authData.user) throw new Error('Login failed')
+
+      // Check user role first - try to get existing user
+      let { data: userProfile, error: profileError } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', authData.user.id)
+        .single() as { data: { role: string } | null; error: any }
+
+      // If user doesn't exist in public.users table, create them
+      if (profileError?.code === 'PGRST116') {
+        const { data: newUser, error: insertError } = await supabase
+          .from('users')
+          .insert({
+            id: authData.user.id,
+            email: authData.user.email!,
+            full_name: authData.user.user_metadata?.full_name || 'User',
+            role: authData.user.user_metadata?.role || 'trainer',
+          })
+          .select('role')
+          .single() as { data: { role: string } | null; error: any }
+
+        if (insertError) {
+          throw insertError
+        }
+        userProfile = newUser
+      }
+
+      if (userProfile?.role === 'admin') {
+        router.push('/admin')
+        return
+      }
 
       // Check if trainer profile is approved
       const { data: profile } = await supabase
