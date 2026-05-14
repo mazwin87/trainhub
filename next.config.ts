@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  basePath: '/trainhub',
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   trailingSlash: true,
 
   reactStrictMode: true,
