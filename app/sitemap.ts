@@ -6,29 +6,12 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://ai.nimonimo.tech/tr
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createServerClient()
 
-  // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: BASE_URL,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1.0,
-    },
-    {
-      url: `${BASE_URL}/trainers`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/blog`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
+    { url: BASE_URL, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
+    { url: `${BASE_URL}/trainers`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
   ]
 
-  // Dynamic — all approved trainers
   const { data: trainers } = await supabase
     .from('trainer_profiles')
     .select('slug, updated_at')
@@ -42,7 +25,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Dynamic — all published blog posts
   const { data: posts } = await supabase
     .from('blog_posts')
     .select('slug, updated_at')
