@@ -9,8 +9,7 @@ export const metadata: Metadata = {
   description:
     'Discover and connect with 500+ verified HRDF-certified trainers across Malaysia. Search by topic, state, language, and more.',
   keywords: ['HRDF trainer', 'Malaysia trainer directory', 'HRD Corp', 'training provider Malaysia'],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://hrdc.my'),
-  openGraph: {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://ai.nimonimo.tech/trainhub'),  openGraph: {
     siteName: 'TrainHub Malaysia',
     type: 'website',
     locale: 'en_MY',
