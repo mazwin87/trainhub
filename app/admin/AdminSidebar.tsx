@@ -9,11 +9,12 @@ interface Props {
 }
 
 const NAV_ITEMS = [
-  { href: '/admin', label: '📊 Dashboard', icon: '📊' },
-  { href: '/admin/trainers', label: '👥 All Trainers', icon: '👥' },
-  { href: '/admin/approvals', label: '✓ Pending Approvals', icon: '✓' },
-  { href: '/admin/inquiries', label: '📬 Inquiries', icon: '📬' },
-  { href: '/admin/users', label: '⚙️ Users', icon: '⚙️' },
+  { href: '/admin', label: '📊 Dashboard' },
+  { href: '/admin/trainers', label: '👥 All Trainers' },
+  { href: '/admin/approvals', label: '✓ Pending Approvals' },
+  { href: '/admin/inquiries', label: '📬 Inquiries' },
+  { href: '/admin/blog', label: '📝 Blog Posts' },
+  { href: '/admin/users', label: '⚙️ Users' },
 ]
 
 export function AdminSidebar({ userName }: Props) {
