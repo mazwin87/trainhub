@@ -138,6 +138,11 @@ function LoginForm() {
             onChange={handleChange}
             required
           />
+          <div style={{ textAlign: 'right', marginTop: '-8px' }}>
+            <Link href="/forgot-password" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)' }}>
+              Forgot password?
+            </Link>
+          </div>
         </div>
 
         {error && (
