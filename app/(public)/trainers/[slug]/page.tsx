@@ -7,7 +7,7 @@ import type { TrainerProfile } from '@/features/trainers/types'
 import { InquiryButtonClient } from '@/features/search/components/InquiryButtonClient'
 
 // ISR: revalidate each profile page every hour
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: Promise<{ slug: string }>
