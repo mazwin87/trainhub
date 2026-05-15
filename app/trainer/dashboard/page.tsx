@@ -50,6 +50,28 @@ export default async function DashboardPage() {
           : 'Complete your profile to get approved faster'}
       </p>
 
+      {!profile && (
+        <div style={{
+          background: 'linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-surface) 100%)',
+          border: '1px solid var(--color-accent)',
+          borderRadius: 'var(--radius-lg)',
+          padding: 'var(--space-8)',
+          textAlign: 'center',
+          marginBottom: 'var(--space-6)',
+        }}>
+          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-4)' }}>👋</div>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)', marginBottom: 'var(--space-3)' }}>
+            Let's set up your trainer profile
+          </h2>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', maxWidth: '480px', margin: '0 auto var(--space-5)', lineHeight: 'var(--leading-relaxed)' }}>
+            You're 5 minutes away from being discoverable by Malaysian companies looking for HRDF-certified trainers.
+          </p>
+          <Link href="/trainer/profile" className="btn btn-primary">
+            Start with your profile →
+          </Link>
+        </div>
+      )}
+      
       {/* Stats row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)' }}>
