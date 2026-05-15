@@ -23,16 +23,24 @@ export default async function ProfilePage() {
   // Fetch user info
   const { data: userInfo } = await supabase
     .from('users')
-    .select('full_name, email')
+    .select('full_name, email, avatar_url')
     .eq('id', user.id)
-    .single() as { data: { full_name: string; email: string } | null }
+    .single() as { data: { full_name: string; email: string; avatar_url: string | null } | null }
+  
+  const { data: existingCerts } = await supabase
+  .from('certifications')
+  .select('name')
+  .eq('trainer_id', profile?.id) as { data: { name: string }[] | null }
+
+  const certsText = (existingCerts ?? []).map(c => c.name).join('\n')
 
   return (
     <ProfileEditor
-      userId={user.id}
-      userInfo={userInfo}
-      profile={profile}
-      selectedTopicIds={(trainerTopics ?? []).map(t => t.topic_id)}
+        userId={user.id}
+        userInfo={userInfo}
+        profile={profile}
+        selectedTopicIds={(trainerTopics ?? []).map(t => t.topic_id)}
+        certsText={certsText}
     />
-  )
+)
 }

@@ -1,25 +1,27 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
 import { MALAYSIAN_STATES, TRAINER_TOPICS } from '@/types'
+import { AvatarUpload } from '@/features/trainers/components/AvatarUpload'
 
 interface Props {
   userId: string
-  userInfo: { full_name: string; email: string } | null
+  userInfo: { full_name: string; email: string; avatar_url: string | null } | null
   profile: any
   selectedTopicIds: string[]
+  certsText: string
 }
 
-export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds }: Props) {
-  const router = useRouter()
+export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds, certsText }: Props) {  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   const [form, setForm] = useState({
     tagline: profile?.tagline ?? '',
     bio: profile?.bio ?? '',
+    certifications_text: certsText ?? '',
     hrdf_cert_number: profile?.hrdf_cert_number ?? '',
     years_experience: profile?.years_experience ?? 0,
     location_state: profile?.location_state ?? '',
@@ -38,14 +40,14 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds }: P
   const [allTopics, setAllTopics] = useState<{ id: string; name: string }[]>([])
 
   // Load all topics on mount
-  useState(() => {
+    useEffect(() => {
     const loadTopics = async () => {
-      const supabase = createBrowserClient()
-      const { data } = await supabase.from('topics').select('id, name').order('name')
-      setAllTopics((data as { id: string; name: string }[]) ?? [])
+        const supabase = createBrowserClient()
+        const { data } = await supabase.from('topics').select('id, name').order('name')
+        setAllTopics((data as { id: string; name: string }[]) ?? [])
     }
     loadTopics()
-  })
+    }, [])
 
   const update = (field: string, value: any) => {
     setForm(prev => ({ ...prev, [field]: value }))
@@ -90,7 +92,7 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds }: P
         linkedin_url: form.linkedin_url || null,
       }
 
-      let trainerId = profile?.id
+     let trainerId = profile?.id
 
       if (profile?.id) {
         // Update existing
@@ -110,12 +112,35 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds }: P
         trainerId = data?.id
       }
 
-      // Update topics — delete all then re-insert
+      // ── Update topics ────────────────────────────────────
       if (trainerId) {
+        console.log('🔍 Saving topics. trainerId:', trainerId, 'topicIds:', topicIds)
         await supabase.from('trainer_topics').delete().eq('trainer_id', trainerId)
         if (topicIds.length > 0) {
-          await supabase.from('trainer_topics').insert(
+          const { error: topicError } = await supabase.from('trainer_topics').insert(
             topicIds.map(tid => ({ trainer_id: trainerId, topic_id: tid })) as any
+          )
+          if (topicError) console.error('❌ Topic insert error:', topicError)
+          else console.log('✅ Topics saved successfully')
+        }
+      }
+
+      // ── Update certifications ────────────────────────────
+      if (trainerId) {
+        await supabase.from('certifications').delete().eq('trainer_id', trainerId)
+
+        const certNames = form.certifications_text
+          .split('\n')
+          .map(c => c.trim())
+          .filter(Boolean)
+
+        if (certNames.length > 0) {
+          await supabase.from('certifications').insert(
+            certNames.map(name => ({
+              trainer_id: trainerId,
+              name,
+              is_verified: false,
+            })) as any
           )
         }
       }
@@ -150,6 +175,16 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds }: P
           {message.text}
         </div>
       )}
+      {/* Avatar upload */}
+        <div style={{ marginBottom: 'var(--space-6)', paddingBottom: 'var(--space-4)', borderBottom: '1px solid var(--color-border)' }}>
+        <label className="label">Profile photo</label>
+        <AvatarUpload
+            userId={userId}
+            currentAvatarUrl={userInfo?.avatar_url ?? null}
+            fullName={userInfo?.full_name ?? 'Trainer'}
+            onUploaded={() => router.refresh()}
+        />
+        </div>
 
       {/* SECTION: Basic info */}
       <section style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', marginBottom: 'var(--space-5)' }}>
@@ -173,7 +208,7 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds }: P
             onChange={e => update('bio', e.target.value)}
             style={{ resize: 'vertical' }}
           />
-          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '4px' }}>{form.bio.length} characters · Aim for 100+ for better discoverability</p>
+          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '4px' }}>{form.bio.length} characters · Aim for 200+ for better discoverability</p><p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '4px' }}>{form.bio.length} characters · Aim for 100+ for better discoverability</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' }}>
@@ -300,7 +335,24 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds }: P
           <input className="input" placeholder="https://linkedin.com/in/you" value={form.linkedin_url} onChange={e => update('linkedin_url', e.target.value)} />
         </div>
       </section>
+      {/* SECTION: Certifications */}
+        <section style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', marginBottom: 'var(--space-5)' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', marginBottom: 'var(--space-2)' }}>
+                Certifications
+            </h2>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-4)' }}>
+                List your professional certifications (one per line)
+            </p>
 
+            <textarea
+                className="input"
+                rows={5}
+                placeholder={`HRDF Certified Trainer\nICF Accredited Coach\nPMP Certified`}
+                value={form.certifications_text}
+                onChange={e => update('certifications_text', e.target.value)}
+                style={{ resize: 'vertical', fontFamily: 'var(--font-body)' }}
+            />
+        </section>
       <button
         type="submit"
         disabled={loading}
