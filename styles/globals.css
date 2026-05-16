@@ -1052,5 +1052,98 @@
   transform: scale(0.98);
 }
 
+/* ============================================================
+   ADMIN TABLES — responsive card-on-mobile pattern
+   ============================================================ */
 
+.admin-table {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
 
+.admin-table-header {
+  display: grid;
+  grid-template-columns: 40px 2fr 1fr 100px 80px 80px;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-surface-alt);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.admin-table-row {
+  display: grid;
+  grid-template-columns: 40px 2fr 1fr 100px 80px 80px;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+}
+
+.admin-cell-label {
+  display: none;
+  font-size: var(--text-xs);
+  color: var(--color-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: var(--space-1);
+}
+
+/* Mobile: stack each row as a card */
+/* Mobile: stack each row as a card */
+@media (max-width: 768px) {
+  .admin-table-header { display: none; }
+
+  .admin-table-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;       /* ← force left alignment */
+    gap: var(--space-2);
+    padding: var(--space-4);
+    position: relative;
+  }
+
+  .admin-cell-avatar {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+  }
+
+  .admin-cell-name {
+    padding-right: 50px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .admin-cell-meta,
+  .admin-cell-status,
+  .admin-cell-complete,
+  .admin-cell-action {
+    text-align: left !important;
+    width: 100%;
+  }
+
+  .admin-cell-label {
+    display: inline;
+  }
+
+  .admin-cell-action {
+    margin-top: var(--space-2);
+  }
+
+  .admin-cell-action a {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-accent);
+    color: #fff !important;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+    text-decoration: none;
+  }
+}
