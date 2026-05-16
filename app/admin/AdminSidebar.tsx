@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
@@ -9,17 +10,18 @@ interface Props {
 }
 
 const NAV_ITEMS = [
-  { href: '/admin', label: '📊 Dashboard' },
-  { href: '/admin/trainers', label: '👥 All Trainers' },
-  { href: '/admin/approvals', label: '✓ Pending Approvals' },
-  { href: '/admin/inquiries', label: '📬 Inquiries' },
-  { href: '/admin/blog', label: '📝 Blog Posts' },
-  { href: '/admin/users', label: '⚙️ Users' },
+  { href: '/admin', label: 'Dashboard', icon: '📊' },
+  { href: '/admin/trainers', label: 'All Trainers', icon: '👥' },
+  { href: '/admin/approvals', label: 'Pending Approvals', icon: '⏳' },
+  { href: '/admin/inquiries', label: 'Inquiries', icon: '💬' },
+  { href: '/admin/blog', label: 'Blog Posts', icon: '📝' },
+  { href: '/admin/users', label: 'Users', icon: '⚙️' },
 ]
 
 export function AdminSidebar({ userName }: Props) {
   const pathname = usePathname()
   const router = useRouter()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const handleLogout = async () => {
     const supabase = createBrowserClient()
@@ -28,66 +30,94 @@ export function AdminSidebar({ userName }: Props) {
   }
 
   return (
-    <aside style={{ background: 'var(--color-surface)', borderRight: '1px solid var(--color-border)', padding: 'var(--space-6) 0', display: 'flex', flexDirection: 'column' }}>
-
-      {/* Brand */}
-      <div style={{ padding: '0 var(--space-6)', marginBottom: 'var(--space-8)' }}>
-        <Link href="/" style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-ink)' }}>
+    <aside className={`admin-sidebar ${menuOpen ? 'menu-open' : ''}`}>
+      {/* Mobile header with hamburger */}
+      <div className="admin-sidebar-mobile-header">
+        <Link href="/" style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 600 }}>
           Train<span style={{ color: 'var(--color-accent)' }}>Hub</span>
         </Link>
-        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '4px' }}>Admin Panel</p>
+        <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>
+          {menuOpen ? '✕' : '☰'}
+        </button>
+      </div>
+
+      {/* Brand */}
+      <div className="admin-sidebar-brand" style={{ padding: 'var(--space-6)', borderBottom: '1px solid var(--color-border)' }}>
+        <Link href="/" style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-ink)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ fontSize: '1.5rem' }}>🎓</span>
+          Train<span style={{ color: 'var(--color-accent)' }}>Hub</span>
+        </Link>
+        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '4px', fontWeight: 500 }}>ADMIN CONTROL</p>
       </div>
 
       {/* User info */}
-      <div style={{ padding: '0 var(--space-6) var(--space-6)', borderBottom: '1px solid var(--color-border)', marginBottom: 'var(--space-4)' }}>
-        <div className="avatar avatar-sm" style={{ background: 'var(--color-accent-light)', color: 'var(--color-accent)', marginBottom: 'var(--space-2)' }}>
-          {userName.slice(0, 2).toUpperCase()}
+      <div className="admin-sidebar-user" style={{ padding: 'var(--space-6)', background: 'linear-gradient(135deg, var(--color-accent-light) 0%, rgba(193, 125, 60, 0.05) 100%)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>
+          <div style={{ background: 'var(--color-accent)', color: 'white', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', fontWeight: 600, fontSize: 'var(--text-sm)' }}>
+            {userName.slice(0, 2).toUpperCase()}
+          </div>
+          <div>
+            <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-ink)' }}>{userName}</p>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)', fontWeight: 500 }}>👑 Administrator</p>
+          </div>
         </div>
-        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 500 }}>{userName}</p>
-        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>Administrator</p>
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1 }}>
+      <nav className="admin-sidebar-nav">
         {NAV_ITEMS.map(item => {
           const isActive = pathname === item.href
           return (
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => setMenuOpen(false)}
+              className={`admin-nav-item ${isActive ? 'active' : ''}`}
               style={{
-                display: 'block',
-                padding: 'var(--space-3) var(--space-6)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-3)',
+                padding: 'var(--space-4) var(--space-6)',
                 fontSize: 'var(--text-sm)',
                 color: isActive ? 'var(--color-accent)' : 'var(--color-muted)',
                 background: isActive ? 'var(--color-accent-light)' : 'transparent',
-                borderRight: isActive ? '3px solid var(--color-accent)' : 'none',
-                fontWeight: isActive ? 500 : 400,
+                borderLeft: isActive ? '4px solid var(--color-accent)' : '4px solid transparent',
+                fontWeight: isActive ? 600 : 500,
+                transition: 'all 0.2s ease',
               }}
             >
+              <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
               {item.label}
             </Link>
           )
         })}
       </nav>
 
+      {/* Spacer */}
+      <div style={{ flex: 1 }} />
+
       {/* Logout */}
-      <button
-        onClick={handleLogout}
-        style={{
-          margin: 'var(--space-4) var(--space-6)',
-          padding: 'var(--space-3)',
-          background: 'transparent',
-          border: '1px solid var(--color-border)',
-          borderRadius: 'var(--radius-md)',
-          fontSize: 'var(--text-sm)',
-          color: 'var(--color-muted)',
-          cursor: 'pointer',
-          fontFamily: 'var(--font-body)',
-        }}
-      >
-        Sign out
-      </button>
+      <div style={{ padding: 'var(--space-4) var(--space-6)' }}>
+        <button
+          onClick={handleLogout}
+          className="admin-sidebar-logout"
+          style={{
+            width: '100%',
+            padding: 'var(--space-3) var(--space-4)',
+            background: 'var(--color-accent)',
+            color: 'white',
+            border: 'none',
+            borderRadius: 'var(--radius-md)',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 600,
+            cursor: 'pointer',
+            fontFamily: 'var(--font-body)',
+            transition: 'all 0.2s ease',
+          }}
+        >
+          🚪 Sign out
+        </button>
+      </div>
     </aside>
   )
 }

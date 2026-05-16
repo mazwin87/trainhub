@@ -1,5 +1,12 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import '@/styles/globals.css'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 2,
+  themeColor: '#c17d3c',
+}
 
 export const metadata: Metadata = {
   title: {
@@ -19,8 +26,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" style={{ overflowX: 'hidden', width: '100%' }}>
+      <body style={{ overflowX: 'hidden', width: '100%' }}>{children}</body>
     </html>
   )
 }

@@ -27,9 +27,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', minHeight: '100vh' }}>
+    <div className="admin-dashboard-grid">
       <AdminSidebar userName={profile.full_name} />
-      <main style={{ background: 'var(--color-bg)', padding: 'var(--space-8)' }}>
+      <main style={{ background: 'var(--color-bg)', padding: 'var(--space-8)', overflowX: 'hidden' }}>
         {children}
       </main>
     </div>

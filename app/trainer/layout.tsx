@@ -23,13 +23,13 @@ export default async function TrainerLayout({ children }: { children: React.Reac
     .single() as { data: { full_name: string; role: string } | null }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', minHeight: '100vh' }}>
+    <div className="trainer-layout">
       <TrainerSidebar
         userName={userInfo?.full_name ?? 'Trainer'}
         completeness={profile?.profile_completeness ?? 0}
         approvalStatus={profile?.approval_status ?? 'pending'}
       />
-      <main style={{ background: 'var(--color-bg)', padding: 'var(--space-8)' }}>
+      <main className="dashboard-main">
         {children}
       </main>
     </div>

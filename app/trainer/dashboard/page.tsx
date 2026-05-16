@@ -73,7 +73,7 @@ export default async function DashboardPage() {
       )}
       
       {/* Stats row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
+      <div className="stat-cards-grid" style={{ marginBottom: 'var(--space-6)' }}>
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)' }}>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)' }}>{profile?.views_count ?? 0}</div>
           <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>Profile views</div>
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Checklist */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-2) var(--space-5)' }}>
+        <div className="checklist-grid">
           {checks.map(check => (
             <div key={check.key} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', padding: 'var(--space-2) 0', fontSize: 'var(--text-sm)' }}>
               <span style={{ fontSize: '1rem' }}>
@@ -141,7 +141,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
+      <div className="action-cards-grid">
         <Link href="/trainer/profile" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)', textDecoration: 'none', color: 'inherit' }}>
           <div style={{ fontSize: '1.5rem', marginBottom: 'var(--space-2)' }}>👤</div>
           <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, marginBottom: '4px' }}>Edit profile</div>

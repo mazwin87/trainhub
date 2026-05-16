@@ -18,7 +18,7 @@ interface PageProps {
 
 async function getTrainers(filters: TrainerSearchFilters): Promise<{ data: TrainerCardType[]; total: number }> {
   console.log('🔍 getTrainers called with filters:', filters)
-  
+
   try {
     const supabase = await createServerClient()
 
@@ -57,13 +57,13 @@ async function getTrainers(filters: TrainerSearchFilters): Promise<{ data: Train
     query = query.range((page - 1) * limit, page * limit - 1)
 
     const { data, count, error } = await query
-    
+
     if (error) {
       console.error('❌ SUPABASE ERROR:', JSON.stringify(error, null, 2))
     } else {
       console.log('✅ Query OK — count:', count, 'rows:', data?.length)
     }
-    
+
     return { data: (data ?? []) as unknown as TrainerCardType[], total: count ?? 0 }
   } catch (err) {
     console.error('❌ EXCEPTION:', err)
@@ -89,10 +89,13 @@ export default async function TrainersPage({ searchParams }: PageProps) {
   const activeTopic = filters.topics?.[0] ?? 'All topics'
 
   return (
-    <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto', padding: 'var(--space-8) var(--space-10)' }}>
+    <div
+      className="dir-wrapper"
+      style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto', padding: 'var(--space-8) var(--space-10)' }}
+    >
 
       {/* Page heading */}
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-3)', marginBottom: 'var(--space-5)' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-3)', marginBottom: 'var(--space-5)', flexWrap: 'wrap' }}>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', fontWeight: 500 }}>Trainer directory</h1>
         <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', background: 'var(--color-surface-alt)', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-pill)' }}>
           {total.toLocaleString()} trainer{total !== 1 ? 's' : ''}
@@ -100,19 +103,25 @@ export default async function TrainersPage({ searchParams }: PageProps) {
       </div>
 
       {/* Search + sort row */}
-      <form method="GET" style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-5)', flexWrap: 'wrap' }}>
+      <form method="GET" className="search-row" style={{ marginBottom: 'var(--space-5)' }}>
         <input
           name="q"
           defaultValue={filters.q}
           className="input"
           placeholder="Search by name, topic, or course…"
-          style={{ flex: 1, minWidth: '200px', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236b6560' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: '0.85rem center', paddingLeft: '2.5rem' }}
+          style={{
+            flex: 1,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236b6560' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: '0.85rem center',
+            paddingLeft: '2.5rem',
+          }}
         />
         <select
           name="state"
           defaultValue={filters.state}
           className="input"
-          style={{ width: 'auto', minWidth: '160px' }}
+          style={{ width: 'auto' }}
         >
           <option value="">All states</option>
           {MALAYSIAN_STATES.map(s => (
@@ -123,7 +132,7 @@ export default async function TrainersPage({ searchParams }: PageProps) {
           name="sort"
           defaultValue={filters.sort}
           className="input"
-          style={{ width: 'auto', minWidth: '160px' }}
+          style={{ width: 'auto' }}
         >
           <option value="rating">Sort: Top rated</option>
           <option value="reviews">Most reviews</option>
@@ -140,46 +149,61 @@ export default async function TrainersPage({ searchParams }: PageProps) {
       </div>
 
       {/* Layout: sidebar + grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 'var(--space-6)' }}>
+      <div className="dir-layout">
 
         {/* Filter sidebar */}
         <aside>
-          <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)', position: 'sticky', top: '80px' }}>
+          <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)' }}>
 
             <div className="section-label">Verification</div>
             {[
               { label: 'HRDF verified', name: 'verified' },
               { label: 'Top rated (4.8+)', name: 'top' },
             ].map(f => (
-              <label key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer' }}>
-                <input type="checkbox" name={f.name} style={{ accentColor: 'var(--color-accent)' }} />
+              <label key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer', minHeight: '28px' }}>
+                <input type="checkbox" name={f.name} style={{ accentColor: 'var(--color-accent)', width: '16px', height: '16px', flexShrink: 0 }} />
                 {f.label}
               </label>
             ))}
+
             <div className="section-label" style={{ marginTop: 'var(--space-4)' }}>Delivery</div>
             {[
               { label: 'Online', name: 'online' },
               { label: 'Offline / On-site', name: 'offline' },
             ].map(f => (
-              <label key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer' }}>
-                <input type="checkbox" name={f.name} style={{ accentColor: 'var(--color-accent)' }} />
+              <label key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer', minHeight: '28px' }}>
+                <input type="checkbox" name={f.name} style={{ accentColor: 'var(--color-accent)', width: '16px', height: '16px', flexShrink: 0 }} />
                 {f.label}
               </label>
             ))}
 
             <div className="section-label" style={{ marginTop: 'var(--space-4)' }}>Language</div>
             {['English', 'Bahasa Malaysia', 'Mandarin', 'Tamil'].map(lang => (
-              <label key={lang} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer' }}>
-                <input type="checkbox" name="language" value={lang} style={{ accentColor: 'var(--color-accent)' }} />
+              <label key={lang} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer', minHeight: '28px' }}>
+                <input type="checkbox" name="language" value={lang} style={{ accentColor: 'var(--color-accent)', width: '16px', height: '16px', flexShrink: 0 }} />
                 {lang}
               </label>
             ))}
 
             <div className="section-label" style={{ marginTop: 'var(--space-4)' }}>Budget (MYR/day)</div>
             <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
-              <input className="input" name="min_price" type="number" placeholder="Min" defaultValue={filters.min_price} style={{ padding: '0.4rem 0.6rem', fontSize: 'var(--text-xs)' }} />
-              <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>to</span>
-              <input className="input" name="max_price" type="number" placeholder="Max" defaultValue={filters.max_price} style={{ padding: '0.4rem 0.6rem', fontSize: 'var(--text-xs)' }} />
+              <input
+                className="input"
+                name="min_price"
+                type="number"
+                placeholder="Min"
+                defaultValue={filters.min_price}
+                style={{ padding: '0.5rem 0.6rem', fontSize: 'var(--text-xs)', minHeight: '40px' }}
+              />
+              <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', flexShrink: 0 }}>to</span>
+              <input
+                className="input"
+                name="max_price"
+                type="number"
+                placeholder="Max"
+                defaultValue={filters.max_price}
+                style={{ padding: '0.5rem 0.6rem', fontSize: 'var(--text-xs)', minHeight: '40px' }}
+              />
             </div>
           </div>
         </aside>
@@ -192,7 +216,7 @@ export default async function TrainersPage({ searchParams }: PageProps) {
               <p style={{ fontSize: 'var(--text-sm)' }}>Try adjusting your filters or search term.</p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-4)' }}>
+            <div className="dir-grid">
               {trainers.map(t => <TrainerCard key={t.id} trainer={t} />)}
             </div>
           )}
@@ -201,5 +225,3 @@ export default async function TrainersPage({ searchParams }: PageProps) {
     </div>
   )
 }
-
-

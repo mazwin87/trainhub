@@ -14,23 +14,20 @@ export function TrainerCard({ trainer }: Props) {
   const extraCount = topics.length - 3
 
   return (
-    <Link href={`/trainers/${trainer.slug}`} className="block">
-      <article className="card group">
+    <Link href={`/trainers/${trainer.slug}`} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <article className="card" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
 
         {/* Header */}
-        <div className="flex gap-3 items-start mb-4">
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginBottom: '1rem' }}>
           <div
-            className="avatar avatar-md flex-shrink-0"
-            style={{
-              background: 'var(--color-accent-light)',
-              color: 'var(--color-accent)',
-            }}
+            className="avatar avatar-md"
+            style={{ background: 'var(--color-accent-light)', color: 'var(--color-accent)' }}
           >
             {trainer.avatar_url ? (
               <img
                 src={trainer.avatar_url}
                 alt={trainer.full_name}
-                className="w-full h-full object-cover rounded-full"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
               />
             ) : (
               <span style={{ fontFamily: 'var(--font-display)' }}>
@@ -38,27 +35,28 @@ export function TrainerCard({ trainer }: Props) {
               </span>
             )}
           </div>
-          <div className="min-w-0">
+          <div style={{ minWidth: 0, flex: 1 }}>
             <h3
-              className="font-medium truncate"
               style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: 'var(--text-md)',
+                fontWeight: 500,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                marginBottom: '0.2rem',
               }}
             >
               {trainer.full_name || trainer.users?.full_name || 'Trainer'}
             </h3>
-            <p
-              className="text-muted mt-0.5"
-              style={{ fontSize: 'var(--text-sm)' }}
-            >
-              {truncate(trainer.tagline, 80)}
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', lineHeight: 1.4 }}>
+              {truncate(trainer.tagline, 72)}
             </p>
           </div>
         </div>
 
         {/* Badges */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '0.75rem' }}>
           {trainer.is_verified_hrdf && (
             <span className="badge badge-hrdf">✓ HRDF Verified</span>
           )}
@@ -71,7 +69,7 @@ export function TrainerCard({ trainer }: Props) {
         </div>
 
         {/* Topics */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '1rem', flex: 1 }}>
           {visibleTopics.map((topic: any) => (
             <span key={topic.id} className="badge badge-tag">
               {topic.name}
@@ -91,22 +89,23 @@ export function TrainerCard({ trainer }: Props) {
           )}
         </div>
 
-        {/* Footer */}
+        {/* Footer — pinned to bottom via flex */}
         <div
-          className="flex items-center justify-between pt-3"
-          style={{ borderTop: '1px solid var(--color-border)' }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingTop: '0.75rem',
+            borderTop: '1px solid var(--color-border)',
+            marginTop: 'auto',
+            gap: '0.5rem',
+          }}
         >
-          <div>
-            <div
-              className="font-medium"
-              style={{ fontSize: 'var(--text-sm)' }}
-            >
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-ink)' }}>
               {formatPrice(trainer.pricing_mode, trainer.pricing_from, trainer.pricing_to)}
             </div>
-            <div
-              className="text-muted"
-              style={{ fontSize: 'var(--text-xs)' }}
-            >
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '0.1rem' }}>
               ★ {trainer.avg_rating.toFixed(1)} · {trainer.review_count} reviews
             </div>
           </div>
@@ -125,7 +124,7 @@ export function TrainerCard({ trainer }: Props) {
                 )
               }}
               className="btn btn-cta"
-              style={{ fontSize: 'var(--text-xs)', padding: '0.35rem 0.85rem' }}
+              style={{ fontSize: 'var(--text-xs)', padding: '0.5rem 0.9rem', flexShrink: 0 }}
             >
               WhatsApp
             </button>

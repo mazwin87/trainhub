@@ -23,20 +23,23 @@ export function FilterBarClient({ activeTopic }: Props) {
   }
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+    <div className="filter-bar">
       {['All topics', ...TRAINER_TOPICS].map((topic) => (
         <button
           key={topic}
           onClick={() => handleTopicChange(topic)}
           style={{
             fontSize: 'var(--text-xs)',
-            padding: '0.38rem 0.9rem',
+            padding: '0.45rem 0.9rem',
             borderRadius: 'var(--radius-pill)',
             border: '1px solid var(--color-border)',
             background: activeTopic === topic ? 'var(--color-ink)' : 'var(--color-surface)',
             color: activeTopic === topic ? '#fff' : 'var(--color-muted)',
             cursor: 'pointer',
             fontFamily: 'var(--font-body)',
+            flexShrink: 0,
+            minHeight: '36px',
+            whiteSpace: 'nowrap',
           }}
         >
           {topic}

@@ -2,8 +2,11 @@ import Link from 'next/link'
 
 export function Footer() {
   return (
-    <footer style={{ background: 'var(--color-ink)', padding: 'var(--space-12) var(--space-10)', marginTop: 'auto' }}>
-      <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 'var(--space-10)' }}>
+    <footer
+      className="home-section"
+      style={{ background: 'var(--color-ink)', marginTop: 'auto' }}
+    >
+      <div className="footer-grid" style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto' }}>
 
         {/* Brand */}
         <div>
@@ -15,7 +18,7 @@ export function Footer() {
           </p>
         </div>
 
-        {/* Trainers */}
+        {/* For trainers */}
         <div>
           <div style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7a7370', marginBottom: 'var(--space-4)' }}>For trainers</div>
           {['Create profile', 'Trainer dashboard', 'Pricing plans', 'How it works'].map(l => (
@@ -23,7 +26,7 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Companies */}
+        {/* For companies */}
         <div>
           <div style={{ fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7a7370', marginBottom: 'var(--space-4)' }}>For companies</div>
           {['Find trainers', 'Post a training need', 'HRDF guide', 'Verified trainers'].map(l => (
@@ -40,7 +43,10 @@ export function Footer() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 'var(--max-width-content)', margin: 'var(--space-8) auto 0', paddingTop: 'var(--space-6)', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        className="footer-bottom"
+        style={{ maxWidth: 'var(--max-width-content)', margin: 'var(--space-8) auto 0', paddingTop: 'var(--space-6)', borderTop: '1px solid rgba(255,255,255,0.08)' }}
+      >
         <p style={{ fontSize: 'var(--text-xs)', color: '#7a7370' }}>
           © 2026 TrainHub Sdn Bhd · Cyberjaya, Malaysia
         </p>

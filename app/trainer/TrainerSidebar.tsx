@@ -30,7 +30,7 @@ export function TrainerSidebar({ userName, completeness, approvalStatus }: Props
   }
 
   return (
-    <aside style={{ background: 'var(--color-surface)', borderRight: '1px solid var(--color-border)', padding: 'var(--space-6) 0', display: 'flex', flexDirection: 'column' }}>
+    <aside className="trainer-sidebar">      
       <div style={{ padding: '0 var(--space-6)', marginBottom: 'var(--space-6)' }}>
         <Link href="/" style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-ink)' }}>
           Train<span style={{ color: 'var(--color-accent)' }}>Hub</span>
@@ -58,7 +58,7 @@ export function TrainerSidebar({ userName, completeness, approvalStatus }: Props
         </div>
       </div>
 
-      <nav style={{ flex: 1 }}>
+      <nav>
         {NAV_ITEMS.map(item => {
           const isActive = pathname === item.href
           return (

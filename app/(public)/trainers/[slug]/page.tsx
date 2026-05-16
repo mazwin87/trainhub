@@ -98,25 +98,25 @@ export default async function TrainerProfilePage({ params }: PageProps) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto', padding: 'var(--space-6) var(--space-10) var(--space-12)' }}>
+      <div className="profile-wrapper">
 
         {/* Back */}
-        <Link href="/trainers" style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-6)', textDecoration: 'none' }}>
+        <Link href="/trainers" style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-5)', textDecoration: 'none' }}>
           ← Back to directory
         </Link>
 
         {/* Hero card */}
-        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-8)', marginBottom: 'var(--space-5)' }}>
-          <div style={{ display: 'flex', gap: 'var(--space-6)', alignItems: 'flex-start' }}>
-            <div className="avatar avatar-xl" style={{ background: 'var(--color-accent-light)', color: 'var(--color-accent)', flexShrink: 0 }}>
+        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', marginBottom: 'var(--space-5)' }}>
+          <div className="profile-hero-inner">
+            <div className="avatar avatar-xl" style={{ background: 'var(--color-accent-light)', color: 'var(--color-accent)' }}>
               {user?.avatar_url
                 ? <img src={user.avatar_url} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                 : initials
               }
             </div>
-            <div style={{ flex: 1 }}>
-              <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-2)' }}>{name}</h1>
-              <p style={{ fontSize: 'var(--text-base)', color: 'var(--color-muted)', marginBottom: 'var(--space-4)' }}>{trainer.tagline}</p>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.4rem, 3vw, var(--text-2xl))', marginBottom: 'var(--space-2)', lineHeight: 1.2 }}>{name}</h1>
+              <p style={{ fontSize: 'var(--text-base)', color: 'var(--color-muted)', marginBottom: 'var(--space-4)', lineHeight: 1.5 }}>{trainer.tagline}</p>
 
               {/* Badges */}
               <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap', marginBottom: 'var(--space-4)' }}>
@@ -135,19 +135,19 @@ export default async function TrainerProfilePage({ params }: PageProps) {
               </div>
 
               {/* Meta */}
-              <div style={{ display: 'flex', gap: 'var(--space-6)', flexWrap: 'wrap', fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
+              <div className="profile-meta">
                 <span>📍 {trainer.location_city}, {trainer.location_state}</span>
-                <span>⏱ {trainer.years_experience} years experience</span>
+                <span>⏱ {trainer.years_experience} yrs exp</span>
                 <span>🌐 {langs.map((l: any) => l.language).join(' · ')}</span>
-                <span>★ {trainer.avg_rating.toFixed(1)} · {trainer.review_count} reviews</span>
-                <span>{trainer.is_online && trainer.is_offline ? 'Online & offline' : trainer.is_online ? 'Online only' : 'Offline only'}</span>
+                <span>★ {trainer.avg_rating.toFixed(1)} ({trainer.review_count} reviews)</span>
+                <span>{trainer.is_online && trainer.is_offline ? 'Online & offline' : trainer.is_online ? 'Online' : 'Offline'}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Body: main + sidebar */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 'var(--space-5)' }}>
+        <div className="profile-body">
 
           {/* Main */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
