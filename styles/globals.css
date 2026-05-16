@@ -1147,3 +1147,57 @@
     text-decoration: none;
   }
 }
+
+/* ============================================================
+   ADMIN DASHBOARD (overview page)
+   ============================================================ */
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.admin-stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+  display: block;
+}
+
+.admin-stat-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.admin-activity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+/* ── Tablet (≤ 900px) — stats 2x2, activity stacks ─────── */
+@media (max-width: 900px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .admin-activity-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Mobile (≤ 480px) — tighter spacing ────────────────── */
+@media (max-width: 480px) {
+  .admin-stat-card {
+    padding: var(--space-4);
+  }
+  .admin-stat-card > div:nth-child(2) {
+    font-size: 1.6rem !important;
+  }
+}

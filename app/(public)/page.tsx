@@ -36,6 +36,17 @@ const TOPIC_COUNTS: Record<string, number> = {
   'Audit & Compliance': 47, 'Strategy': 38,
 }
 
+// Default fallback when no searches have been logged yet
+const DEFAULT_POPULAR = [
+  'Leadership',
+  'AI & Data',
+  'Sales & Marketing',
+  'Mental Health',
+  'Audit & Compliance',
+  'Sustainability & ESG',
+  'Health & Safety',
+]
+
 async function getFeaturedTrainers(): Promise<TrainerCardType[]> {
   try {
     const supabase = await createServerClient()
@@ -60,8 +71,53 @@ async function getFeaturedTrainers(): Promise<TrainerCardType[]> {
   }
 }
 
+// Get the top-searched queries from the last 30 days
+async function getPopularSearches(): Promise<string[]> {
+  try {
+    const supabase = await createServerClient()
+    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+
+    const { data } = await supabase
+      .from('search_logs')
+      .select('query')
+      .gte('created_at', since)
+      .limit(500) as { data: { query: string }[] | null }
+
+    if (!data || data.length === 0) return DEFAULT_POPULAR
+
+    // Count frequency
+    const counts = new Map<string, number>()
+    data.forEach(row => {
+      const q = (row.query ?? '').trim()
+      if (q.length < 2) return
+      counts.set(q, (counts.get(q) ?? 0) + 1)
+    })
+
+    if (counts.size === 0) return DEFAULT_POPULAR
+
+    // Sort by frequency, take top 7, capitalize for display
+    const popular = [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 7)
+      .map(([query]) => query.charAt(0).toUpperCase() + query.slice(1))
+
+    // If we have fewer than 4 real searches, blend with defaults so the row never looks empty
+    if (popular.length < 4) {
+      const fillers = DEFAULT_POPULAR.filter(d => !popular.some(p => p.toLowerCase() === d.toLowerCase()))
+      return [...popular, ...fillers].slice(0, 7)
+    }
+
+    return popular
+  } catch {
+    return DEFAULT_POPULAR
+  }
+}
+
 export default async function HomePage() {
-  const featured = await getFeaturedTrainers()
+  const [featured, popularSearches] = await Promise.all([
+    getFeaturedTrainers(),
+    getPopularSearches(),
+  ])
 
   return (
     <>
@@ -110,17 +166,22 @@ export default async function HomePage() {
             </button>
           </form>
 
-          {/* Quick topic tags — horizontally scrollable on mobile */}
-          <div className="hero-tags">
-            {['Leadership', 'AI & Data', 'Sales & Marketing', 'Mental Health', 'Audit & Compliance', 'Sustainability & ESG', 'Health & Safety'].map(topic => (
-              <Link
-                key={topic}
-                href={`/trainers?topic=${encodeURIComponent(topic)}`}
-                style={{ fontSize: 'var(--text-xs)', padding: '0.45rem 0.9rem', borderRadius: 'var(--radius-pill)', border: '1px solid var(--color-border)', color: 'var(--color-muted)', background: 'var(--color-surface)', transition: 'all var(--transition-base)', whiteSpace: 'nowrap' }}
-              >
-                {topic}
-              </Link>
-            ))}
+          {/* Popular searches — real-time from search_logs */}
+          <div style={{ marginTop: 'var(--space-5)' }}>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 'var(--space-3)' }}>
+              Most searched this month
+            </p>
+            <div className="hero-tags">
+              {popularSearches.map(topic => (
+                <Link
+                  key={topic}
+                  href={`/trainers?q=${encodeURIComponent(topic)}`}
+                  style={{ fontSize: 'var(--text-xs)', padding: '0.45rem 0.9rem', borderRadius: 'var(--radius-pill)', border: '1px solid var(--color-border)', color: 'var(--color-muted)', background: 'var(--color-surface)', transition: 'all var(--transition-base)', whiteSpace: 'nowrap' }}
+                >
+                  {topic}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>

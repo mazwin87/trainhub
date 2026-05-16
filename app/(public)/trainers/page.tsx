@@ -71,6 +71,18 @@ async function getTrainers(filters: TrainerSearchFilters): Promise<{ data: Train
   }
 }
 
+// Fire-and-forget search logger — never blocks the page render
+async function logSearch(query: string, state: string | undefined) {
+  try {
+    const supabase = await createServerClient()
+    await supabase
+      .from('search_logs')
+      .insert({ query: query.trim().toLowerCase(), state: state || null } as any)
+  } catch {
+    // silently ignore — we never want logging to break the page
+  }
+}
+
 export default async function TrainersPage({ searchParams }: PageProps) {
   const params = await searchParams
 
@@ -83,6 +95,11 @@ export default async function TrainersPage({ searchParams }: PageProps) {
     sort:     (params.sort as TrainerSearchFilters['sort']) ?? 'rating',
     page:     params.page ? Number(params.page) : 1,
     limit:    12,
+  }
+
+  // Log meaningful search queries (2+ chars). Fire-and-forget, doesn't block render.
+  if (filters.q && filters.q.trim().length >= 2) {
+    logSearch(filters.q, filters.state)
   }
 
   const { data: trainers, total } = await getTrainers(filters)

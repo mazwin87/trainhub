@@ -4,18 +4,30 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
+import {
+  LayoutDashboard,
+  Users,
+  Hourglass,
+  MessageSquare,
+  FileText,
+  Settings,
+  ExternalLink,
+  LineChart
+} from 'lucide-react'
 
 interface Props {
   userName: string
 }
 
-const NAV_ITEMS = [
-  { href: '/admin', label: 'Dashboard', icon: '📊' },
-  { href: '/admin/trainers', label: 'All Trainers', icon: '👥' },
-  { href: '/admin/approvals', label: 'Pending Approvals', icon: '⏳' },
-  { href: '/admin/inquiries', label: 'Inquiries', icon: '💬' },
-  { href: '/admin/blog', label: 'Blog Posts', icon: '📝' },
-  { href: '/admin/users', label: 'Users', icon: '⚙️' },
+const NAV_ITEMS: { href: string; label: string; Icon: LucideIcon }[] = [
+  { href: '/admin',           label: 'Dashboard',         Icon: LayoutDashboard },
+  { href: '/admin/trainers',  label: 'All Trainers',      Icon: Users },
+  { href: '/admin/approvals', label: 'Pending Approvals', Icon: Hourglass },
+  { href: '/admin/inquiries', label: 'Inquiries',         Icon: MessageSquare },
+  { href: '/admin/blog',      label: 'Blog Posts',        Icon: FileText },
+  { href: '/admin/search-trends',  label: 'Search Trends',     Icon: LineChart },  // ← NEW
+  { href: '/admin/users',     label: 'Users',             Icon: Settings },
+  { href: '/',                label: 'View site',         Icon: ExternalLink, external: true },
 ]
 
 export function AdminSidebar({ userName }: Props) {
@@ -67,26 +79,25 @@ export function AdminSidebar({ userName }: Props) {
       <nav className="admin-sidebar-nav">
         {NAV_ITEMS.map(item => {
           const isActive = pathname === item.href
+          const Icon = item.Icon
           return (
             <Link
               key={item.href}
               href={item.href}
-              onClick={() => setMenuOpen(false)}
-              className={`admin-nav-item ${isActive ? 'active' : ''}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 'var(--space-3)',
-                padding: 'var(--space-4) var(--space-6)',
+                padding: 'var(--space-3) var(--space-6)',
                 fontSize: 'var(--text-sm)',
                 color: isActive ? 'var(--color-accent)' : 'var(--color-muted)',
                 background: isActive ? 'var(--color-accent-light)' : 'transparent',
-                borderLeft: isActive ? '4px solid var(--color-accent)' : '4px solid transparent',
-                fontWeight: isActive ? 600 : 500,
-                transition: 'all 0.2s ease',
+                borderRight: isActive ? '3px solid var(--color-accent)' : 'none',
+                fontWeight: isActive ? 500 : 400,
+                textDecoration: 'none',
               }}
             >
-              <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
+              <Icon size={18} strokeWidth={1.75} />
               {item.label}
             </Link>
           )

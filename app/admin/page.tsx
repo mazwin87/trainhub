@@ -1,171 +1,165 @@
+import Link from 'next/link'
 import { createServerClient } from '@/lib/supabase/server'
 
 export default async function AdminDashboard() {
   const supabase = await createServerClient()
 
-  // Get counts
-  const [pending, approved, inquiries, users] = await Promise.all([
+  const [pending, approved, inquiries, users, recentInquiries, recentTrainers] = await Promise.all([
     supabase.from('trainer_profiles').select('id', { count: 'exact', head: true }).eq('approval_status', 'pending'),
     supabase.from('trainer_profiles').select('id', { count: 'exact', head: true }).eq('approval_status', 'approved'),
     supabase.from('inquiries').select('id', { count: 'exact', head: true }),
     supabase.from('users').select('id', { count: 'exact', head: true }),
+    supabase.from('inquiries')
+      .select('id, contact_name, company_name, training_topic, status, created_at, trainer_profiles(users(full_name))')
+      .order('created_at', { ascending: false })
+      .limit(5),
+    supabase.from('trainer_profiles')
+      .select('id, slug, approval_status, created_at, users(full_name, avatar_url)')
+      .order('created_at', { ascending: false })
+      .limit(5),
   ])
 
   const stats = [
-    { label: 'Pending Approvals', value: pending.count ?? 0, icon: '⏳', bgColor: '#FEF3E2', color: '#D97706' },
-    { label: 'Approved Trainers', value: approved.count ?? 0, icon: '✓', bgColor: '#ECFDF5', color: '#059669' },
-    { label: 'Total Inquiries', value: inquiries.count ?? 0, icon: '💬', bgColor: '#EFF6FF', color: '#0284C7' },
-    { label: 'Total Users', value: users.count ?? 0, icon: '👥', bgColor: '#F5F3FF', color: '#7C3AED' },
+    { label: 'Pending approvals', value: pending.count ?? 0,    href: '/admin/approvals',                   accent: 'var(--color-accent)' },
+    { label: 'Approved trainers', value: approved.count ?? 0,   href: '/admin/trainers?status=approved',    accent: 'var(--color-cta)' },
+    { label: 'Total inquiries',   value: inquiries.count ?? 0,  href: '/admin/inquiries',                   accent: 'var(--color-featured-text)' },
+    { label: 'Total users',       value: users.count ?? 0,      href: '/admin/users',                       accent: 'var(--color-top-text)' },
   ]
 
   return (
-    <div style={{ maxWidth: '1200px' }}>
+    <div>
       {/* Header */}
-      <div style={{ marginBottom: 'var(--space-12)' }}>
-        <h1 style={{ 
-          fontFamily: 'var(--font-display)', 
-          fontSize: 'var(--text-3xl)', 
-          fontWeight: 600,
-          marginBottom: 'var(--space-2)',
-          color: 'var(--color-ink)'
-        }}>
-          Welcome back 👋
+      <div style={{ marginBottom: 'var(--space-6)' }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-1)', fontWeight: 500 }}>
+          Dashboard
         </h1>
-        <p style={{ fontSize: 'var(--text-base)', color: 'var(--color-muted)', marginBottom: 'var(--space-1)' }}>
-          Overview of TrainHub Malaysia
-        </p>
-        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)' }}>
-          Last updated {new Date().toLocaleDateString('en-MY', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
+          Overview · Updated {new Date().toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' })}
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: 'var(--space-6)',
-        marginBottom: 'var(--space-12)'
-      }}>
-        {stats.map(stat => (
-          <div 
-            key={stat.label} 
-            className="admin-stat-card"
-            style={{ 
-              background: 'var(--color-surface)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--radius-xl)',
-              padding: 'var(--space-6)',
-              position: 'relative',
-              overflow: 'hidden'
-            }}
-          >
-            {/* Icon Background */}
-            <div style={{
-              position: 'absolute',
-              top: '-10px',
-              right: '-10px',
-              width: '100px',
-              height: '100px',
-              background: stat.bgColor,
-              borderRadius: '50%',
-              opacity: 0.5,
-            }} />
-
-            {/* Content */}
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <div style={{ 
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--space-3)',
-                marginBottom: 'var(--space-4)'
-              }}>
-                <div style={{
-                  fontSize: '2rem',
-                  background: stat.bgColor,
-                  width: '48px',
-                  height: '48px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 'var(--radius-md)',
-                }}>
-                  {stat.icon}
-                </div>
-                <div style={{ fontSize: '2.5rem', fontWeight: 700, color: stat.color }}>
-                  {stat.value}
-                </div>
-              </div>
-              <p style={{ 
-                fontSize: 'var(--text-sm)', 
-                color: 'var(--color-muted)',
-                fontWeight: 500
-              }}>
-                {stat.label}
-              </p>
+      {/* Stats */}
+      <div className="admin-stats-grid">
+        {stats.map(s => (
+          <Link key={s.label} href={s.href} className="admin-stat-card">
+            <div style={{ width: '4px', height: '32px', background: s.accent, borderRadius: '2px', marginBottom: 'var(--space-3)' }} />
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 500, lineHeight: 1, marginBottom: 'var(--space-2)' }}>
+              {s.value}
             </div>
-          </div>
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              {s.label}
+            </div>
+          </Link>
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <div style={{
-        background: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-        borderRadius: 'var(--radius-xl)',
-        padding: 'var(--space-8)',
-      }}>
-        <h2 style={{
-          fontSize: 'var(--text-lg)',
-          fontWeight: 600,
-          marginBottom: 'var(--space-6)',
-          color: 'var(--color-ink)'
-        }}>
-          Quick Actions
-        </h2>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 'var(--space-4)'
-        }}>
-          <a href="/admin/approvals" className="admin-action-link" style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--space-3)',
-            padding: 'var(--space-4)',
-            background: 'linear-gradient(135deg, #FEF3E2 0%, #FDE8B6 100%)',
-            borderRadius: 'var(--radius-md)',
-            textDecoration: 'none',
-            color: '#D97706',
-            fontWeight: 500,
-          }}>
-            ⏳ Review Approvals
-          </a>
-          <a href="/admin/trainers" className="admin-action-link" style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--space-3)',
-            padding: 'var(--space-4)',
-            background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
-            borderRadius: 'var(--radius-md)',
-            textDecoration: 'none',
-            color: '#059669',
-            fontWeight: 500,
-          }}>
-            👥 View Trainers
-          </a>
-          <a href="/admin/inquiries" className="admin-action-link" style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--space-3)',
-            padding: 'var(--space-4)',
-            background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
-            borderRadius: 'var(--radius-md)',
-            textDecoration: 'none',
-            color: '#0284C7',
-            fontWeight: 500,
-          }}>
-            💬 Check Inquiries
-          </a>
+      {/* Two-column section */}
+      <div className="admin-activity-grid">
+
+        {/* Recent inquiries */}
+        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
+          <div style={{ padding: 'var(--space-4) var(--space-5)', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-md)', fontWeight: 500 }}>
+              Recent inquiries
+            </h3>
+            <Link href="/admin/inquiries" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)' }}>
+              View all →
+            </Link>
+          </div>
+
+          {!recentInquiries.data || recentInquiries.data.length === 0 ? (
+            <div style={{ padding: 'var(--space-8)', textAlign: 'center', color: 'var(--color-muted)', fontSize: 'var(--text-sm)' }}>
+              No inquiries yet
+            </div>
+          ) : (
+            recentInquiries.data.map((inq: any, i: number) => (
+              <Link
+                key={inq.id}
+                href="/admin/inquiries"
+                style={{
+                  display: 'block',
+                  padding: 'var(--space-4) var(--space-5)',
+                  borderBottom: i < recentInquiries.data!.length - 1 ? '1px solid var(--color-border)' : 'none',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px', gap: 'var(--space-2)' }}>
+                  <span style={{ fontSize: 'var(--text-sm)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {inq.company_name || inq.contact_name}
+                  </span>
+                  {inq.status === 'new' && (
+                    <span style={{ fontSize: '10px', color: 'var(--color-accent)', textTransform: 'uppercase', fontWeight: 500, flexShrink: 0 }}>
+                      New
+                    </span>
+                  )}
+                </div>
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {inq.training_topic ?? 'No topic'} · for {inq.trainer_profiles?.users?.full_name ?? '—'}
+                </p>
+              </Link>
+            ))
+          )}
+        </div>
+
+        {/* Recent trainers */}
+        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
+          <div style={{ padding: 'var(--space-4) var(--space-5)', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-md)', fontWeight: 500 }}>
+              Recent registrations
+            </h3>
+            <Link href="/admin/trainers" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)' }}>
+              View all →
+            </Link>
+          </div>
+
+          {!recentTrainers.data || recentTrainers.data.length === 0 ? (
+            <div style={{ padding: 'var(--space-8)', textAlign: 'center', color: 'var(--color-muted)', fontSize: 'var(--text-sm)' }}>
+              No registrations yet
+            </div>
+          ) : (
+            recentTrainers.data.map((t: any, i: number) => {
+              const statusColor =
+                t.approval_status === 'approved' ? 'var(--color-cta-dark)' :
+                t.approval_status === 'rejected' ? 'var(--color-error-text)' :
+                'var(--color-accent)'
+
+              return (
+                <Link
+                  key={t.id}
+                  href="/admin/trainers"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)',
+                    padding: 'var(--space-4) var(--space-5)',
+                    borderBottom: i < recentTrainers.data!.length - 1 ? '1px solid var(--color-border)' : 'none',
+                    textDecoration: 'none',
+                    color: 'inherit',
+                  }}
+                >
+                  <div className="avatar avatar-sm" style={{ background: 'var(--color-accent-light)', color: 'var(--color-accent)', overflow: 'hidden' }}>
+                    {t.users?.avatar_url ? (
+                      <img src={t.users.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      (t.users?.full_name ?? '?').slice(0, 2).toUpperCase()
+                    )}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 'var(--text-sm)', fontWeight: 500, marginBottom: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {t.users?.full_name ?? 'Unnamed'}
+                    </p>
+                    <p style={{ fontSize: 'var(--text-xs)', color: statusColor, textTransform: 'capitalize' }}>
+                      {t.approval_status}
+                    </p>
+                  </div>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)', flexShrink: 0 }}>
+                    {new Date(t.created_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short' })}
+                  </span>
+                </Link>
+              )
+            })
+          )}
         </div>
       </div>
     </div>
