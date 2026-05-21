@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, Mailbox, Star, BookOpen, TrendingUp, Lightbulb } from 'lucide-react'
+import { Eye, Mailbox, Star, BookOpen, TrendingUp, PartyPopper } from 'lucide-react'
 import { createServerClient } from '@/lib/supabase/server'
 
 export default async function AnalyticsPage() {
@@ -10,7 +10,7 @@ export default async function AnalyticsPage() {
 
   const { data: profile } = await supabase
     .from('trainer_profiles')
-    .select('id, views_count, inquiry_count, avg_rating, review_count, is_published, approval_status, tagline, avatar_url, pricing_mode')
+    .select('id, views_count, inquiry_count, avg_rating, review_count')
     .eq('user_id', user.id)
     .single() as { data: any }
 
@@ -19,10 +19,10 @@ export default async function AnalyticsPage() {
   const [courseResult, recentInquiries] = trainerId ? await Promise.all([
     supabase.from('courses').select('id', { count: 'exact', head: true }).eq('trainer_id', trainerId),
     supabase.from('inquiries')
-      .select('id, contact_name, company_name, training_topic, status, created_at, message')
+      .select('id, contact_name, company_name, training_topic, status, created_at')
       .eq('trainer_id', trainerId)
       .order('created_at', { ascending: false })
-      .limit(5),
+      .limit(8),
   ]) : [{ count: 0 }, { data: [] }]
 
   const courseCount = courseResult.count ?? 0
@@ -38,14 +38,6 @@ export default async function AnalyticsPage() {
   const conversionRate = profile?.views_count > 0
     ? ((profile.inquiry_count / profile.views_count) * 100).toFixed(1)
     : '0.0'
-
-  const tips = [
-    !profile?.tagline && { text: 'Add a compelling tagline to increase clicks from search results', href: '/trainer/profile' },
-    !profile?.avatar_url && { text: 'Upload a professional photo — profiles with photos get 5× more views', href: '/trainer/profile' },
-    courseCount === 0 && { text: 'List at least one course to show companies what you offer', href: '/trainer/courses' },
-    profile?.pricing_mode === null && { text: 'Set your pricing so companies can quickly assess fit', href: '/trainer/profile' },
-    (profile?.review_count ?? 0) === 0 && { text: 'Ask past clients for a review to build social proof', href: null },
-  ].filter(Boolean) as { text: string; href: string | null }[]
 
   return (
     <div style={{ maxWidth: '900px' }}>
@@ -101,99 +93,56 @@ export default async function AnalyticsPage() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-5)', alignItems: 'start' }}>
-
-        {/* Recent inquiries */}
-        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-base)', fontWeight: 500 }}>Recent inquiries</h2>
-            <Link href="/trainer/inquiries" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)' }}>View all →</Link>
-          </div>
-
-          {inquiries.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-8) 0' }}>
-              <Mailbox size={32} strokeWidth={1.5} style={{ color: 'var(--color-muted)', margin: '0 auto var(--space-3)' }} />
-              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>No inquiries yet</p>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-              {inquiries.map((inq: any) => (
-                <div key={inq.id} style={{
-                  padding: 'var(--space-3)',
-                  background: 'var(--color-bg)',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: 'var(--radius-md)',
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 'var(--space-2)', marginBottom: '4px' }}>
-                    <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-ink)' }}>
-                      {inq.contact_name}
-                    </div>
-                    <span style={{
-                      fontSize: '0.65rem',
-                      padding: '2px 8px',
-                      borderRadius: '99px',
-                      background: inq.status === 'new' ? 'var(--color-accent-light)' : 'var(--color-surface)',
-                      color: inq.status === 'new' ? 'var(--color-accent)' : 'var(--color-muted)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      fontWeight: 600,
-                      flexShrink: 0,
-                    }}>
-                      {inq.status ?? 'new'}
-                    </span>
-                  </div>
-                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
-                    {inq.company_name ?? 'Individual'} · {inq.training_topic ?? 'General'}
-                  </div>
-                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)', marginTop: '4px' }}>
-                    {new Date(inq.created_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+      {/* Recent inquiries */}
+      <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-base)', fontWeight: 500 }}>Recent inquiries</h2>
+          <Link href="/trainer/inquiries" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)' }}>View all →</Link>
         </div>
 
-        {/* Profile tips */}
-        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
-            <Lightbulb size={18} strokeWidth={1.75} style={{ color: '#D97706' }} />
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-base)', fontWeight: 500 }}>Ways to improve</h2>
+        {inquiries.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: 'var(--space-10) 0' }}>
+            <PartyPopper size={36} strokeWidth={1.5} style={{ color: 'var(--color-muted)', margin: '0 auto var(--space-3)' }} />
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: '4px' }}>No inquiries yet</p>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)' }}>They&apos;ll show up here once companies reach out</p>
           </div>
-
-          {tips.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-8) 0' }}>
-              <div style={{ fontSize: '1.8rem', marginBottom: 'var(--space-3)' }}>🎉</div>
-              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>Your profile looks great!</p>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-              {tips.map((tip, i) => (
-                <div key={i} style={{
-                  padding: 'var(--space-3)',
-                  background: 'var(--color-bg)',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: 'var(--radius-md)',
-                  display: 'flex',
-                  gap: 'var(--space-3)',
-                  alignItems: 'flex-start',
-                }}>
-                  <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#D97706', marginTop: '6px', flexShrink: 0 }} />
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink)', lineHeight: 'var(--leading-relaxed)', marginBottom: tip.href ? '6px' : 0 }}>
-                      {tip.text}
-                    </p>
-                    {tip.href && (
-                      <Link href={tip.href} style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)', fontWeight: 500 }}>
-                        Fix this →
-                      </Link>
-                    )}
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 'var(--space-3)' }}>
+            {inquiries.map((inq: any) => (
+              <div key={inq.id} style={{
+                padding: 'var(--space-4)',
+                background: 'var(--color-bg)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-md)',
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 'var(--space-2)', marginBottom: '6px' }}>
+                  <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-ink)' }}>
+                    {inq.contact_name}
                   </div>
+                  <span style={{
+                    fontSize: '0.65rem',
+                    padding: '2px 8px',
+                    borderRadius: '99px',
+                    background: inq.status === 'new' ? 'var(--color-accent-light)' : 'var(--color-surface)',
+                    color: inq.status === 'new' ? 'var(--color-accent)' : 'var(--color-muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    fontWeight: 600,
+                    flexShrink: 0,
+                  }}>
+                    {inq.status ?? 'new'}
+                  </span>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginBottom: '4px' }}>
+                  {inq.company_name ?? 'Individual'} · {inq.training_topic ?? 'General'}
+                </div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)' }}>
+                  {new Date(inq.created_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' })}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
