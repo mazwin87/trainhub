@@ -3,6 +3,16 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
+import {
+  LayoutDashboard,
+  User,
+  BookOpen,
+  Inbox,
+  BarChart2,
+  Settings,
+  LogOut,
+  type LucideIcon,
+} from 'lucide-react'
 
 interface Props {
   userName: string
@@ -10,13 +20,13 @@ interface Props {
   approvalStatus: string
 }
 
-const NAV_ITEMS = [
-  { href: '/trainer/dashboard', label: '📊 Dashboard' },
-  { href: '/trainer/profile',   label: '👤 My Profile' },
-  { href: '/trainer/courses',   label: '📚 Courses' },
-  { href: '/trainer/inquiries', label: '📬 Inquiries' },
-  { href: '/trainer/analytics', label: '📈 Analytics' },
-  { href: '/trainer/settings',  label: '⚙️ Settings' },
+const NAV_ITEMS: { href: string; label: string; Icon: LucideIcon }[] = [
+  { href: '/trainer/dashboard', label: 'Dashboard',  Icon: LayoutDashboard },
+  { href: '/trainer/profile',   label: 'My Profile', Icon: User },
+  { href: '/trainer/courses',   label: 'Courses',    Icon: BookOpen },
+  { href: '/trainer/inquiries', label: 'Inquiries',  Icon: Inbox },
+  { href: '/trainer/analytics', label: 'Analytics',  Icon: BarChart2 },
+  { href: '/trainer/settings',  label: 'Settings',   Icon: Settings },
 ]
 
 export function TrainerSidebar({ userName, completeness, approvalStatus }: Props) {
@@ -61,20 +71,25 @@ export function TrainerSidebar({ userName, completeness, approvalStatus }: Props
       <nav>
         {NAV_ITEMS.map(item => {
           const isActive = pathname === item.href
+          const Icon = item.Icon
           return (
             <Link
               key={item.href}
               href={item.href}
               style={{
-                display: 'block',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-3)',
                 padding: 'var(--space-3) var(--space-6)',
                 fontSize: 'var(--text-sm)',
                 color: isActive ? 'var(--color-accent)' : 'var(--color-muted)',
                 background: isActive ? 'var(--color-accent-light)' : 'transparent',
                 borderRight: isActive ? '3px solid var(--color-accent)' : 'none',
                 fontWeight: isActive ? 500 : 400,
+                textDecoration: 'none',
               }}
             >
+              <Icon size={18} strokeWidth={1.75} />
               {item.label}
             </Link>
           )
@@ -93,9 +108,13 @@ export function TrainerSidebar({ userName, completeness, approvalStatus }: Props
           color: 'var(--color-muted)',
           cursor: 'pointer',
           fontFamily: 'var(--font-body)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '6px',
         }}
       >
-        Sign out
+        <LogOut size={15} strokeWidth={1.75} /> Sign out
       </button>
     </aside>
   )

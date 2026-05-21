@@ -1,5 +1,6 @@
 import { createServerClient } from '@/lib/supabase/server'
 import { ApprovalActions } from './ApprovalActions'
+import { CheckCircle } from 'lucide-react'
 
 export default async function ApprovalsPage() {
   const supabase = await createServerClient()
@@ -25,7 +26,10 @@ export default async function ApprovalsPage() {
 
       {!pending || pending.length === 0 ? (
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-12)', textAlign: 'center' }}>
-          <p style={{ fontSize: 'var(--text-md)', color: 'var(--color-muted)' }}>No pending approvals 🎉</p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--space-2)', fontSize: 'var(--text-md)', color: 'var(--color-muted)' }}>
+            <CheckCircle size={20} strokeWidth={1.75} style={{ color: 'var(--color-cta)' }} />
+            No pending approvals
+          </div>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>

@@ -5,6 +5,7 @@ import { createServerClient } from '@/lib/supabase/server'
 import { formatPrice, getWhatsAppUrl } from '@/lib/utils'
 import type { TrainerProfile } from '@/features/trainers/types'
 import { InquiryButtonClient } from '@/features/search/components/InquiryButtonClient'
+import { MapPin, Clock, Globe, Star, Monitor, ShieldCheck, Check, MessageCircle, Zap } from 'lucide-react'
 
 // ISR: revalidate each profile page every hour
 export const dynamic = 'force-dynamic'
@@ -121,26 +122,32 @@ export default async function TrainerProfilePage({ params }: PageProps) {
               {/* Badges */}
               <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap', marginBottom: 'var(--space-4)' }}>
                 {trainer.is_verified_hrdf && (
-                  <span className="badge badge-hrdf">✓ HRDF Verified · {trainer.hrdf_cert_number}</span>
+                  <span className="badge badge-hrdf" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Check size={11} strokeWidth={2.5} /> HRDF Verified · {trainer.hrdf_cert_number}
+                  </span>
                 )}
                 {trainer.avg_rating >= 4.8 && (
-                  <span className="badge badge-top">★ Top Rated</span>
+                  <span className="badge badge-top" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Star size={11} strokeWidth={2} fill="currentColor" /> Top Rated
+                  </span>
                 )}
                 {trainer.is_featured && (
                   <span className="badge badge-featured">Featured Trainer</span>
                 )}
                 {trainer.is_identity_verified && (
-                  <span className="badge badge-tag">🛡 Identity Verified</span>
+                  <span className="badge badge-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <ShieldCheck size={12} strokeWidth={1.75} /> Identity Verified
+                  </span>
                 )}
               </div>
 
               {/* Meta */}
               <div className="profile-meta">
-                <span>📍 {trainer.location_city}, {trainer.location_state}</span>
-                <span>⏱ {trainer.years_experience} yrs exp</span>
-                <span>🌐 {langs.map((l: any) => l.language).join(' · ')}</span>
-                <span>★ {trainer.avg_rating.toFixed(1)} ({trainer.review_count} reviews)</span>
-                <span>{trainer.is_online && trainer.is_offline ? 'Online & offline' : trainer.is_online ? 'Online' : 'Offline'}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><MapPin size={13} strokeWidth={1.75} /> {trainer.location_city}, {trainer.location_state}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Clock size={13} strokeWidth={1.75} /> {trainer.years_experience} yrs exp</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Globe size={13} strokeWidth={1.75} /> {langs.map((l: any) => l.language).join(' · ')}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Star size={13} strokeWidth={1.75} fill="currentColor" /> {trainer.avg_rating.toFixed(1)} ({trainer.review_count} reviews)</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Monitor size={13} strokeWidth={1.75} /> {trainer.is_online && trainer.is_offline ? 'Online & offline' : trainer.is_online ? 'Online' : 'Offline'}</span>
               </div>
             </div>
           </div>
@@ -177,8 +184,8 @@ export default async function TrainerProfilePage({ params }: PageProps) {
                 <div key={course.id} style={{ padding: 'var(--space-4)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', marginBottom: 'var(--space-3)' }}>
                   <div style={{ fontSize: 'var(--text-base)', fontWeight: 500, marginBottom: 'var(--space-2)' }}>{course.title}</div>
                   <div style={{ display: 'flex', gap: 'var(--space-4)', fontSize: 'var(--text-xs)', color: 'var(--color-muted)', flexWrap: 'wrap' }}>
-                    {course.duration_hours && <span>⏱ {course.duration_hours}h</span>}
-                    <span>🖥 {course.delivery_mode}</span>
+                    {course.duration_hours && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Clock size={12} strokeWidth={1.75} /> {course.duration_hours}h</span>}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Monitor size={12} strokeWidth={1.75} /> {course.delivery_mode}</span>
                     {course.is_hrdf_claimable && (
                       <span style={{ color: 'var(--color-cta-dark)', background: 'var(--color-cta-light)', padding: '0.15rem 0.6rem', borderRadius: 'var(--radius-pill)' }}>
                         HRDF claimable
@@ -224,9 +231,9 @@ export default async function TrainerProfilePage({ params }: PageProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-cta"
-                  style={{ width: '100%', justifyContent: 'center', marginBottom: 'var(--space-2)', borderRadius: 'var(--radius-md)' }}
+                  style={{ width: '100%', justifyContent: 'center', marginBottom: 'var(--space-2)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', gap: '6px' }}
                 >
-                  💬 Chat on WhatsApp
+                  <MessageCircle size={16} strokeWidth={1.75} /> Chat on WhatsApp
                 </a>
               )}
               <InquiryButtonClient trainerName={name} trainerId={trainer.id} />
@@ -235,15 +242,15 @@ export default async function TrainerProfilePage({ params }: PageProps) {
             {/* Quick info */}
             <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)' }}>
               <div className="section-label">Quick info</div>
-              {[
-                { icon: '📍', text: `${trainer.location_city}, ${trainer.location_state}` },
-                { icon: '🖥', text: trainer.is_online && trainer.is_offline ? 'Online & offline' : trainer.is_online ? 'Online only' : 'Offline only' },
-                { icon: '🌐', text: langs.map((l: any) => l.language).join(', ') || '—' },
-                { icon: '⏱', text: `${trainer.years_experience} years experience` },
-                { icon: '⚡', text: 'Replies within 4 hours' },
-              ].map(row => (
+              {([
+                { Icon: MapPin,         text: `${trainer.location_city}, ${trainer.location_state}` },
+                { Icon: Monitor,        text: trainer.is_online && trainer.is_offline ? 'Online & offline' : trainer.is_online ? 'Online only' : 'Offline only' },
+                { Icon: Globe,          text: langs.map((l: any) => l.language).join(', ') || '—' },
+                { Icon: Clock,          text: `${trainer.years_experience} years experience` },
+                { Icon: Zap,            text: 'Replies within 4 hours' },
+              ] as { Icon: typeof MapPin; text: string }[]).map(row => (
                 <div key={row.text} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-3)' }}>
-                  <span>{row.icon}</span>
+                  <row.Icon size={15} strokeWidth={1.75} style={{ flexShrink: 0 }} />
                   <span>{row.text}</span>
                 </div>
               ))}

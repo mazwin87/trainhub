@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
 import { marked } from 'marked'
+import { Pencil, Eye, Search, Check } from 'lucide-react'
 
 interface Props {
   initialPost?: any
@@ -175,17 +176,21 @@ export function BlogEditor({ initialPost, onSaved }: Props) {
           borderRadius: 'var(--radius-md)',
           fontSize: 'var(--text-sm)',
           marginBottom: 'var(--space-5)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
         }}>
-          {message.text}
+          {message.type === 'success' && <Check size={15} strokeWidth={2} />}
+          {message.text.replace(/^✓\s*/, '')}
         </div>
       )}
 
       {/* Tabs */}
       <div style={{ display: 'flex', gap: '2px', marginBottom: 'var(--space-5)', borderBottom: '1px solid var(--color-border)' }}>
         {[
-          { key: 'write',   label: '✏️ Write' },
-          { key: 'preview', label: '👁 Preview' },
-          { key: 'seo',     label: '🔍 SEO' },
+          { key: 'write',   label: 'Write',   Icon: Pencil },
+          { key: 'preview', label: 'Preview', Icon: Eye },
+          { key: 'seo',     label: 'SEO',     Icon: Search },
         ].map(t => (
           <button
             key={t.key}
@@ -201,9 +206,12 @@ export function BlogEditor({ initialPost, onSaved }: Props) {
               cursor: 'pointer',
               fontFamily: 'var(--font-body)',
               marginBottom: '-1px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
             }}
           >
-            {t.label}
+            <t.Icon size={14} strokeWidth={1.75} /> {t.label}
           </button>
         ))}
       </div>

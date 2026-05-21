@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { AlertTriangle } from 'lucide-react'
 
 export default function ErrorPage({ error, reset }: { error: Error; reset: () => void }) {
   useEffect(() => {
@@ -11,7 +12,9 @@ export default function ErrorPage({ error, reset }: { error: Error; reset: () =>
   return (
     <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--space-12) var(--space-6)' }}>
       <div style={{ maxWidth: '480px', textAlign: 'center' }}>
-        <div style={{ fontSize: '4rem', marginBottom: 'var(--space-4)' }}>⚠️</div>
+        <div style={{ marginBottom: 'var(--space-4)', display: 'flex', justifyContent: 'center' }}>
+          <AlertTriangle size={64} strokeWidth={1.5} style={{ color: 'var(--color-accent)' }} />
+        </div>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)', marginBottom: 'var(--space-3)' }}>
           Something went wrong
         </h1>

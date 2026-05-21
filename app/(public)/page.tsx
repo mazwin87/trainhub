@@ -5,6 +5,12 @@ import { TrainerCard } from '@/features/trainers/components'
 import type { TrainerCard as TrainerCardType } from '@/features/trainers/types'
 import { MALAYSIAN_STATES } from '@/types'
 import { ScrollReveal, ScrollRevealGroup } from '@/components/ScrollReveal'
+import {
+  Target, Bot, MessageCircle, Brain, TrendingUp, Leaf, Search,
+  Compass, ShieldAlert, Sparkles, Package, DollarSign, Users,
+  Settings2, BookOpen, MapPin,
+  type LucideIcon,
+} from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'TrainHub Malaysia — Find Verified HRDF Trainers',
@@ -14,21 +20,21 @@ export const metadata: Metadata = {
 
 export const revalidate = 1800
 
-const TOPIC_ICONS: Record<string, string> = {
-  'Leadership': '🎯',
-  'AI & Data': '🤖',
-  'Communication': '💬',
-  'Mental Health': '🧠',
-  'Sales & Marketing': '📈',
-  'Sustainability & ESG': '🌱',
-  'Audit & Compliance': '🔍',
-  'Strategy': '♟',
-  'Health & Safety': '🦺',
-  'Personal Development': '🌟',
-  'Procurement': '📦',
-  'Finance': '💰',
-  'Human Resources': '👥',
-  'Operations': '⚙️',
+const TOPIC_ICONS: Record<string, LucideIcon> = {
+  'Leadership':          Target,
+  'AI & Data':           Bot,
+  'Communication':       MessageCircle,
+  'Mental Health':       Brain,
+  'Sales & Marketing':   TrendingUp,
+  'Sustainability & ESG': Leaf,
+  'Audit & Compliance':  Search,
+  'Strategy':            Compass,
+  'Health & Safety':     ShieldAlert,
+  'Personal Development': Sparkles,
+  'Procurement':         Package,
+  'Finance':             DollarSign,
+  'Human Resources':     Users,
+  'Operations':          Settings2,
 }
 
 const TOPIC_COUNTS: Record<string, number> = {
@@ -121,8 +127,8 @@ export default async function HomePage() {
         {/* Content */}
         <div className="hero-animate" style={{ maxWidth: 'var(--max-width-narrow)', margin: '0 auto', position: 'relative', zIndex: 1 }}>
 
-          <div className="hero-badge-glass">
-            🇲🇾 Malaysia&apos;s HRDF Trainer Directory
+          <div className="hero-badge-glass" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <MapPin size={14} strokeWidth={1.75} /> Malaysia&apos;s HRDF Trainer Directory
           </div>
 
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.9rem, 5vw, var(--text-3xl))', fontWeight: 500, lineHeight: 1.18, marginBottom: 'var(--space-4)', letterSpacing: '-0.02em', color: '#fff' }}>
@@ -218,18 +224,23 @@ export default async function HomePage() {
             </div>
           </ScrollReveal>
           <ScrollRevealGroup className="topics-grid">
-            {Object.entries(TOPIC_COUNTS).map(([topic, count]) => (
-              <Link
-                key={topic}
-                href={`/trainers?topic=${encodeURIComponent(topic)}`}
-                className="reveal topic-card"
-                style={{ padding: 'var(--space-5) var(--space-3)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', background: 'var(--color-bg)', textAlign: 'center', transition: 'all var(--transition-base)', textDecoration: 'none', display: 'block' }}
-              >
-                <div className="topic-icon" style={{ fontSize: '1.4rem', marginBottom: 'var(--space-2)', lineHeight: 1 }}>{TOPIC_ICONS[topic] ?? '📚'}</div>
-                <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-ink)', marginBottom: '0.15rem' }}>{topic}</div>
-                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>{count} trainers</div>
-              </Link>
-            ))}
+            {Object.entries(TOPIC_COUNTS).map(([topic, count]) => {
+              const TopicIcon = TOPIC_ICONS[topic] ?? BookOpen
+              return (
+                <Link
+                  key={topic}
+                  href={`/trainers?topic=${encodeURIComponent(topic)}`}
+                  className="reveal topic-card"
+                  style={{ padding: 'var(--space-5) var(--space-3)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', background: 'var(--color-bg)', textAlign: 'center', transition: 'all var(--transition-base)', textDecoration: 'none', display: 'block' }}
+                >
+                  <div className="topic-icon" style={{ marginBottom: 'var(--space-2)', lineHeight: 1, display: 'flex', justifyContent: 'center', color: 'var(--color-accent)' }}>
+                    <TopicIcon size={24} strokeWidth={1.5} />
+                  </div>
+                  <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-ink)', marginBottom: '0.15rem' }}>{topic}</div>
+                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>{count} trainers</div>
+                </Link>
+              )
+            })}
           </ScrollRevealGroup>
         </div>
       </section>

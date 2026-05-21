@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { TrendingUp, TrendingDown, Minus, Search, AlertCircle } from 'lucide-react'
+import { TrendingUp, TrendingDown, Minus, Search, AlertCircle, Flame, Lightbulb, CheckCircle } from 'lucide-react'
 import { createServerClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -167,8 +167,8 @@ export default async function SearchTrendsPage() {
         {/* TOP SEARCHES */}
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
           <div style={{ padding: 'var(--space-4) var(--space-5)', borderBottom: '1px solid var(--color-border)' }}>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-md)', fontWeight: 500 }}>
-              🔥 Top searches
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-md)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Flame size={16} strokeWidth={1.75} style={{ color: 'var(--color-accent)' }} /> Top searches
             </h3>
             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '2px' }}>
               Last 30 days
@@ -228,8 +228,8 @@ export default async function SearchTrendsPage() {
           {/* Trending up */}
           <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
             <div style={{ padding: 'var(--space-4) var(--space-5)', borderBottom: '1px solid var(--color-border)' }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-md)', fontWeight: 500 }}>
-                📈 Trending up
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-md)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <TrendingUp size={16} strokeWidth={1.75} style={{ color: 'var(--color-cta)' }} /> Trending up
               </h3>
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '2px' }}>
                 Biggest growth vs previous 30 days
@@ -266,8 +266,8 @@ export default async function SearchTrendsPage() {
           {/* Zero-result opportunities */}
           <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-accent)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
             <div style={{ padding: 'var(--space-4) var(--space-5)', borderBottom: '1px solid var(--color-border)', background: 'var(--color-accent-light)' }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-md)', fontWeight: 500, color: 'var(--color-accent-dark)' }}>
-                💡 Opportunities
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-md)', fontWeight: 500, color: 'var(--color-accent-dark)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Lightbulb size={16} strokeWidth={1.75} /> Opportunities
               </h3>
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent-dark)', marginTop: '2px' }}>
                 Searched but no matching topic — recruit trainers or write blog posts!
@@ -275,8 +275,9 @@ export default async function SearchTrendsPage() {
             </div>
 
             {zeroResultSearches.length === 0 ? (
-              <div style={{ padding: 'var(--space-6)', textAlign: 'center', color: 'var(--color-muted)', fontSize: 'var(--text-sm)' }}>
-                All popular searches have matching trainers 🎉
+              <div style={{ padding: 'var(--space-6)', textAlign: 'center', color: 'var(--color-muted)', fontSize: 'var(--text-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                <CheckCircle size={16} strokeWidth={1.75} style={{ color: 'var(--color-cta)' }} />
+                All popular searches have matching trainers
               </div>
             ) : (
               zeroResultSearches.map((s, i) => (
@@ -306,7 +307,8 @@ export default async function SearchTrendsPage() {
 
       {/* Tip */}
       <div style={{ marginTop: 'var(--space-6)', padding: 'var(--space-5)', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)' }}>
-        💡 <strong style={{ color: 'var(--color-ink)' }}>Pro tip:</strong> Top searches with no matching topic are gold. They show what users want but can't find. Use these to plan blog posts (free SEO traffic) and to recruit specialty trainers.
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', verticalAlign: 'middle' }}><Lightbulb size={16} strokeWidth={1.75} style={{ color: 'var(--color-accent)', flexShrink: 0 }} /></span>{' '}
+      <strong style={{ color: 'var(--color-ink)' }}>Pro tip:</strong> Top searches with no matching topic are gold. They show what users want but can't find. Use these to plan blog posts (free SEO traffic) and to recruit specialty trainers.
       </div>
     </div>
   )

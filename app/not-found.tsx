@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Home } from 'lucide-react'
 
 export default function NotFound() {
   return (
@@ -14,8 +15,8 @@ export default function NotFound() {
           The page you're looking for doesn't exist or may have been moved. Try one of these instead:
         </p>
         <div style={{ display: 'flex', gap: 'var(--space-3)', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/" className="btn btn-primary">
-            🏠 Homepage
+          <Link href="/" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Home size={16} /> Homepage
           </Link>
           <Link href="/trainers" className="btn btn-outline">
             Find a trainer

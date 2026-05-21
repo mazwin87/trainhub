@@ -14,6 +14,11 @@ import {
   ExternalLink,
   LineChart,
   BarChart2,
+  GraduationCap,
+  Crown,
+  LogOut,
+  Menu,
+  X,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -51,15 +56,15 @@ export function AdminSidebar({ userName }: Props) {
         <Link href="/" style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 600 }}>
           Train<span style={{ color: 'var(--color-accent)' }}>Hub</span>
         </Link>
-        <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>
-          {menuOpen ? '✕' : '☰'}
+        <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: 'var(--color-ink)' }}>
+          {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {/* Brand */}
       <div className="admin-sidebar-brand" style={{ padding: 'var(--space-6)', borderBottom: '1px solid var(--color-border)' }}>
         <Link href="/" style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-ink)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ fontSize: '1.5rem' }}>🎓</span>
+          <GraduationCap size={24} strokeWidth={1.75} style={{ color: 'var(--color-accent)' }} />
           Train<span style={{ color: 'var(--color-accent)' }}>Hub</span>
         </Link>
         <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '4px', fontWeight: 500 }}>ADMIN CONTROL</p>
@@ -73,7 +78,9 @@ export function AdminSidebar({ userName }: Props) {
           </div>
           <div>
             <p style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-ink)' }}>{userName}</p>
-            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)', fontWeight: 500 }}>👑 Administrator</p>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Crown size={12} strokeWidth={1.75} /> Administrator
+            </p>
           </div>
         </div>
       </div>
@@ -129,7 +136,9 @@ export function AdminSidebar({ userName }: Props) {
             transition: 'all 0.2s ease',
           }}
         >
-          🚪 Sign out
+          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+            <LogOut size={16} strokeWidth={1.75} /> Sign out
+          </span>
         </button>
       </div>
     </aside>

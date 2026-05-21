@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { createBrowserClient } from '@/lib/supabase/client'
+import { CheckCircle } from 'lucide-react'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -43,7 +44,9 @@ export default function ForgotPasswordPage() {
 
       {sent ? (
         <div style={{ padding: 'var(--space-5)', background: 'var(--color-cta-light)', color: 'var(--color-cta-dark)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-          <div style={{ fontSize: '2rem', marginBottom: 'var(--space-3)' }}>✓</div>
+          <div style={{ marginBottom: 'var(--space-3)', display: 'flex', justifyContent: 'center' }}>
+            <CheckCircle size={40} strokeWidth={1.5} />
+          </div>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', marginBottom: 'var(--space-2)' }}>
             Check your email
           </h2>

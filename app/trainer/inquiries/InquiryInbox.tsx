@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createBrowserClient } from '@/lib/supabase/client'
+import { Inbox, Mail, MessageCircle } from 'lucide-react'
 
 interface Inquiry {
   id: string
@@ -97,7 +98,9 @@ export function InquiryInbox({ initialInquiries }: { initialInquiries: Inquiry[]
 
       {inquiries.length === 0 ? (
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-12)', textAlign: 'center' }}>
-          <div style={{ fontSize: '2rem', marginBottom: 'var(--space-4)' }}>📭</div>
+          <div style={{ marginBottom: 'var(--space-4)', display: 'flex', justifyContent: 'center' }}>
+            <Inbox size={40} strokeWidth={1.5} style={{ color: 'var(--color-muted)' }} />
+          </div>
           <p style={{ fontSize: 'var(--text-md)', color: 'var(--color-muted)', marginBottom: 'var(--space-2)' }}>No inquiries yet</p>
           <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-subtle)' }}>
             Complete your profile to start receiving inquiries from companies
@@ -237,8 +240,9 @@ export function InquiryInbox({ initialInquiries }: { initialInquiries: Inquiry[]
                   <a
                     href={`mailto:${selected.contact_email}?subject=Re: Training inquiry`}
                     className="btn btn-primary"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                   >
-                    📧 Reply via email
+                    <Mail size={15} strokeWidth={1.75} /> Reply via email
                   </a>
                   {selected.contact_phone && (
                     <a
@@ -246,8 +250,9 @@ export function InquiryInbox({ initialInquiries }: { initialInquiries: Inquiry[]
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-cta"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                     >
-                      💬 WhatsApp
+                      <MessageCircle size={15} strokeWidth={1.75} /> WhatsApp
                     </a>
                   )}
                   {selected.status !== 'replied' && (
