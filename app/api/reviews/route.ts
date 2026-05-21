@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/client'
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,14 +13,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Rating must be between 1 and 5' }, { status: 400 })
     }
 
-    const supabase = await createServerClient()
+    // Auth check via session cookie (optional — anonymous reviews allowed)
+    const authClient = await createServerClient()
+    const { data: { user } } = await authClient.auth.getUser()
 
-    // Get current user (optional — anonymous reviews allowed)
-    const { data: { user } } = await supabase.auth.getUser()
+    // Use admin client to bypass RLS for all DB operations
+    const admin = createAdminClient()
 
     // Prevent duplicate reviews from the same logged-in user
     if (user) {
-      const { data: existing } = await supabase
+      const { data: existing } = await admin
         .from('reviews')
         .select('id')
         .eq('trainer_id', trainer_id)
@@ -31,7 +34,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const { error } = await supabase.from('reviews').insert({
+    const { error } = await admin.from('reviews').insert({
       trainer_id,
       rating,
       title: title.trim(),
