@@ -18,6 +18,17 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
+  // Redirect away if already logged in
+  useEffect(() => {
+    const supabase = createBrowserClient()
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        const role = data.user.user_metadata?.role
+        router.replace(role === 'admin' ? '/admin' : '/trainer/dashboard')
+      }
+    })
+  }, [router])
+
   useEffect(() => {
     if (registered) {
       const timer = setTimeout(() => {
@@ -99,74 +110,109 @@ function LoginForm() {
   }
 
   return (
-    <div style={{ maxWidth: '420px', margin: '0 auto', padding: 'var(--space-12) var(--space-6)' }}>
-      <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-2)' }}>
-        Sign in to your account
-      </h1>
-      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-8)' }}>
-        Welcome back to TrainHub Malaysia
-      </p>
+    <div style={{
+      minHeight: 'calc(100vh - var(--nav-height) - 200px)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 'var(--space-10) var(--space-5)',
+    }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '440px',
+        background: '#fff',
+        borderRadius: '16px',
+        padding: 'var(--space-8) var(--space-7)',
+        boxShadow: '0 8px 40px rgba(107, 33, 168, 0.15)',
+      }}>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '2.5rem',
+          fontWeight: 600,
+          color: '#6B21A8',
+          marginBottom: 'var(--space-2)',
+          lineHeight: 1.15,
+        }}>
+          Welcome back
+        </h1>
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-6)' }}>
+          Sign in to your TrainHub Malaysia account
+        </p>
 
-      {registered && (
-        <div style={{ padding: 'var(--space-3)', background: 'var(--color-cta-light)', color: 'var(--color-cta-dark)', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-6)' }}>
-          ✓ Account created! Please sign in with your email and password.
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-        <div>
-          <label className="label">Email</label>
-          <input
-            className="input"
-            name="email"
-            type="email"
-            placeholder="amara@example.com"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div>
-          <label className="label">Password</label>
-          <input
-            className="input"
-            name="password"
-            type="password"
-            placeholder="••••••••"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <div style={{ textAlign: 'right', marginTop: '-8px' }}>
-            <Link href="/forgot-password" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)' }}>
-              Forgot password?
-            </Link>
-          </div>
-        </div>
-
-        {error && (
-          <div style={{ padding: 'var(--space-3)', background: 'var(--color-error)', color: 'var(--color-error-text)', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)' }}>
-            {error}
+        {registered && (
+          <div style={{
+            padding: 'var(--space-3)',
+            background: 'var(--color-cta-light)',
+            color: 'var(--color-cta-dark)',
+            borderRadius: 'var(--radius-md)',
+            fontSize: 'var(--text-sm)',
+            marginBottom: 'var(--space-5)',
+          }}>
+            ✓ Account created! Please sign in with your email and password.
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btn-primary"
-          style={{ width: '100%', padding: 'var(--space-3)', borderRadius: 'var(--radius-md)' }}
-        >
-          {loading ? 'Signing in...' : 'Sign in'}
-        </button>
-      </form>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
+          <div>
+            <label className="label">Email</label>
+            <input
+              className="input"
+              name="email"
+              type="email"
+              placeholder="amara@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-      <p style={{ textAlign: 'center', marginTop: 'var(--space-6)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
-        Don't have an account?{' '}
-        <Link href="/register" style={{ color: 'var(--color-accent)', fontWeight: 500 }}>
-          Create one
-        </Link>
-      </p>
+          <div>
+            <label className="label">Password</label>
+            <input
+              className="input"
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <div style={{ textAlign: 'right', marginTop: 'var(--space-2)' }}>
+              <Link href="/forgot-password" style={{ fontSize: 'var(--text-sm)', color: '#A855F7', transition: 'color 0.3s ease' }}>
+                Forgot password?
+              </Link>
+            </div>
+          </div>
+
+          {error && (
+            <div style={{
+              padding: 'var(--space-3)',
+              background: 'var(--color-error)',
+              color: 'var(--color-error-text)',
+              borderRadius: 'var(--radius-md)',
+              fontSize: 'var(--text-sm)',
+            }}>
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary"
+            style={{ width: '100%', padding: 'var(--space-4)', marginTop: 'var(--space-2)' }}
+          >
+            {loading ? 'Signing in…' : 'Sign in'}
+          </button>
+        </form>
+
+        <p style={{ textAlign: 'center', marginTop: 'var(--space-6)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
+          Don&apos;t have an account?{' '}
+          <Link href="/register" style={{ color: '#A855F7', fontWeight: 600, transition: 'color 0.3s ease' }}>
+            Create one
+          </Link>
+        </p>
+      </div>
     </div>
   )
 }
