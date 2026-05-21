@@ -136,6 +136,7 @@ export interface TrainerSearchFilters {
   topics?: string[]
   languages?: string[]
   verified?: boolean
+  top_rated?: boolean
   online?: boolean
   offline?: boolean
   min_price?: number

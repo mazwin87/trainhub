@@ -5,7 +5,8 @@ import { createServerClient } from '@/lib/supabase/server'
 import { formatPrice, getWhatsAppUrl } from '@/lib/utils'
 import type { TrainerProfile } from '@/features/trainers/types'
 import { InquiryButtonClient } from '@/features/search/components/InquiryButtonClient'
-import { MapPin, Clock, Globe, Star, Monitor, ShieldCheck, Check, MessageCircle, Zap } from 'lucide-react'
+import { WriteReviewClient } from '@/features/reviews/WriteReviewClient'
+import { MapPin, Clock, Globe, Star, Monitor, ShieldCheck, Check, MessageCircle, Zap, BadgeCheck } from 'lucide-react'
 
 // ISR: revalidate each profile page every hour
 export const dynamic = 'force-dynamic'
@@ -46,6 +47,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+interface Review {
+  id: string
+  rating: number
+  title: string | null
+  body: string | null
+  created_at: string | null
+  is_verified_training: boolean | null
+}
+
 /* ── Fetch full trainer profile ─────────────────────────── */
 async function getTrainer(slug: string): Promise<TrainerProfile | null> {
   try {
@@ -70,11 +80,29 @@ async function getTrainer(slug: string): Promise<TrainerProfile | null> {
   }
 }
 
+async function getReviews(trainerId: string): Promise<Review[]> {
+  try {
+    const supabase = await createServerClient()
+    const { data } = await supabase
+      .from('reviews')
+      .select('id, rating, title, body, created_at, is_verified_training')
+      .eq('trainer_id', trainerId)
+      .eq('is_approved', true)
+      .order('created_at', { ascending: false })
+      .limit(20)
+    return (data ?? []) as Review[]
+  } catch {
+    return []
+  }
+}
+
 /* ── Page ───────────────────────────────────────────────── */
 export default async function TrainerProfilePage({ params }: PageProps) {
   const { slug } = await params
   const trainer = await getTrainer(slug)
   if (!trainer) notFound()
+
+  const reviews = await getReviews(trainer.id)
 
   const user = trainer.user as any
   const name = user?.full_name ?? ''
@@ -213,6 +241,59 @@ export default async function TrainerProfilePage({ params }: PageProps) {
                 ))}
               </section>
             )}
+
+            {/* Reviews */}
+            <section style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                <div className="section-label" style={{ marginBottom: 0 }}>Reviews</div>
+                {trainer.review_count > 0 && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
+                    <Star size={14} strokeWidth={1.75} fill="var(--color-accent)" color="var(--color-accent)" />
+                    <strong style={{ color: 'var(--color-ink)' }}>{trainer.avg_rating.toFixed(1)}</strong>
+                    <span>({trainer.review_count} review{trainer.review_count !== 1 ? 's' : ''})</span>
+                  </div>
+                )}
+              </div>
+
+              {reviews.length === 0 ? (
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-4)' }}>
+                  No reviews yet — be the first.
+                </p>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', marginBottom: 'var(--space-5)' }}>
+                  {reviews.map(review => (
+                    <div key={review.id} style={{ paddingBottom: 'var(--space-4)', borderBottom: '1px solid var(--color-border)' }}>
+                      {/* Stars */}
+                      <div style={{ display: 'flex', gap: '2px', marginBottom: 'var(--space-2)' }}>
+                        {[1, 2, 3, 4, 5].map(n => (
+                          <Star
+                            key={n}
+                            size={13}
+                            strokeWidth={1.5}
+                            fill={review.rating >= n ? 'var(--color-accent)' : 'none'}
+                            color={review.rating >= n ? 'var(--color-accent)' : 'var(--color-border)'}
+                          />
+                        ))}
+                        {review.is_verified_training && (
+                          <span style={{ marginLeft: 'var(--space-2)', display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', color: 'var(--color-cta-dark)', background: 'var(--color-cta-light)', padding: '1px 6px', borderRadius: 'var(--radius-pill)' }}>
+                            <BadgeCheck size={10} strokeWidth={2} /> Verified
+                          </span>
+                        )}
+                      </div>
+                      {review.title && (
+                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 500, marginBottom: '0.25rem' }}>{review.title}</p>
+                      )}
+                      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)' }}>{review.body}</p>
+                      <p style={{ fontSize: '11px', color: 'var(--color-subtle)', marginTop: '0.4rem' }}>
+                        {new Date(review.created_at!).toLocaleDateString('en-MY', { year: 'numeric', month: 'short', day: 'numeric' })}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <WriteReviewClient trainerId={trainer.id} trainerName={name} />
+            </section>
           </div>
 
           {/* Sidebar */}

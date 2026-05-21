@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Star, Check, MapPin } from 'lucide-react'
 import type { TrainerCard as TrainerCardType } from '../types'
 import { formatPrice, getWhatsAppUrl, truncate } from '@/lib/utils'
 
@@ -58,13 +59,17 @@ export function TrainerCard({ trainer }: Props) {
         {/* Badges */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '0.75rem' }}>
           {trainer.is_verified_hrdf && (
-            <span className="badge badge-hrdf">✓ HRDF Verified</span>
+            <span className="badge badge-hrdf" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+              <Check size={10} strokeWidth={2.5} /> HRDF Verified
+            </span>
           )}
           {trainer.is_featured && (
             <span className="badge badge-featured">Featured</span>
           )}
           {trainer.avg_rating >= 4.8 && (
-            <span className="badge badge-top">★ Top Rated</span>
+            <span className="badge badge-top" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+              <Star size={10} strokeWidth={2} fill="currentColor" /> Top Rated
+            </span>
           )}
         </div>
 
@@ -105,8 +110,16 @@ export function TrainerCard({ trainer }: Props) {
             <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-ink)' }}>
               {formatPrice(trainer.pricing_mode, trainer.pricing_from, trainer.pricing_to)}
             </div>
-            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '0.1rem' }}>
-              ★ {trainer.avg_rating.toFixed(1)} · {trainer.review_count} reviews
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '0.1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                <Star size={11} strokeWidth={1.75} fill="var(--color-accent)" color="var(--color-accent)" />
+                {trainer.avg_rating.toFixed(1)}
+              </span>
+              <span style={{ color: 'var(--color-border)' }}>·</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                <MapPin size={10} strokeWidth={1.75} />
+                {trainer.location_state}
+              </span>
             </div>
           </div>
 

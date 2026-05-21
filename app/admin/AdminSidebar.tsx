@@ -19,6 +19,7 @@ import {
   LogOut,
   Menu,
   X,
+  Star,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -32,6 +33,7 @@ const NAV_ITEMS: { href: string; label: string; Icon: LucideIcon; external?: boo
   { href: '/admin/approvals',    label: 'Pending Approvals', Icon: Hourglass },
   { href: '/admin/inquiries',    label: 'Inquiries',         Icon: MessageSquare },
   { href: '/admin/blog',         label: 'Blog Posts',        Icon: FileText },
+  { href: '/admin/reviews',      label: 'Reviews',           Icon: Star },
   { href: '/admin/search-trends', label: 'Search Trends',   Icon: LineChart },
   { href: '/admin/analytics',    label: 'Analytics',         Icon: BarChart2 },
   { href: '/admin/users',        label: 'Users',             Icon: Settings },
