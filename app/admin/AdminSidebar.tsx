@@ -12,22 +12,25 @@ import {
   FileText,
   Settings,
   ExternalLink,
-  LineChart
+  LineChart,
+  BarChart2,
+  type LucideIcon,
 } from 'lucide-react'
 
 interface Props {
   userName: string
 }
 
-const NAV_ITEMS: { href: string; label: string; Icon: LucideIcon }[] = [
-  { href: '/admin',           label: 'Dashboard',         Icon: LayoutDashboard },
-  { href: '/admin/trainers',  label: 'All Trainers',      Icon: Users },
-  { href: '/admin/approvals', label: 'Pending Approvals', Icon: Hourglass },
-  { href: '/admin/inquiries', label: 'Inquiries',         Icon: MessageSquare },
-  { href: '/admin/blog',      label: 'Blog Posts',        Icon: FileText },
-  { href: '/admin/search-trends',  label: 'Search Trends',     Icon: LineChart },  // ← NEW
-  { href: '/admin/users',     label: 'Users',             Icon: Settings },
-  { href: '/',                label: 'View site',         Icon: ExternalLink, external: true },
+const NAV_ITEMS: { href: string; label: string; Icon: LucideIcon; external?: boolean }[] = [
+  { href: '/admin',              label: 'Dashboard',         Icon: LayoutDashboard },
+  { href: '/admin/trainers',     label: 'All Trainers',      Icon: Users },
+  { href: '/admin/approvals',    label: 'Pending Approvals', Icon: Hourglass },
+  { href: '/admin/inquiries',    label: 'Inquiries',         Icon: MessageSquare },
+  { href: '/admin/blog',         label: 'Blog Posts',        Icon: FileText },
+  { href: '/admin/search-trends', label: 'Search Trends',   Icon: LineChart },
+  { href: '/admin/analytics',    label: 'Analytics',         Icon: BarChart2 },
+  { href: '/admin/users',        label: 'Users',             Icon: Settings },
+  { href: '/',                   label: 'View site',         Icon: ExternalLink, external: true },
 ]
 
 export function AdminSidebar({ userName }: Props) {
