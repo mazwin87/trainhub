@@ -1,35 +1,21 @@
 import { Star, CheckCircle } from 'lucide-react'
-import { createServerClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/client'
 import { ReviewActions } from './ReviewActions'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminReviewsPage() {
-  const supabase = await createServerClient()
+  const supabase = createAdminClient()
 
-  const { data: pending } = await supabase
+  const { data: queue } = await supabase
     .from('reviews')
     .select(`
       id, rating, title, body, created_at, is_verified_training,
       trainer_id,
       trainer_profiles(slug, users(full_name))
     `)
-    .is('is_approved', false)
-    .not('is_approved', 'is', null)
+    .eq('is_approved', false)
     .order('created_at', { ascending: true }) as { data: any[] | null }
-
-  // Also grab newly submitted (is_approved is null = not yet touched)
-  const { data: newReviews } = await supabase
-    .from('reviews')
-    .select(`
-      id, rating, title, body, created_at, is_verified_training,
-      trainer_id,
-      trainer_profiles(slug, users(full_name))
-    `)
-    .is('is_approved', null)
-    .order('created_at', { ascending: true }) as { data: any[] | null }
-
-  const queue = [...(newReviews ?? []), ...(pending ?? [])]
 
   return (
     <div>
