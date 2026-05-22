@@ -14,7 +14,10 @@ export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: Promise<{ slug: string }>
+  searchParams: Promise<Record<string, string | undefined>>
 }
+
+const REVIEWS_PER_PAGE = 5
 
 /* ── Generate static params for top trainers at build time ── */
 export async function generateStaticParams() {
@@ -81,29 +84,35 @@ async function getTrainer(slug: string): Promise<TrainerProfile | null> {
   }
 }
 
-async function getReviews(trainerId: string): Promise<Review[]> {
+async function getReviews(trainerId: string, page: number): Promise<{ reviews: Review[]; total: number }> {
   try {
     const supabase = createAdminClient()
-    const { data } = await supabase
+    const from = (page - 1) * REVIEWS_PER_PAGE
+    const to = from + REVIEWS_PER_PAGE - 1
+    const { data, count } = await supabase
       .from('reviews')
-      .select('id, rating, title, body, created_at, is_verified_training')
+      .select('id, rating, title, body, created_at, is_verified_training', { count: 'exact' })
       .eq('trainer_id', trainerId)
       .eq('is_approved', true)
       .order('created_at', { ascending: false })
-      .limit(20)
-    return (data ?? []) as Review[]
+      .range(from, to)
+    return { reviews: (data ?? []) as Review[], total: count ?? 0 }
   } catch {
-    return []
+    return { reviews: [], total: 0 }
   }
 }
 
 /* ── Page ───────────────────────────────────────────────── */
-export default async function TrainerProfilePage({ params }: PageProps) {
+export default async function TrainerProfilePage({ params, searchParams }: PageProps) {
   const { slug } = await params
+  const sp = await searchParams
+  const reviewPage = Math.max(1, Number(sp.rp ?? 1))
+
   const trainer = await getTrainer(slug)
   if (!trainer) notFound()
 
-  const reviews = await getReviews(trainer.id)
+  const { reviews, total: reviewTotal } = await getReviews(trainer.id, reviewPage)
+  const totalReviewPages = Math.ceil(reviewTotal / REVIEWS_PER_PAGE)
 
   const user = trainer.user as any
   const name = user?.full_name ?? ''
@@ -244,7 +253,7 @@ export default async function TrainerProfilePage({ params }: PageProps) {
             )}
 
             {/* Reviews */}
-            <section style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)' }}>
+            <section id="reviews" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
                 <div className="section-label" style={{ marginBottom: 0 }}>Reviews</div>
                 {trainer.review_count > 0 && (
@@ -261,36 +270,68 @@ export default async function TrainerProfilePage({ params }: PageProps) {
                   No reviews yet — be the first.
                 </p>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', marginBottom: 'var(--space-5)' }}>
-                  {reviews.map(review => (
-                    <div key={review.id} style={{ paddingBottom: 'var(--space-4)', borderBottom: '1px solid var(--color-border)' }}>
-                      {/* Stars */}
-                      <div style={{ display: 'flex', gap: '2px', marginBottom: 'var(--space-2)' }}>
-                        {[1, 2, 3, 4, 5].map(n => (
-                          <Star
-                            key={n}
-                            size={13}
-                            strokeWidth={1.5}
-                            fill={review.rating >= n ? 'var(--color-accent)' : 'none'}
-                            color={review.rating >= n ? 'var(--color-accent)' : 'var(--color-border)'}
-                          />
-                        ))}
-                        {review.is_verified_training && (
-                          <span style={{ marginLeft: 'var(--space-2)', display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', color: 'var(--color-cta-dark)', background: 'var(--color-cta-light)', padding: '1px 6px', borderRadius: 'var(--radius-pill)' }}>
-                            <BadgeCheck size={10} strokeWidth={2} /> Verified
-                          </span>
+                <>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', marginBottom: 'var(--space-5)' }}>
+                    {reviews.map(review => (
+                      <div key={review.id} style={{ paddingBottom: 'var(--space-4)', borderBottom: '1px solid var(--color-border)' }}>
+                        <div style={{ display: 'flex', gap: '2px', marginBottom: 'var(--space-2)' }}>
+                          {[1, 2, 3, 4, 5].map(n => (
+                            <Star
+                              key={n}
+                              size={13}
+                              strokeWidth={1.5}
+                              fill={review.rating >= n ? 'var(--color-accent)' : 'none'}
+                              color={review.rating >= n ? 'var(--color-accent)' : 'var(--color-border)'}
+                            />
+                          ))}
+                          {review.is_verified_training && (
+                            <span style={{ marginLeft: 'var(--space-2)', display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', color: 'var(--color-cta-dark)', background: 'var(--color-cta-light)', padding: '1px 6px', borderRadius: 'var(--radius-pill)' }}>
+                              <BadgeCheck size={10} strokeWidth={2} /> Verified
+                            </span>
+                          )}
+                        </div>
+                        {review.title && (
+                          <p style={{ fontSize: 'var(--text-sm)', fontWeight: 500, marginBottom: '0.25rem' }}>{review.title}</p>
                         )}
+                        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)' }}>{review.body}</p>
+                        <p style={{ fontSize: '11px', color: 'var(--color-subtle)', marginTop: '0.4rem' }}>
+                          {new Date(review.created_at!).toLocaleDateString('en-MY', { year: 'numeric', month: 'short', day: 'numeric' })}
+                        </p>
                       </div>
-                      {review.title && (
-                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 500, marginBottom: '0.25rem' }}>{review.title}</p>
-                      )}
-                      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)' }}>{review.body}</p>
-                      <p style={{ fontSize: '11px', color: 'var(--color-subtle)', marginTop: '0.4rem' }}>
-                        {new Date(review.created_at!).toLocaleDateString('en-MY', { year: 'numeric', month: 'short', day: 'numeric' })}
-                      </p>
+                    ))}
+                  </div>
+
+                  {/* Pagination */}
+                  {totalReviewPages > 1 && (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-5)' }}>
+                      <Link
+                        href={reviewPage > 1 ? `?rp=${reviewPage - 1}#reviews` : '#'}
+                        style={{
+                          fontSize: 'var(--text-xs)',
+                          color: reviewPage > 1 ? 'var(--color-accent)' : 'var(--color-border)',
+                          pointerEvents: reviewPage > 1 ? 'auto' : 'none',
+                          textDecoration: 'none',
+                        }}
+                      >
+                        ← Previous
+                      </Link>
+                      <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
+                        {reviewPage} / {totalReviewPages}
+                      </span>
+                      <Link
+                        href={reviewPage < totalReviewPages ? `?rp=${reviewPage + 1}#reviews` : '#'}
+                        style={{
+                          fontSize: 'var(--text-xs)',
+                          color: reviewPage < totalReviewPages ? 'var(--color-accent)' : 'var(--color-border)',
+                          pointerEvents: reviewPage < totalReviewPages ? 'auto' : 'none',
+                          textDecoration: 'none',
+                        }}
+                      >
+                        Next →
+                      </Link>
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
               )}
 
               <WriteReviewClient trainerId={trainer.id} trainerName={name} />
