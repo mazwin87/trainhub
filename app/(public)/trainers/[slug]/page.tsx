@@ -5,6 +5,7 @@ import { createServerClient } from '@/lib/supabase/server'
 import { formatPrice, getWhatsAppUrl } from '@/lib/utils'
 import type { TrainerProfile } from '@/features/trainers/types'
 import { InquiryButtonClient } from '@/features/search/components/InquiryButtonClient'
+import { createAdminClient } from '@/lib/supabase/client'
 import { WriteReviewClient } from '@/features/reviews/WriteReviewClient'
 import { MapPin, Clock, Globe, Star, Monitor, ShieldCheck, Check, MessageCircle, Zap, BadgeCheck } from 'lucide-react'
 
@@ -82,7 +83,7 @@ async function getTrainer(slug: string): Promise<TrainerProfile | null> {
 
 async function getReviews(trainerId: string): Promise<Review[]> {
   try {
-    const supabase = await createServerClient()
+    const supabase = createAdminClient()
     const { data } = await supabase
       .from('reviews')
       .select('id, rating, title, body, created_at, is_verified_training')
