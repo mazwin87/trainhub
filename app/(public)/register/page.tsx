@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createBrowserClient } from '@/lib/supabase/client'
+import { OAuthButtons } from '@/features/auth/components/OAuthButtons'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -98,6 +99,14 @@ export default function RegisterPage() {
         <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-6)' }}>
           Join Malaysia&apos;s HRDF trainer directory. It&apos;s free.
         </p>
+
+        <OAuthButtons />
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', margin: 'var(--space-2) 0' }}>
+          <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', whiteSpace: 'nowrap' }}>or register with email</span>
+          <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+        </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
           <div>

@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createBrowserClient } from '@/lib/supabase/client'
+import { OAuthButtons } from '@/features/auth/components/OAuthButtons'
 import type { TablesInsert } from '@/lib/supabase/database.types'
 
 function LoginForm() {
@@ -151,6 +152,14 @@ function LoginForm() {
             ✓ Account created! Please sign in with your email and password.
           </div>
         )}
+
+        <OAuthButtons />
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', margin: 'var(--space-2) 0' }}>
+          <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', whiteSpace: 'nowrap' }}>or sign in with email</span>
+          <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+        </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
           <div>
