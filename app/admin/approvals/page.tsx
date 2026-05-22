@@ -50,7 +50,7 @@ export default async function ApprovalsPage() {
                     </p>
                   )}
                 </div>
-                <ApprovalActions trainerId={trainer.id} />
+                <ApprovalActions trainerId={trainer.id} hrdfCertNumber={trainer.hrdf_cert_number} />
               </div>
 
               {trainer.tagline && (

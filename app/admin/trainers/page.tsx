@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createServerClient } from '@/lib/supabase/server'
+import { HrdfToggle } from './HrdfToggle'
 
 const PER_PAGE = 20
 
@@ -26,7 +27,7 @@ export default async function AdminTrainersPage({
     .from('trainer_profiles')
     .select(`
       id, slug, hrdf_cert_number, location_state,
-      approval_status, is_published, profile_completeness,
+      approval_status, is_published, is_verified_hrdf, profile_completeness,
       created_at, user_id,
       users(full_name, email, avatar_url)
     `, { count: 'exact' })
@@ -196,7 +197,10 @@ export default async function AdminTrainersPage({
                   {trainer.profile_completeness ?? 0}%
                 </div>
 
-                <div className="admin-cell-action" style={{ textAlign: 'right' }}>
+                <div className="admin-cell-action" style={{ textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 'var(--space-3)' }}>
+                  {trainer.approval_status === 'approved' && (
+                    <HrdfToggle trainerId={trainer.id} isVerified={!!trainer.is_verified_hrdf} />
+                  )}
                   {trainer.is_published && (
                     <Link
                       href={`/trainers/${trainer.slug}`}
