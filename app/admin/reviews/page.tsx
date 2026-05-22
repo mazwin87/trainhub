@@ -17,6 +17,8 @@ export default async function AdminReviewsPage() {
     .eq('is_approved', false)
     .order('created_at', { ascending: true }) as { data: any[] | null }
 
+  const reviews = queue ?? []
+
   return (
     <div>
       <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-2)' }}>
@@ -26,7 +28,7 @@ export default async function AdminReviewsPage() {
         Approve or reject submitted reviews. Approved reviews are immediately visible on trainer profiles.
       </p>
 
-      {queue.length === 0 ? (
+      {reviews.length === 0 ? (
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-12)', textAlign: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--space-2)', fontSize: 'var(--text-md)', color: 'var(--color-muted)' }}>
             <CheckCircle size={20} strokeWidth={1.75} style={{ color: 'var(--color-cta)' }} />
@@ -35,7 +37,7 @@ export default async function AdminReviewsPage() {
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-          {queue.map((review: any) => {
+          {reviews.map((review: any) => {
             const trainerName = review.trainer_profiles?.users?.full_name ?? 'Unknown Trainer'
             const trainerSlug = review.trainer_profiles?.slug ?? ''
 
