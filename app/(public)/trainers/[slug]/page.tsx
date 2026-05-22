@@ -404,7 +404,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                         paddingBottom: 'var(--space-5)',
                         borderBottom: '1px solid var(--color-border)',
                       }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-2)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)', flexWrap: 'wrap', rowGap: 'var(--space-1)' }}>
                           <div style={{ display: 'flex', gap: '2px' }}>
                             {[1, 2, 3, 4, 5].map(n => (
                               <Star
@@ -470,7 +470,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
           </div>
 
           {/* ── SIDEBAR ──────────────────────────────────── */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+          <div className="profile-sidebar">
 
             {/* Price + CTA */}
             <div style={{
