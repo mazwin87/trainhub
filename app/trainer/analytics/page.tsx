@@ -29,10 +29,10 @@ export default async function AnalyticsPage() {
   const inquiries = (recentInquiries.data ?? []) as any[]
 
   const stats = [
-    { label: 'Profile views', value: profile?.views_count ?? 0, Icon: Eye, accent: '#0F766E' },
+    { label: 'Profile views', value: profile?.views_count ?? 0, Icon: Eye, accent: '#C2410C' },
     { label: 'Inquiries received', value: profile?.inquiry_count ?? 0, Icon: Mailbox, accent: '#059669' },
     { label: 'Average rating', value: profile?.avg_rating?.toFixed(1) ?? '—', Icon: Star, accent: '#D97706' },
-    { label: 'Courses listed', value: courseCount, Icon: BookOpen, accent: '#0F766E' },
+    { label: 'Courses listed', value: courseCount, Icon: BookOpen, accent: '#C2410C' },
   ]
 
   const conversionRate = profile?.views_count > 0

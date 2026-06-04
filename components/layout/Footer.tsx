@@ -4,14 +4,14 @@ export function Footer() {
   return (
     <footer
       className="home-section"
-      style={{ background: 'linear-gradient(135deg, #0C302C 0%, #115E59 100%)', marginTop: 'auto' }}
+      style={{ background: 'linear-gradient(135deg, #5A1E0A 0%, #9A3412 100%)', marginTop: 'auto' }}
     >
       <div className="footer-grid" style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto' }}>
 
         {/* Brand */}
         <div>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', color: '#fff', marginBottom: 'var(--space-3)' }}>
-            Train<span style={{ color: '#14B8A6' }}>Hub</span> Malaysia
+            Train<span style={{ color: '#EA8A4B' }}>Hub</span> Malaysia
           </div>
           <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.5)', lineHeight: 'var(--leading-relaxed)', maxWidth: '280px' }}>
             Malaysia's HRDC trainer directory. Connecting companies with verified, certified training professionals.

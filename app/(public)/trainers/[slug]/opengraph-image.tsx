@@ -53,7 +53,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         style={{
           width: '100%', height: '100%',
           display: 'flex', flexDirection: 'column',
-          background: 'linear-gradient(135deg, #0E5C55 0%, #0F766E 55%, #14B8A6 100%)',
+          background: 'linear-gradient(135deg, #9A3412 0%, #C2410C 55%, #EA8A4B 100%)',
           fontFamily: 'DM Sans, sans-serif',
           position: 'relative',
         }}
@@ -162,7 +162,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{ width: '36px', height: '36px', background: 'white', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ width: '20px', height: '20px', background: 'linear-gradient(135deg, #0F766E, #14B8A6)', borderRadius: '5px', display: 'flex' }} />
+              <div style={{ width: '20px', height: '20px', background: 'linear-gradient(135deg, #C2410C, #EA8A4B)', borderRadius: '5px', display: 'flex' }} />
             </div>
             <span style={{ color: 'white', fontSize: '22px', fontWeight: 700, letterSpacing: '-0.3px' }}>
               TrainHub Malaysia

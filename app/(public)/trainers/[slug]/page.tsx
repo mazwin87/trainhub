@@ -165,7 +165,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                 color: '#fff',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 600,
-                boxShadow: '0 6px 20px rgba(15,118,110,0.28)',
+                boxShadow: '0 6px 20px rgba(194,65,12,0.28)',
               }}>
                 {user?.avatar_url
                   ? <img src={user.avatar_url} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />

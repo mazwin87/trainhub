@@ -69,7 +69,7 @@ export function Navbar() {
             color: '#fff',
           }}
         >
-          Train<span style={{ color: '#A6E0D7' }}>Hub</span>
+          Train<span style={{ color: '#E8C3A6' }}>Hub</span>
           <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.65)', fontWeight: 400, marginLeft: '0.35rem', fontFamily: 'var(--font-body)' }}>
             Malaysia
           </span>

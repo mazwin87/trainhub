@@ -1,6 +1,6 @@
 /* ============================================================
    TRAINHUB MALAYSIA — DESIGN TOKENS
-   Teal Trust Theme
+   Terracotta & Clay Theme
    ============================================================ */
 
 :root {
@@ -8,24 +8,24 @@
   /* ── COLORS ─────────────────────────────────────────── */
 
   /* Surfaces */
-  --color-bg:            #F1FAF8;   /* light teal tint */
+  --color-bg:            #FCF7F2;   /* warm cream */
   --color-surface:       #ffffff;
-  --color-surface-alt:   #DBF4EF;   /* soft teal — pills, hovers */
-  --color-ink:           #112B27;   /* dark teal-charcoal — primary text */
+  --color-surface-alt:   #FAE1D0;   /* soft clay — pills, hovers */
+  --color-ink:           #3A241A;   /* warm charcoal — primary text */
 
   /* Text */
-  --color-muted:         #5E7D78;
-  --color-subtle:        #93AEA9;
+  --color-muted:         #8A6F5E;
+  --color-subtle:        #B8A593;
 
   /* Borders */
-  --color-border:        #CDEEE8;   /* soft teal border */
-  --color-border-strong: #A6E0D7;
+  --color-border:        #F2DEC9;   /* soft clay border */
+  --color-border-strong: #E8C3A6;
 
-  /* ── PRIMARY ACCENT — Trust Teal ────────────────────── */
-  --color-accent:        #0F766E;
-  --color-accent-light:  #E6FBF6;
-  --color-accent-dark:   #115E59;
-  --color-accent-text:   #0E5C55;
+  /* ── PRIMARY ACCENT — Terracotta ────────────────────── */
+  --color-accent:        #C2410C;
+  --color-accent-light:  #FCEDE2;
+  --color-accent-dark:   #9A3412;
+  --color-accent-text:   #9A3412;
 
   /* ── CTA — Green (WhatsApp / positive actions) ───────── */
   --color-cta:           #97C459;
@@ -33,18 +33,18 @@
   --color-cta-dark:      #639922;
   --color-cta-text:      #3B6D11;
 
-  /* ── SECONDARY — Bright Teal accent ──────────────────── */
-  --color-secondary:       #14B8A6;
-  --color-secondary-light: #E6FBF6;
-  --color-secondary-dark:  #0F766E;
-  --color-secondary-text:  #115E59;
+  /* ── SECONDARY — Warm Clay accent ──────────────────── */
+  --color-secondary:       #EA8A4B;
+  --color-secondary-light: #FCEDE2;
+  --color-secondary-dark:  #C2410C;
+  --color-secondary-text:  #9A3412;
 
   /* ── SEMANTIC BADGES ──────────────────────────────────── */
   --color-verified:        var(--color-cta-light);
   --color-verified-text:   var(--color-cta-dark);
 
-  --color-featured:        #E6FBF6;
-  --color-featured-text:   #115E59;
+  --color-featured:        #FCEDE2;
+  --color-featured-text:   #9A3412;
 
   --color-top:             #FAEEDA;
   --color-top-text:        #854F0B;
@@ -56,8 +56,8 @@
   --color-warning:         #FAEEDA;
   --color-warning-text:    #854F0B;
 
-  --color-info:            #E6FBF6;
-  --color-info-text:       #115E59;
+  --color-info:            #FCEDE2;
+  --color-info-text:       #9A3412;
 
 
   /* ── TYPOGRAPHY ─────────────────────────────────────── */
@@ -112,10 +112,10 @@
 
 
   /* ── SHADOWS ─────────────────────────────────────────── */
-  --shadow-sm:    0 1px 3px rgba(15, 118, 110, 0.07);
-  --shadow-md:    0 4px 12px rgba(15, 118, 110, 0.12);
-  --shadow-hover: 0 6px 24px rgba(15, 118, 110, 0.20);
-  --shadow-focus: 0 0 0 4px rgba(20, 184, 166, 0.18);
+  --shadow-sm:    0 1px 3px rgba(194, 65, 12, 0.07);
+  --shadow-md:    0 4px 12px rgba(194, 65, 12, 0.12);
+  --shadow-hover: 0 6px 24px rgba(194, 65, 12, 0.20);
+  --shadow-focus: 0 0 0 4px rgba(234, 138, 75, 0.18);
 
 
   /* ── TRANSITIONS ─────────────────────────────────────── */
