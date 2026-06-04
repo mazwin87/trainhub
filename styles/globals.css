@@ -1621,7 +1621,7 @@
   position: absolute;
   inset: 0 0 auto 0;
   height: 420px;
-  background: linear-gradient(to bottom, rgba(230, 251, 246, 0.7), rgba(255, 255, 255, 0));
+  background: linear-gradient(to bottom, rgba(252, 237, 226, 0.7), rgba(255, 255, 255, 0));
   pointer-events: none;
   z-index: 0;
 }
