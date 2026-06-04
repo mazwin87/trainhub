@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og'
-import { createAdminClient } from '@/lib/supabase/client'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export const alt = 'Trainer profile on TrainHub Malaysia'
 export const size = { width: 1200, height: 630 }
@@ -32,7 +32,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     .single()
 
   const name     = (data?.users as any)?.full_name ?? 'Trainer'
-  const tagline  = data?.tagline ?? 'HRDF Certified Trainer'
+  const tagline  = data?.tagline ?? 'HRDC Certified Trainer'
   const location = data ? `${data.location_city}, ${data.location_state}` : 'Malaysia'
   const rating   = (data?.avg_rating ?? 0) > 0 ? (data?.avg_rating ?? 0).toFixed(1) : null
   const reviews  = data?.review_count ?? 0
@@ -53,7 +53,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         style={{
           width: '100%', height: '100%',
           display: 'flex', flexDirection: 'column',
-          background: 'linear-gradient(135deg, #5B21B6 0%, #7C3AED 55%, #A855F7 100%)',
+          background: 'linear-gradient(135deg, #0E5C55 0%, #0F766E 55%, #14B8A6 100%)',
           fontFamily: 'DM Sans, sans-serif',
           position: 'relative',
         }}
@@ -105,7 +105,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                   fontSize: '14px', fontWeight: 700,
                   display: 'flex', alignItems: 'center', gap: '5px',
                 }}>
-                  ✓ HRDF Verified
+                  ✓ HRDC Verified
                 </div>
               )}
               {experience > 0 && (
@@ -162,14 +162,14 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{ width: '36px', height: '36px', background: 'white', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ width: '20px', height: '20px', background: 'linear-gradient(135deg, #7C3AED, #A855F7)', borderRadius: '5px', display: 'flex' }} />
+              <div style={{ width: '20px', height: '20px', background: 'linear-gradient(135deg, #0F766E, #14B8A6)', borderRadius: '5px', display: 'flex' }} />
             </div>
             <span style={{ color: 'white', fontSize: '22px', fontWeight: 700, letterSpacing: '-0.3px' }}>
               TrainHub Malaysia
             </span>
           </div>
           <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px' }}>
-            Malaysia's HRDF Trainer Directory
+            Malaysia's HRDC Trainer Directory
           </span>
         </div>
       </div>

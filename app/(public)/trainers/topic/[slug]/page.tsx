@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { createAdminClient } from '@/lib/supabase/client'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { TrainerCard } from '@/features/trainers/components'
 import type { TrainerCard as TrainerCardType } from '@/features/trainers/types'
 import { MALAYSIAN_STATES } from '@/types'
@@ -26,11 +26,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const n = topic.name
   return {
-    title: `${n} Trainers in Malaysia — HRDF Certified | TrainHub`,
-    description: `Find the best ${n} trainers in Malaysia. Compare HRDF-certified ${n} training providers, read verified reviews, and contact trainers directly.`,
+    title: `${n} Trainers in Malaysia — HRDC Certified | TrainHub`,
+    description: `Find the best ${n} trainers in Malaysia. Compare HRDC-certified ${n} training providers, read verified reviews, and contact trainers directly.`,
     openGraph: {
       title: `Top ${n} Trainers in Malaysia`,
-      description: `Browse HRDF-certified ${n} trainers. Verified reviews, direct contact, competitive rates.`,
+      description: `Browse HRDC-certified ${n} trainers. Verified reviews, direct contact, competitive rates.`,
     },
     alternates: {
       canonical: `/trainers/topic/${slug}`,
@@ -89,7 +89,7 @@ export default async function TopicLandingPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: `${topic.name} Trainers in Malaysia`,
-    description: `HRDF-certified ${topic.name} trainers in Malaysia`,
+    description: `HRDC-certified ${topic.name} trainers in Malaysia`,
     numberOfItems: total,
     url: `${process.env.NEXT_PUBLIC_APP_URL}/trainers/topic/${slug}`,
   }
@@ -135,7 +135,7 @@ export default async function TopicLandingPage({ params }: PageProps) {
             <span style={{ color: 'var(--color-accent)' }}>in Malaysia</span>
           </h1>
           <p style={{ fontSize: 'var(--text-md)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)', maxWidth: '640px' }}>
-            Browse {total} verified {topic.name} trainers in Malaysia. All trainers are reviewed and many are HRDF-certified,
+            Browse {total} verified {topic.name} trainers in Malaysia. All trainers are reviewed and many are HRDC-certified,
             making their programmes claimable under the Human Resources Development Fund.
           </p>
         </div>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { createAdminClient } from '@/lib/supabase/client'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { TrainerCard } from '@/features/trainers/components'
 import type { TrainerCard as TrainerCardType } from '@/features/trainers/types'
 import { MALAYSIAN_STATES } from '@/types'
@@ -23,11 +23,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const n = stateObj.name
   return {
-    title: `HRDF Trainers in ${n} — Verified & Rated | TrainHub`,
-    description: `Find top-rated HRDF trainers in ${n}, Malaysia. Browse verified training providers, compare profiles and reviews, and book directly.`,
+    title: `HRDC Trainers in ${n} — Verified & Rated | TrainHub`,
+    description: `Find top-rated HRDC trainers in ${n}, Malaysia. Browse verified training providers, compare profiles and reviews, and book directly.`,
     openGraph: {
-      title: `HRDF Trainers in ${n}, Malaysia`,
-      description: `Verified HRDF-certified trainers in ${n}. Read reviews, compare rates, contact directly.`,
+      title: `HRDC Trainers in ${n}, Malaysia`,
+      description: `Verified HRDC-certified trainers in ${n}. Read reviews, compare rates, contact directly.`,
     },
     alternates: {
       canonical: `/trainers/location/${state}`,
@@ -71,7 +71,7 @@ export default async function LocationLandingPage({ params }: PageProps) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: `HRDF Trainers in ${stateObj.name}`,
+    name: `HRDC Trainers in ${stateObj.name}`,
     description: `Verified corporate trainers based in ${stateObj.name}, Malaysia`,
     numberOfItems: total,
     url: `${process.env.NEXT_PUBLIC_APP_URL}/trainers/location/${state}`,
@@ -121,13 +121,13 @@ export default async function LocationLandingPage({ params }: PageProps) {
             lineHeight: 1.1,
             marginBottom: 'var(--space-4)',
           }}>
-            HRDF Trainers in<br />
+            HRDC Trainers in<br />
             <span style={{ color: 'var(--color-accent)' }}>{stateObj.name}</span>
           </h1>
 
           <p style={{ fontSize: 'var(--text-md)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)', maxWidth: '640px' }}>
             Browse {total} corporate trainers based in {stateObj.name}. All profiles are verified.
-            Many are HRDF-certified, meaning their programmes can be claimed under Malaysia's
+            Many are HRDC-certified, meaning their programmes can be claimed under Malaysia's
             Human Resources Development Fund — reducing training costs for your organisation.
           </p>
         </div>

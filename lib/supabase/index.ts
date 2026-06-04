@@ -1,1 +1,2 @@
-export { createBrowserClient, createAdminClient } from './client'
+export { createBrowserClient } from './client'
+export { createAdminClient } from './admin'

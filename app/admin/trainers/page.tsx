@@ -91,7 +91,7 @@ export default async function AdminTrainersPage({
         <input
           type="text"
           name="q"
-          placeholder="Search by name, email, HRDF cert, or state..."
+          placeholder="Search by name, email, HRDC cert, or state..."
           defaultValue={q}
           className="input"
           style={{ maxWidth: '480px' }}
@@ -143,7 +143,7 @@ export default async function AdminTrainersPage({
           <div className="admin-table-header">
             <div></div>
             <div>Trainer</div>
-            <div>HRDF / Location</div>
+            <div>HRDC / Location</div>
             <div>Status</div>
             <div style={{ textAlign: 'center' }}>Complete</div>
             <div style={{ textAlign: 'right' }}>Action</div>
@@ -179,9 +179,9 @@ export default async function AdminTrainersPage({
                 </div>
 
                 <div className="admin-cell-meta">
-                  <span className="admin-cell-label">HRDF · </span>
+                  <span className="admin-cell-label">HRDC · </span>
                   <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
-                    {trainer.hrdf_cert_number ?? 'No HRDF'} · {trainer.location_state ?? '—'}
+                    {trainer.hrdf_cert_number ?? 'No HRDC'} · {trainer.location_state ?? '—'}
                   </span>
                 </div>
 

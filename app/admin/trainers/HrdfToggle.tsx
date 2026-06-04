@@ -49,7 +49,7 @@ export function HrdfToggle({ trainerId, isVerified }: Props) {
         transition: 'all 0.15s ease',
       }}
     >
-      {verified ? '✓ HRDF' : 'Set HRDF'}
+      {verified ? '✓ HRDC' : 'Set HRDC'}
     </button>
   )
 }

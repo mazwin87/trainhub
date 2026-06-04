@@ -5,17 +5,19 @@ import { TrainerCard } from '@/features/trainers/components'
 import type { TrainerCard as TrainerCardType } from '@/features/trainers/types'
 import { MALAYSIAN_STATES } from '@/types'
 import { ScrollReveal, ScrollRevealGroup } from '@/components/ScrollReveal'
+import { HowItWorks } from '@/components/HowItWorks'
+import { HeroIllustration } from '@/components/HeroIllustration'
 import {
   Target, Bot, MessageCircle, Brain, TrendingUp, Leaf, Search,
   Compass, ShieldAlert, Sparkles, Package, DollarSign, Users,
-  Settings2, BookOpen, MapPin,
+  Settings2, BookOpen, MapPin, ShieldCheck, Star,
   type LucideIcon,
 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'TrainHub Malaysia — Find Verified HRDF Trainers',
+  title: 'TrainHub Malaysia — Find Verified HRDC Trainers',
   description:
-    "Malaysia's #1 HRDF trainer directory. Discover and connect with 500+ verified, certified trainers. All HRDF SBL-Khas claimable.",
+    "Malaysia's #1 HRDC trainer directory. Discover and connect with 500+ verified, certified trainers. All HRDC SBL-Khas claimable.",
 }
 
 export const revalidate = 1800
@@ -112,38 +114,33 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ── HERO — hi-tech dark ── */}
-      <section className="hero-section home-hero hero-hitech" style={{ textAlign: 'center' }}>
-
-        {/* Animated background layers */}
-        <div className="hero-bg">
-          <div className="hero-mesh" />
-          <div className="hero-dots" />
-          <div className="hero-orb hero-orb-1" />
-          <div className="hero-orb hero-orb-2" />
-          <div className="hero-orb hero-orb-3" />
-        </div>
+      {/* ── HERO — light, search-first, two-column ── */}
+      <section className="hero-section home-hero hero-light">
+        <div className="hero-grid">
 
         {/* Content */}
-        <div className="hero-animate" style={{ maxWidth: 'var(--max-width-narrow)', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div className="hero-animate hero-copy" style={{ position: 'relative', zIndex: 1 }}>
 
-          <div className="hero-badge-glass" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={14} strokeWidth={1.75} /> Malaysia&apos;s HRDF Trainer Directory
+          <div className="hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <MapPin size={14} strokeWidth={1.75} /> Malaysia&apos;s HRDC Trainer Directory
           </div>
 
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.9rem, 5vw, var(--text-3xl))', fontWeight: 500, lineHeight: 1.18, marginBottom: 'var(--space-4)', letterSpacing: '-0.02em', color: '#fff' }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 5.2vw, var(--text-3xl))', fontWeight: 600, lineHeight: 1.1, marginBottom: 'var(--space-4)', letterSpacing: '-0.025em', color: 'var(--color-ink)' }}>
             Find verified{' '}
-            <em className="hero-accent-text" style={{ fontStyle: 'normal' }}>HRDF-certified</em>{' '}
+            <em className="hero-accent-text" style={{ fontStyle: 'normal' }}>HRDC-certified</em>{' '}
             trainers, instantly
           </h1>
 
-          <p style={{ fontSize: 'var(--text-md)', color: 'rgba(255,255,255,0.62)', lineHeight: 'var(--leading-relaxed)', fontWeight: 300, maxWidth: '520px', margin: '0 auto var(--space-8)' }}>
-            Discover, compare, and connect with 500+ certified trainers across Malaysia. All HRDF claimable. All verified.
+          <p style={{ fontSize: 'var(--text-md)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)', maxWidth: '540px', margin: '0 auto var(--space-7)' }}>
+            Discover, compare, and connect with 500+ certified trainers across Malaysia. Every profile verified. Every program HRDC-claimable.
           </p>
 
-          {/* Glassmorphism search bar */}
-          <form action="/trainers" method="GET" className="hero-search-dark">
-            <input name="q" type="text" placeholder="Search by topic, trainer name…" />
+          {/* Search bar */}
+          <form action="/trainers" method="GET" className="hero-search-light">
+            <div className="hsl-field">
+              <Search size={18} strokeWidth={2} />
+              <input name="q" type="text" placeholder="Search by topic, trainer name…" />
+            </div>
             <div className="search-sep" />
             <select name="state">
               <option value="">All states</option>
@@ -151,12 +148,14 @@ export default async function HomePage() {
                 <option key={s.slug} value={s.slug}>{s.name}</option>
               ))}
             </select>
-            <button type="submit">Search</button>
+            <button type="submit">
+              <Search size={16} strokeWidth={2.4} /> Search
+            </button>
           </form>
 
           {/* Popular searches */}
           <div style={{ marginTop: 'var(--space-5)' }}>
-            <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.32)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 'var(--space-3)' }}>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 'var(--space-3)' }}>
               Most searched this month
             </p>
             <div className="hero-tags">
@@ -164,33 +163,28 @@ export default async function HomePage() {
                 <Link
                   key={topic}
                   href={`/trainers?q=${encodeURIComponent(topic)}`}
-                  className="hero-tag-dark"
+                  className="hero-tag-light"
                 >
                   {topic}
                 </Link>
               ))}
             </div>
           </div>
+
+          {/* Trust row */}
+          <div className="hero-trust">
+            <span><ShieldCheck size={16} strokeWidth={1.9} /> HRD Corp verified</span>
+            <span><Star size={16} strokeWidth={1.9} /> 4.9 average rating</span>
+            <span><Users size={16} strokeWidth={1.9} /> 2,400+ companies served</span>
+          </div>
+        </div>
+
+        {/* Illustration */}
+        <div className="hero-art">
+          <HeroIllustration />
+        </div>
         </div>
       </section>
-
-      {/* ── STATS BAR ── */}
-      <ScrollRevealGroup
-        className="stats-grid"
-        style={{ borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)', background: 'var(--color-surface)' }}
-      >
-        {[
-          { num: '500+', lbl: 'Verified trainers' },
-          { num: '40+', lbl: 'Training topics' },
-          { num: '16', lbl: 'Malaysian states' },
-          { num: '2,400+', lbl: 'Companies served' },
-        ].map(s => (
-          <div key={s.lbl} className="reveal" style={{ padding: 'var(--space-5) var(--space-4)', textAlign: 'center', borderRight: '1px solid var(--color-border)' }}>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', fontWeight: 500, lineHeight: 1, color: 'var(--color-accent)' }}>{s.num}</div>
-            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '0.35rem' }}>{s.lbl}</div>
-          </div>
-        ))}
-      </ScrollRevealGroup>
 
       {/* ── FEATURED TRAINERS ── */}
       {featured.length > 0 && (
@@ -246,38 +240,16 @@ export default async function HomePage() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section className="home-section" style={{ textAlign: 'center' }}>
-        <div style={{ maxWidth: '820px', margin: '0 auto' }}>
-          <ScrollReveal>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)', marginBottom: 'var(--space-2)' }}>How it works</h2>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-8)' }}>Connect with the right HRDF trainer in 3 simple steps</p>
-          </ScrollReveal>
-          <ScrollRevealGroup className="steps-grid">
-            {[
-              { num: '1', title: 'Search & filter', desc: 'Browse by topic, state, language, budget, and more. Every trainer is HRDF-certified.' },
-              { num: '2', title: 'Compare profiles', desc: 'Review bios, certifications, courses, ratings, and pricing at a glance.' },
-              { num: '3', title: 'Connect directly', desc: 'Send an inquiry or WhatsApp the trainer directly. No middleman, no commission.' },
-            ].map(step => (
-              <div key={step.num} className="reveal step-item">
-                <div className="step-circle" style={{ width: '44px', height: '44px', borderRadius: 'var(--radius-circle)', background: 'var(--color-accent-light)', color: 'var(--color-accent)', fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto var(--space-4)' }}>
-                  {step.num}
-                </div>
-                <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 500, marginBottom: 'var(--space-2)' }}>{step.title}</h3>
-                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)' }}>{step.desc}</p>
-              </div>
-            ))}
-          </ScrollRevealGroup>
-        </div>
-      </section>
+      <HowItWorks />
 
       {/* ── TRAINER CTA ── */}
-      <section className="home-section" style={{ background: 'linear-gradient(135deg, #6B21A8 0%, #8B5CF6 100%)', textAlign: 'center' }}>
+      <section className="home-section" style={{ background: 'linear-gradient(135deg, var(--color-accent-dark) 0%, var(--color-secondary) 100%)', textAlign: 'center' }}>
         <ScrollReveal style={{ maxWidth: '600px', margin: '0 auto' }}>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.4rem, 4vw, var(--text-2xl))', color: '#fff', marginBottom: 'var(--space-3)', fontWeight: 500, lineHeight: 1.2 }}>
-            Are you an HRDF-certified trainer?
+            Are you an HRDC-certified trainer?
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 'var(--text-base)', marginBottom: 'var(--space-6)', lineHeight: 'var(--leading-relaxed)' }}>
-            Join Malaysia&apos;s largest HRDF trainer directory. Get discovered by companies actively looking for your expertise.
+            Join Malaysia&apos;s largest HRDC trainer directory. Get discovered by companies actively looking for your expertise.
           </p>
           <div className="cta-buttons">
             <Link href="/register" className="cta-btn cta-btn--white">

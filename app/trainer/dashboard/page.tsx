@@ -83,7 +83,7 @@ export default async function DashboardPage() {
             Let's set up your trainer profile
           </h2>
           <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', maxWidth: '480px', margin: '0 auto var(--space-5)', lineHeight: 'var(--leading-relaxed)' }}>
-            You're 5 minutes away from being discoverable by Malaysian companies looking for HRDF-certified trainers.
+            You're 5 minutes away from being discoverable by Malaysian companies looking for HRDC-certified trainers.
           </p>
           <Link href="/trainer/profile" className="btn btn-primary">
             Start with your profile →

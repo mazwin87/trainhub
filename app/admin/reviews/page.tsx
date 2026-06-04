@@ -1,5 +1,5 @@
 import { Star, CheckCircle } from 'lucide-react'
-import { createAdminClient } from '@/lib/supabase/client'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { ReviewActions } from './ReviewActions'
 
 export const dynamic = 'force-dynamic'

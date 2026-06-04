@@ -149,7 +149,7 @@ export function CoursesManager({ trainerId, initialCourses, topics }: Props) {
             My courses
           </h1>
           <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
-            Add courses you can deliver. HRDF-claimable courses get featured priority.
+            Add courses you can deliver. HRDC-claimable courses get featured priority.
           </p>
         </div>
         {!showForm && (
@@ -218,7 +218,7 @@ export function CoursesManager({ trainerId, initialCourses, topics }: Props) {
 
           <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-5)', fontSize: 'var(--text-sm)', cursor: 'pointer' }}>
             <input type="checkbox" checked={form.is_hrdf_claimable} onChange={e => update('is_hrdf_claimable', e.target.checked)} style={{ accentColor: 'var(--color-accent)' }} />
-            HRDF claimable
+            HRDC claimable
           </label>
 
           <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
@@ -277,7 +277,7 @@ export function CoursesManager({ trainerId, initialCourses, topics }: Props) {
                   <span className="badge badge-tag">RM {course.price_per_pax}/pax</span>
                 )}
                 {course.is_hrdf_claimable && (
-                  <span className="badge badge-hrdf">✓ HRDF claimable</span>
+                  <span className="badge badge-hrdf">✓ HRDC claimable</span>
                 )}
               </div>
             </div>

@@ -49,7 +49,7 @@ export function ApprovalActions({ trainerId, hrdfCertNumber }: Props) {
           onChange={e => setMarkHrdf(e.target.checked)}
           style={{ accentColor: 'var(--color-accent)', width: '14px', height: '14px' }}
         />
-        Mark HRDF verified
+        Mark HRDC verified
       </label>
       <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
         <button

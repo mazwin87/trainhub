@@ -27,7 +27,7 @@ export function calculateCompleteness(
     },
     {
       key: 'hrdf',
-      label: 'Add HRDF cert number',
+      label: 'Add HRDC cert number',
       points: 15,
       completed: Boolean(profile?.hrdf_cert_number),
     },

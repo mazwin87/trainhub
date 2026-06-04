@@ -51,7 +51,7 @@ export function Navbar() {
           justifyContent: 'space-between',
           padding: '0 var(--space-10)',
           height: 'var(--nav-height)',
-          background: 'linear-gradient(135deg, #6B21A8 0%, #8B5CF6 100%)',
+          background: 'linear-gradient(135deg, var(--color-accent-dark) 0%, var(--color-secondary) 100%)',
           position: 'sticky',
           top: 0,
           zIndex: 'var(--z-sticky)',
@@ -69,7 +69,7 @@ export function Navbar() {
             color: '#fff',
           }}
         >
-          Train<span style={{ color: '#E9D5FF' }}>Hub</span>
+          Train<span style={{ color: '#A6E0D7' }}>Hub</span>
           <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.65)', fontWeight: 400, marginLeft: '0.35rem', fontFamily: 'var(--font-body)' }}>
             Malaysia
           </span>
@@ -98,20 +98,19 @@ export function Navbar() {
           {authReady && (
             user ? (
               <>
-                <span style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <span style={{ width: 28, height: 28, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 600, color: '#fff', flexShrink: 0 }}>
-                    {firstName[0].toUpperCase()}
-                  </span>
-                  {firstName}
-                </span>
+                {/* Account chip — avatar + name links to the dashboard */}
                 <Link
                   href={dashboardHref}
+                  title="Go to your dashboard"
                   style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
                     fontSize: '1.05rem',
                     color: '#fff',
                     border: '1.5px solid rgba(255,255,255,0.55)',
                     borderRadius: 'var(--radius-pill)',
-                    padding: '0.4rem 1.1rem',
+                    padding: '0.3rem 1rem 0.3rem 0.35rem',
                     transition: 'all 0.3s ease',
                   }}
                   onMouseEnter={e => {
@@ -123,7 +122,10 @@ export function Navbar() {
                     e.currentTarget.style.borderColor = 'rgba(255,255,255,0.55)'
                   }}
                 >
-                  Dashboard
+                  <span style={{ width: 28, height: 28, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 600, color: '#fff', flexShrink: 0 }}>
+                    {firstName[0].toUpperCase()}
+                  </span>
+                  {firstName}
                 </Link>
                 <button
                   onClick={handleSignOut}
@@ -170,7 +172,7 @@ export function Navbar() {
                   href="/register"
                   style={{
                     fontSize: '1.1rem',
-                    color: '#6B21A8',
+                    color: 'var(--color-accent-dark)',
                     background: '#fff',
                     borderRadius: 'var(--radius-pill)',
                     padding: '0.45rem 1.25rem',
@@ -178,7 +180,7 @@ export function Navbar() {
                     transition: 'all 0.3s ease',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.background = '#EDE9FE'
+                    e.currentTarget.style.background = 'var(--color-accent-light)'
                     e.currentTarget.style.transform = 'translateY(-1px)'
                   }}
                   onMouseLeave={e => {

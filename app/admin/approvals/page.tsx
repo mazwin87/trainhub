@@ -46,7 +46,7 @@ export default async function ApprovalsPage() {
                   </p>
                   {trainer.hrdf_cert_number && (
                     <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: 'var(--space-2)' }}>
-                      HRDF: {trainer.hrdf_cert_number}
+                      HRDC: {trainer.hrdf_cert_number}
                     </p>
                   )}
                 </div>

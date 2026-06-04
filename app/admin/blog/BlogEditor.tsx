@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
 import { marked } from 'marked'
+import DOMPurify from 'isomorphic-dompurify'
 import { Pencil, Eye, Search, Check } from 'lucide-react'
 
 interface Props {
@@ -16,7 +17,7 @@ const EMPTY_POST = {
   slug: '',
   excerpt: '',
   content: '',
-  category: 'HRDF Guide',
+  category: 'HRDC Guide',
   tags: '',
   cover_image_url: '',
   meta_title: '',
@@ -25,7 +26,7 @@ const EMPTY_POST = {
   is_published: false,
 }
 
-const CATEGORIES = ['HRDF Guide', 'Trainer Tips', 'Industry News', 'Case Studies', 'Resources']
+const CATEGORIES = ['HRDC Guide', 'Trainer Tips', 'Industry News', 'Case Studies', 'Resources']
 
 export function BlogEditor({ initialPost, onSaved }: Props) {
   const router = useRouter()
@@ -223,7 +224,7 @@ export function BlogEditor({ initialPost, onSaved }: Props) {
             <label className="label">Title</label>
             <input
               className="input"
-              placeholder="How to Claim HRDF SBL-Khas..."
+              placeholder="How to Claim HRDC SBL-Khas..."
               value={form.title}
               onChange={e => handleTitleChange(e.target.value)}
               style={{ fontSize: 'var(--text-md)', fontWeight: 500 }}
@@ -252,7 +253,7 @@ export function BlogEditor({ initialPost, onSaved }: Props) {
             </div>
             <div>
               <label className="label">Tags (comma-separated)</label>
-              <input className="input" placeholder="HRDF, Training, HR" value={form.tags} onChange={e => update('tags', e.target.value)} />
+              <input className="input" placeholder="HRDC, Training, HR" value={form.tags} onChange={e => update('tags', e.target.value)} />
             </div>
           </div>
 
@@ -306,7 +307,7 @@ export function BlogEditor({ initialPost, onSaved }: Props) {
           )}
           <div
             className="blog-content"
-            dangerouslySetInnerHTML={{ __html: marked.parse(form.content || '*Nothing to preview yet*') as string }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(form.content || '*Nothing to preview yet*') as string) }}
             style={{ fontSize: 'var(--text-md)', lineHeight: 'var(--leading-relaxed)' }}
           />
         </div>
@@ -319,7 +320,7 @@ export function BlogEditor({ initialPost, onSaved }: Props) {
             <label className="label">Meta title (for Google)</label>
             <input
               className="input"
-              placeholder="Best HRDF Trainers in Malaysia 2026"
+              placeholder="Best HRDC Trainers in Malaysia 2026"
               value={form.meta_title}
               onChange={e => update('meta_title', e.target.value)}
               maxLength={60}

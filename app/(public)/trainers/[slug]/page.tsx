@@ -5,9 +5,9 @@ import { createServerClient } from '@/lib/supabase/server'
 import { formatPrice, getWhatsAppUrl } from '@/lib/utils'
 import type { TrainerProfile } from '@/features/trainers/types'
 import { InquiryButtonClient } from '@/features/search/components/InquiryButtonClient'
-import { createAdminClient } from '@/lib/supabase/client'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { WriteReviewClient } from '@/features/reviews/WriteReviewClient'
-import { MapPin, Clock, Globe, Star, Monitor, ShieldCheck, Check, MessageCircle, Zap, BadgeCheck } from 'lucide-react'
+import { MapPin, Clock, Globe, Star, Monitor, ShieldCheck, Check, MessageCircle, Zap, BadgeCheck, ArrowLeft } from 'lucide-react'
 
 // ISR: revalidate each profile page every hour
 export const dynamic = 'force-dynamic'
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const topics = (trainer.trainer_topics as any[])?.map((t: any) => t.topics?.name).filter(Boolean).join(', ')
 
   return {
-    title: `${name} — HRDF Trainer in ${trainer.location_state}`,
+    title: `${name} — HRDC Trainer in ${trainer.location_state}`,
     description: `${trainer.tagline}. Specialises in ${topics}. ${trainer.bio?.slice(0, 120)}…`,
     openGraph: {
       title: `${name} | TrainHub Malaysia`,
@@ -114,13 +114,14 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
   const { reviews, total: reviewTotal } = await getReviews(trainer.id, reviewPage)
   const totalReviewPages = Math.ceil(reviewTotal / REVIEWS_PER_PAGE)
 
-  const user = trainer.user as any
+  const user = (trainer as any).users ?? (trainer as any).user
   const name = user?.full_name ?? ''
   const initials = name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
-  const topics = trainer.topics ?? []
+  const topics = ((trainer as any).trainer_topics ?? trainer.topics ?? [])
+    .map((t: any) => t.topics ?? t).filter(Boolean)
   const courses = trainer.courses ?? []
   const certs = trainer.certifications ?? []
-  const langs = trainer.languages ?? []
+  const langs = (trainer as any).trainer_languages ?? trainer.languages ?? []
 
   // JSON-LD structured data for SEO
   const jsonLd = {
@@ -142,42 +143,29 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
 
       <div className="profile-wrapper">
 
-        {/* ── HERO BANNER ─────────────────────────────────── */}
-        <div style={{
-          background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%)',
-          borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0',
-          height: '140px',
-          position: 'relative',
-        }}>
-          {/* Back link inside banner */}
-          <Link href="/trainers" style={{
-            position: 'absolute', top: 'var(--space-4)', left: 'var(--space-5)',
-            display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)',
-            fontSize: 'var(--text-sm)', color: 'rgba(255,255,255,0.85)',
-            textDecoration: 'none', fontWeight: 500,
-          }}>
-            ← Directory
-          </Link>
-        </div>
+        {/* ── BACK LINK ────────────────────────────────────── */}
+        <Link href="/trainers" className="profile-back">
+          <ArrowLeft size={15} strokeWidth={2} /> Directory
+        </Link>
 
-        {/* ── HERO CARD (overlaps banner) ──────────────────── */}
+        {/* ── HERO CARD ────────────────────────────────────── */}
         <div style={{
           background: 'var(--color-surface)',
           border: '1px solid var(--color-border)',
-          borderTop: 'none',
-          borderRadius: '0 0 var(--radius-lg) var(--radius-lg)',
+          borderRadius: 'var(--radius-lg)',
           padding: 'var(--space-6)',
           marginBottom: 'var(--space-6)',
         }}>
           <div className="profile-hero-inner">
 
-            {/* Avatar — overlaps banner */}
-            <div style={{ marginTop: '-72px', flexShrink: 0 }}>
+            {/* Avatar */}
+            <div style={{ flexShrink: 0 }}>
               <div className="avatar avatar-xl" style={{
-                background: 'var(--color-accent-light)',
-                color: 'var(--color-accent)',
-                border: '4px solid #fff',
-                boxShadow: '0 4px 16px rgba(124,58,237,0.22)',
+                background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%)',
+                color: '#fff',
+                fontFamily: 'var(--font-display)',
+                fontWeight: 600,
+                boxShadow: '0 6px 20px rgba(15,118,110,0.28)',
               }}>
                 {user?.avatar_url
                   ? <img src={user.avatar_url} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
@@ -193,7 +181,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
               <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap', marginBottom: 'var(--space-3)' }}>
                 {trainer.is_verified_hrdf && (
                   <span className="badge badge-hrdf" style={{ fontSize: 'var(--text-xs)', padding: '0.35rem 0.8rem' }}>
-                    <Check size={11} strokeWidth={2.5} /> HRDF Verified · {trainer.hrdf_cert_number}
+                    <Check size={11} strokeWidth={2.5} /> HRDC Verified · {trainer.hrdf_cert_number}
                   </span>
                 )}
                 {trainer.avg_rating >= 4.8 && (
@@ -340,7 +328,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                       </span>
                       {course.is_hrdf_claimable && (
                         <span style={{ fontSize: 'var(--text-xs)', fontWeight: 500, color: 'var(--color-cta-dark)', background: 'var(--color-cta-light)', padding: '0.2rem 0.7rem', borderRadius: 'var(--radius-pill)' }}>
-                          HRDF claimable
+                          HRDC claimable
                         </span>
                       )}
                     </div>

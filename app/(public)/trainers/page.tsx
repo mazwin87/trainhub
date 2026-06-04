@@ -8,8 +8,8 @@ import type { TrainerCard as TrainerCardType, TrainerSearchFilters } from '@/fea
 import { MALAYSIAN_STATES } from '@/types'
 
 export const metadata: Metadata = {
-  title: 'Find HRDF Trainers in Malaysia',
-  description: 'Search and filter 500+ verified HRDF-certified trainers by topic, state, language, and budget.',
+  title: 'Find HRDC Trainers in Malaysia',
+  description: 'Search and filter 500+ verified HRDC-certified trainers by topic, state, language, and budget.',
 }
 
 export const revalidate = 3600
@@ -214,7 +214,7 @@ export default async function TrainersPage({ searchParams }: PageProps) {
               <div className="section-label">Verification</div>
               <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer', minHeight: '28px' }}>
                 <input type="checkbox" name="verified" value="true" defaultChecked={filters.verified} style={{ accentColor: 'var(--color-accent)', width: '16px', height: '16px', flexShrink: 0 }} />
-                HRDF verified
+                HRDC verified
               </label>
               <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', cursor: 'pointer', minHeight: '28px' }}>
                 <input type="checkbox" name="top" value="true" defaultChecked={filters.top_rated} style={{ accentColor: 'var(--color-accent)', width: '16px', height: '16px', flexShrink: 0 }} />

@@ -61,10 +61,10 @@ export default async function AdminAnalyticsPage() {
   const sparklineMax = Math.max(...sparklineData, 1)
 
   const stats = [
-    { label: 'Total trainers', value: totalTrainers.count ?? 0, sub: `+${newTrainers.count ?? 0} this month`, Icon: Users, accent: '#7C3AED', href: '/admin/trainers' },
+    { label: 'Total trainers', value: totalTrainers.count ?? 0, sub: `+${newTrainers.count ?? 0} this month`, Icon: Users, accent: '#0F766E', href: '/admin/trainers' },
     { label: 'Approved trainers', value: approvedTrainers.count ?? 0, sub: `${pendingTrainers.count ?? 0} pending`, Icon: UserCheck, accent: '#059669', href: '/admin/trainers?status=approved' },
     { label: 'Pending approvals', value: pendingTrainers.count ?? 0, sub: 'Needs review', Icon: Clock, accent: '#D97706', href: '/admin/approvals' },
-    { label: 'Total users', value: totalUsers.count ?? 0, sub: `+${newUsers.count ?? 0} this month`, Icon: Users, accent: '#7C3AED', href: '/admin/users' },
+    { label: 'Total users', value: totalUsers.count ?? 0, sub: `+${newUsers.count ?? 0} this month`, Icon: Users, accent: '#0F766E', href: '/admin/users' },
     { label: 'Total inquiries', value: totalInquiries.count ?? 0, sub: `+${newInquiries.count ?? 0} this month`, Icon: Mailbox, accent: '#059669', href: '/admin/inquiries' },
     { label: 'Searches this month', value: (searchLogsData ?? []).length, sub: `${topSearches.length} unique queries`, Icon: Search, accent: '#D97706', href: null },
   ]
@@ -172,7 +172,7 @@ export default async function AdminAnalyticsPage() {
                     <div style={{
                       height: '100%',
                       width: `${(count / maxSearchCount) * 100}%`,
-                      background: 'linear-gradient(90deg, #7C3AED, #A855F7)',
+                      background: 'linear-gradient(90deg, #0F766E, #14B8A6)',
                       borderRadius: '2px',
                     }} />
                   </div>
@@ -218,9 +218,9 @@ export default async function AdminAnalyticsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
             {[
               { label: 'Review pending approvals', sub: `${pendingTrainers.count ?? 0} waiting`, href: '/admin/approvals', accent: '#D97706' },
-              { label: 'Browse all trainers', sub: `${totalTrainers.count ?? 0} registered`, href: '/admin/trainers', accent: '#7C3AED' },
+              { label: 'Browse all trainers', sub: `${totalTrainers.count ?? 0} registered`, href: '/admin/trainers', accent: '#0F766E' },
               { label: 'View all inquiries', sub: `${totalInquiries.count ?? 0} total`, href: '/admin/inquiries', accent: '#059669' },
-              { label: 'Manage users', sub: `${totalUsers.count ?? 0} accounts`, href: '/admin/users', accent: '#7C3AED' },
+              { label: 'Manage users', sub: `${totalUsers.count ?? 0} accounts`, href: '/admin/users', accent: '#0F766E' },
             ].map(item => (
               <Link
                 key={item.href}

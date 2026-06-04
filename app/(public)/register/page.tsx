@@ -84,20 +84,20 @@ export default function RegisterPage() {
         background: '#fff',
         borderRadius: '16px',
         padding: 'var(--space-8) var(--space-7)',
-        boxShadow: '0 8px 40px rgba(107, 33, 168, 0.15)',
+        boxShadow: '0 8px 40px rgba(17, 94, 89, 0.15)',
       }}>
         <h1 style={{
           fontFamily: 'var(--font-display)',
           fontSize: '2.5rem',
           fontWeight: 600,
-          color: '#6B21A8',
+          color: '#115E59',
           marginBottom: 'var(--space-2)',
           lineHeight: 1.15,
         }}>
           Create your profile
         </h1>
         <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-6)' }}>
-          Join Malaysia&apos;s HRDF trainer directory. It&apos;s free.
+          Join Malaysia&apos;s HRDC trainer directory. It&apos;s free.
         </p>
 
         <OAuthButtons />
@@ -185,7 +185,7 @@ export default function RegisterPage() {
 
         <p style={{ textAlign: 'center', marginTop: 'var(--space-6)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
           Already have an account?{' '}
-          <Link href="/login" style={{ color: '#A855F7', fontWeight: 600, transition: 'color 0.3s ease' }}>
+          <Link href="/login" style={{ color: '#14B8A6', fontWeight: 600, transition: 'color 0.3s ease' }}>
             Sign in
           </Link>
         </p>

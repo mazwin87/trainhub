@@ -60,7 +60,7 @@ export function TrainerCard({ trainer }: Props) {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '0.75rem' }}>
           {trainer.is_verified_hrdf && (
             <span className="badge badge-hrdf" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
-              <Check size={10} strokeWidth={2.5} /> HRDF Verified
+              <Check size={10} strokeWidth={2.5} /> HRDC Verified
             </span>
           )}
           {trainer.is_featured && (

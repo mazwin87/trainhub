@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { createAdminClient } from '@/lib/supabase/client'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { MALAYSIAN_STATES } from '@/types'
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://ai.nimonimo.tech/trainhub'

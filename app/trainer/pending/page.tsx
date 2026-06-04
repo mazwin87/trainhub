@@ -50,7 +50,7 @@ export default function PendingPage() {
       </p>
 
       <p style={{ fontSize: 'var(--text-base)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)', marginBottom: 'var(--space-6)' }}>
-        Your trainer profile is currently under review by our team. We verify all HRDF certifications and trainer credentials to maintain the quality of our directory.
+        Your trainer profile is currently under review by our team. We verify all HRDC certifications and trainer credentials to maintain the quality of our directory.
       </p>
 
       <div style={{ background: 'var(--color-cta-light)', border: '1px solid var(--color-cta)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', marginBottom: 'var(--space-8)', textAlign: 'left' }}>

@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { createServerClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'HRDF Training Insights & Guides',
-  description: 'Expert articles on HRDF claims, training trends, and corporate development in Malaysia.',
+  title: 'HRDC Training Insights & Guides',
+  description: 'Expert articles on HRDC claims, training trends, and corporate development in Malaysia.',
 }
 
 export const revalidate = 3600
@@ -37,10 +37,10 @@ export default async function BlogPage() {
           The TrainHub Blog
         </div>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-3xl)', fontWeight: 500, marginBottom: 'var(--space-3)', letterSpacing: '-0.02em' }}>
-          HRDF Training Insights
+          HRDC Training Insights
         </h1>
         <p style={{ fontSize: 'var(--text-md)', color: 'var(--color-muted)', maxWidth: '520px', margin: '0 auto' }}>
-          Expert guides on HRDF claims, training trends, and building a learning culture in Malaysia
+          Expert guides on HRDC claims, training trends, and building a learning culture in Malaysia
         </p>
       </div>
 

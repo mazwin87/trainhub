@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { marked } from 'marked'
+import DOMPurify from 'isomorphic-dompurify'
 import { createServerClient } from '@/lib/supabase/server'
 
 export const revalidate = 3600
@@ -46,7 +47,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   if (!post) notFound()
 
-  const html = await marked.parse(post.content)
+  const html = DOMPurify.sanitize(await marked.parse(post.content))
   const authorName = post.users?.full_name ?? 'TrainHub Team'
 
   return (
@@ -95,10 +96,10 @@ export default async function BlogPostPage({ params }: Props) {
       {/* CTA */}
       <div style={{ marginTop: 'var(--space-12)', padding: 'var(--space-8)', background: 'var(--color-accent-light)', borderRadius: 'var(--radius-lg)', textAlign: 'center' }}>
         <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', marginBottom: 'var(--space-2)' }}>
-          Looking for an HRDF trainer?
+          Looking for an HRDC trainer?
         </h3>
         <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-4)' }}>
-          Browse 500+ verified, HRDF-certified trainers across Malaysia.
+          Browse 500+ verified, HRDC-certified trainers across Malaysia.
         </p>
         <Link href="/trainers" className="btn btn-primary">
           Find a trainer →

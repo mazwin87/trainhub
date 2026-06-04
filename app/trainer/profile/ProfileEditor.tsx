@@ -213,7 +213,7 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds, cer
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' }}>
           <div>
-            <label className="label">HRDF cert number</label>
+            <label className="label">HRDC cert number</label>
             <input className="input" placeholder="HRD/22/04/0391" value={form.hrdf_cert_number} onChange={e => update('hrdf_cert_number', e.target.value)} />
           </div>
           <div>
@@ -347,7 +347,7 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds, cer
             <textarea
                 className="input"
                 rows={5}
-                placeholder={`HRDF Certified Trainer\nICF Accredited Coach\nPMP Certified`}
+                placeholder={`HRDC Certified Trainer\nICF Accredited Coach\nPMP Certified`}
                 value={form.certifications_text}
                 onChange={e => update('certifications_text', e.target.value)}
                 style={{ resize: 'vertical', fontFamily: 'var(--font-body)' }}
