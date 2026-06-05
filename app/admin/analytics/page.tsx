@@ -96,7 +96,7 @@ export default async function AdminAnalyticsPage() {
                   {s.label}
                 </span>
               </div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', fontWeight: 600, lineHeight: 1, marginBottom: '6px' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', fontWeight: 600, lineHeight: 1, textAlign: 'center', marginBottom: '6px' }}>
                 {s.value}
               </div>
               <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)' }}>

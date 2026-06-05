@@ -64,7 +64,7 @@ export default async function AnalyticsPage() {
                   {s.label}
                 </span>
               </div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', fontWeight: 600, lineHeight: 1 }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', fontWeight: 600, lineHeight: 1, textAlign: 'center' }}>
                 {s.value}
               </div>
             </div>

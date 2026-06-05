@@ -112,7 +112,7 @@ export default async function DashboardPage() {
                   {s.label}
                 </span>
               </div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', fontWeight: 600, lineHeight: 1 }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', fontWeight: 600, lineHeight: 1, textAlign: 'center' }}>
                 {s.value}
                 {s.badge ? (
                   <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent)', marginLeft: '8px', fontFamily: 'var(--font-body)', fontWeight: 500 }}>
