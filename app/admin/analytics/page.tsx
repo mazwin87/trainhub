@@ -88,9 +88,10 @@ export default async function AdminAnalyticsPage() {
           const wrapperProps = s.href ? { href: s.href } : {}
           return (
             <Wrapper key={s.label} {...wrapperProps} className="admin-stat-card">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-3)' }}>
-                <div style={{ width: '4px', height: '32px', background: s.accent, borderRadius: '2px' }} />
-                <Icon size={20} strokeWidth={1.75} style={{ color: s.accent, opacity: 0.6 }} />
+              <div style={{ marginBottom: 'var(--space-4)' }}>
+                <span style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', background: 'var(--color-accent-light)', color: 'var(--color-accent)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={20} strokeWidth={1.75} />
+                </span>
               </div>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 500, lineHeight: 1, marginBottom: '4px' }}>
                 {s.value}
@@ -217,10 +218,10 @@ export default async function AdminAnalyticsPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
             {[
-              { label: 'Review pending approvals', sub: `${pendingTrainers.count ?? 0} waiting`, href: '/admin/approvals', accent: '#D97706' },
-              { label: 'Browse all trainers', sub: `${totalTrainers.count ?? 0} registered`, href: '/admin/trainers', accent: '#C2410C' },
-              { label: 'View all inquiries', sub: `${totalInquiries.count ?? 0} total`, href: '/admin/inquiries', accent: '#059669' },
-              { label: 'Manage users', sub: `${totalUsers.count ?? 0} accounts`, href: '/admin/users', accent: '#C2410C' },
+              { label: 'Review pending approvals', sub: `${pendingTrainers.count ?? 0} waiting`, href: '/admin/approvals', Icon: Clock },
+              { label: 'Browse all trainers', sub: `${totalTrainers.count ?? 0} registered`, href: '/admin/trainers', Icon: Users },
+              { label: 'View all inquiries', sub: `${totalInquiries.count ?? 0} total`, href: '/admin/inquiries', Icon: Mailbox },
+              { label: 'Manage users', sub: `${totalUsers.count ?? 0} accounts`, href: '/admin/users', Icon: UserCheck },
             ].map(item => (
               <Link
                 key={item.href}
@@ -238,7 +239,9 @@ export default async function AdminAnalyticsPage() {
                   transition: 'all var(--transition-base)',
                 }}
               >
-                <div style={{ width: '4px', height: '28px', background: item.accent, borderRadius: '2px', flexShrink: 0 }} />
+                <span style={{ width: 34, height: 34, borderRadius: 'var(--radius-md)', background: 'var(--color-accent-light)', color: 'var(--color-accent)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <item.Icon size={17} strokeWidth={1.75} />
+                </span>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-ink)' }}>{item.label}</div>
                   <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>{item.sub}</div>

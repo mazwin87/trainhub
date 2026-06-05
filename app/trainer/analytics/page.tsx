@@ -56,9 +56,10 @@ export default async function AnalyticsPage() {
           const Icon = s.Icon
           return (
             <div key={s.label} className="admin-stat-card">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-3)' }}>
-                <div style={{ width: '4px', height: '32px', background: s.accent, borderRadius: '2px' }} />
-                <Icon size={20} strokeWidth={1.75} style={{ color: s.accent, opacity: 0.6 }} />
+              <div style={{ marginBottom: 'var(--space-4)' }}>
+                <span style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', background: 'var(--color-accent-light)', color: 'var(--color-accent)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={20} strokeWidth={1.75} />
+                </span>
               </div>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 500, lineHeight: 1, marginBottom: 'var(--space-2)' }}>
                 {s.value}

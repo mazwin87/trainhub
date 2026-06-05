@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Clock, UserCheck, Mailbox, Users } from 'lucide-react'
 import { createServerClient } from '@/lib/supabase/server'
 
 export default async function AdminDashboard() {
@@ -20,10 +21,10 @@ export default async function AdminDashboard() {
   ])
 
   const stats = [
-    { label: 'Pending approvals', value: pending.count ?? 0,    href: '/admin/approvals',                   accent: 'var(--color-accent)' },
-    { label: 'Approved trainers', value: approved.count ?? 0,   href: '/admin/trainers?status=approved',    accent: 'var(--color-cta)' },
-    { label: 'Total inquiries',   value: inquiries.count ?? 0,  href: '/admin/inquiries',                   accent: 'var(--color-featured-text)' },
-    { label: 'Total users',       value: users.count ?? 0,      href: '/admin/users',                       accent: 'var(--color-top-text)' },
+    { label: 'Pending approvals', value: pending.count ?? 0,    href: '/admin/approvals',                Icon: Clock },
+    { label: 'Approved trainers', value: approved.count ?? 0,   href: '/admin/trainers?status=approved', Icon: UserCheck },
+    { label: 'Total inquiries',   value: inquiries.count ?? 0,  href: '/admin/inquiries',                Icon: Mailbox },
+    { label: 'Total users',       value: users.count ?? 0,      href: '/admin/users',                    Icon: Users },
   ]
 
   return (
@@ -40,9 +41,15 @@ export default async function AdminDashboard() {
 
       {/* Stats */}
       <div className="admin-stats-grid">
-        {stats.map(s => (
+        {stats.map(s => {
+          const Icon = s.Icon
+          return (
           <Link key={s.label} href={s.href} className="admin-stat-card">
-            <div style={{ width: '4px', height: '32px', background: s.accent, borderRadius: '2px', marginBottom: 'var(--space-3)' }} />
+            <div style={{ marginBottom: 'var(--space-4)' }}>
+              <span style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', background: 'var(--color-accent-light)', color: 'var(--color-accent)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon size={20} strokeWidth={1.75} />
+              </span>
+            </div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 500, lineHeight: 1, marginBottom: 'var(--space-2)' }}>
               {s.value}
             </div>
@@ -50,7 +57,8 @@ export default async function AdminDashboard() {
               {s.label}
             </div>
           </Link>
-        ))}
+          )
+        })}
       </div>
 
       {/* Two-column section */}
