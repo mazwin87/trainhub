@@ -41,7 +41,7 @@ const TRUST: { Icon: typeof Check; label: string }[] = [
 
 export function HowItWorks() {
   return (
-    <section className="hiw-section" aria-labelledby="how-it-works-heading">
+    <section id="how-it-works" className="hiw-section" aria-labelledby="how-it-works-heading">
       <div className="hiw-glow-top"   aria-hidden />
       <div className="hiw-glow-center" aria-hidden />
 

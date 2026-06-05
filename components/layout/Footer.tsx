@@ -23,8 +23,11 @@ export function Footer() {
           <div style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: 'var(--space-4)' }}>
             For trainers
           </div>
-          {['Create profile', 'Trainer dashboard', 'Pricing plans', 'How it works'].map(l => (
-            <Link key={l} href="#" className="footer-link">{l}</Link>
+          {[
+            { label: 'List your profile', href: '/register' },
+            { label: 'Sign in', href: '/login' },
+          ].map(l => (
+            <Link key={l.href} href={l.href} className="footer-link">{l.label}</Link>
           ))}
         </div>
 
@@ -33,18 +36,23 @@ export function Footer() {
           <div style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: 'var(--space-4)' }}>
             For companies
           </div>
-          {['Find trainers', 'Post a training need', 'HRDC guide', 'Verified trainers'].map(l => (
-            <Link key={l} href="#" className="footer-link">{l}</Link>
+          {[
+            { label: 'Find trainers', href: '/trainers' },
+            { label: 'How it works', href: '/#how-it-works' },
+          ].map(l => (
+            <Link key={l.href} href={l.href} className="footer-link">{l.label}</Link>
           ))}
         </div>
 
-        {/* Company */}
+        {/* Resources */}
         <div>
           <div style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.35)', marginBottom: 'var(--space-4)' }}>
-            Company
+            Resources
           </div>
-          {['About us', 'Blog', 'Privacy policy', 'Terms of service'].map(l => (
-            <Link key={l} href="#" className="footer-link">{l}</Link>
+          {[
+            { label: 'Blog', href: '/blog' },
+          ].map(l => (
+            <Link key={l.href} href={l.href} className="footer-link">{l.label}</Link>
           ))}
         </div>
       </div>
