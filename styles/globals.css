@@ -405,6 +405,7 @@
   flex-direction: column;
   position: sticky;
   top: var(--nav-height);
+  align-self: start;
   height: calc(100vh - var(--nav-height));
   overflow-y: auto;
 }
