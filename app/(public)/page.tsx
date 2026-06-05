@@ -225,7 +225,7 @@ export default async function HomePage() {
                   key={topic}
                   href={`/trainers?topic=${encodeURIComponent(topic)}`}
                   className="reveal topic-card"
-                  style={{ padding: 'var(--space-5) var(--space-3)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', background: 'var(--color-bg)', textAlign: 'center', transition: 'all var(--transition-base)', textDecoration: 'none', display: 'block' }}
+                  style={{ padding: 'var(--space-5) var(--space-3)', border: '1px solid transparent', borderRadius: 'var(--radius-lg)', background: 'var(--color-surface)', boxShadow: '0 1px 2px rgba(58,36,26,0.04), 0 10px 28px -18px rgba(58,36,26,0.16)', textAlign: 'center', transition: 'box-shadow 0.2s ease, transform 0.2s ease', textDecoration: 'none', display: 'block' }}
                 >
                   <div className="topic-icon" style={{ marginBottom: 'var(--space-2)', lineHeight: 1, display: 'flex', justifyContent: 'center', color: 'var(--color-accent)' }}>
                     <TopicIcon size={24} strokeWidth={1.5} />

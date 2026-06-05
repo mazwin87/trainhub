@@ -51,7 +51,11 @@ export function Navbar() {
           justifyContent: 'space-between',
           padding: '0 var(--space-10)',
           height: 'var(--nav-height)',
-          background: 'linear-gradient(135deg, var(--color-accent-dark) 0%, var(--color-secondary) 100%)',
+          // Frosted translucent bar — content faintly shows through on scroll
+          background: 'linear-gradient(135deg, rgba(154,52,18,0.88) 0%, rgba(194,65,12,0.88) 100%)',
+          backdropFilter: 'blur(12px) saturate(140%)',
+          WebkitBackdropFilter: 'blur(12px) saturate(140%)',
+          borderBottom: '1px solid rgba(255,255,255,0.10)',
           position: 'sticky',
           top: 0,
           zIndex: 'var(--z-sticky)',
