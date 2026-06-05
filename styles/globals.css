@@ -1424,16 +1424,6 @@
 }
 
 /* ── ADMIN DASHBOARD CARDS ──────────────────────────────── */
-.admin-stat-card {
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.admin-stat-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
-}
-
 .admin-action-link {
   transition: transform 0.2s ease;
 }
@@ -1571,19 +1561,23 @@
 
 .admin-stat-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid transparent;
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   text-decoration: none;
   color: inherit;
-  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+  box-shadow:
+    0 1px 2px rgba(58, 36, 26, 0.04),
+    0 10px 28px -18px rgba(58, 36, 26, 0.16);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
   display: block;
 }
 
 .admin-stat-card:hover {
-  border-color: var(--color-accent);
-  box-shadow: var(--shadow-hover);
   transform: translateY(-2px);
+  box-shadow:
+    0 2px 4px rgba(58, 36, 26, 0.05),
+    0 22px 44px -20px rgba(58, 36, 26, 0.24);
 }
 
 .admin-activity-grid {
