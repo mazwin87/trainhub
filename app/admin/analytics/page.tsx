@@ -88,16 +88,16 @@ export default async function AdminAnalyticsPage() {
           const wrapperProps = s.href ? { href: s.href } : {}
           return (
             <Wrapper key={s.label} {...wrapperProps} className="admin-stat-card">
-              <div style={{ marginBottom: 'var(--space-4)' }}>
-                <span style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', background: 'var(--color-accent-light)', color: 'var(--color-accent)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>
+                <span style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', background: 'var(--color-accent-light)', color: 'var(--color-accent)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Icon size={20} strokeWidth={1.75} />
                 </span>
+                <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', fontWeight: 500 }}>
+                  {s.label}
+                </span>
               </div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 500, lineHeight: 1, marginBottom: '4px' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', fontWeight: 600, lineHeight: 1, marginBottom: '6px' }}>
                 {s.value}
-              </div>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
-                {s.label}
               </div>
               <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)' }}>
                 {s.sub}
