@@ -5,23 +5,24 @@ import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
 import { MALAYSIAN_STATES, TRAINER_TOPICS } from '@/types'
 import { AvatarUpload } from '@/features/trainers/components/AvatarUpload'
+import { CertManager } from '@/features/trainers/components/CertManager'
+import type { Certification } from '@/features/trainers/types/trainer'
 
 interface Props {
   userId: string
   userInfo: { full_name: string; email: string; avatar_url: string | null } | null
   profile: any
   selectedTopicIds: string[]
-  certsText: string
+  certifications: Certification[]
 }
 
-export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds, certsText }: Props) {  const router = useRouter()
+export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds, certifications }: Props) {  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   const [form, setForm] = useState({
     tagline: profile?.tagline ?? '',
     bio: profile?.bio ?? '',
-    certifications_text: certsText ?? '',
     hrdf_cert_number: profile?.hrdf_cert_number ?? '',
     years_experience: profile?.years_experience ?? 0,
     location_state: profile?.location_state ?? '',
@@ -125,25 +126,8 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds, cer
         }
       }
 
-      // ── Update certifications ────────────────────────────
-      if (trainerId) {
-        await supabase.from('certifications').delete().eq('trainer_id', trainerId)
-
-        const certNames = form.certifications_text
-          .split('\n')
-          .map(c => c.trim())
-          .filter(Boolean)
-
-        if (certNames.length > 0) {
-          await supabase.from('certifications').insert(
-            certNames.map(name => ({
-              trainer_id: trainerId,
-              name,
-              is_verified: false,
-            })) as any
-          )
-        }
-      }
+      // Certifications are managed independently via <CertManager> (file uploads),
+      // so they are intentionally NOT touched by the profile save.
 
       setMessage({ type: 'success', text: '✓ Profile saved!' })
       router.refresh()
@@ -336,23 +320,22 @@ export function ProfileEditor({ userId, userInfo, profile, selectedTopicIds, cer
         </div>
       </section>
       {/* SECTION: Certifications */}
-        <section style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', marginBottom: 'var(--space-5)' }}>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', marginBottom: 'var(--space-2)' }}>
-                Certifications
-            </h2>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-4)' }}>
-                List your professional certifications (one per line)
-            </p>
+      <section style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', marginBottom: 'var(--space-5)' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', marginBottom: 'var(--space-2)' }}>
+          Certifications
+        </h2>
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-4)' }}>
+          Upload your professional certificates (PDF or image). Files are private — only you and TrainHub admins can view them.
+        </p>
 
-            <textarea
-                className="input"
-                rows={5}
-                placeholder={`HRDC Certified Trainer\nICF Accredited Coach\nPMP Certified`}
-                value={form.certifications_text}
-                onChange={e => update('certifications_text', e.target.value)}
-                style={{ resize: 'vertical', fontFamily: 'var(--font-body)' }}
-            />
-        </section>
+        {profile?.id ? (
+          <CertManager trainerId={profile.id} userId={userId} initialCerts={certifications} />
+        ) : (
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
+            Save your profile first to start uploading certificates.
+          </p>
+        )}
+      </section>
       <button
         type="submit"
         disabled={loading}
