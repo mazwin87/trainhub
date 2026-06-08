@@ -566,7 +566,7 @@
   max-width: var(--max-width-content);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: 0.9fr 1.1fr;
   gap: var(--space-8);
   align-items: center;
   position: relative;
@@ -586,8 +586,95 @@
   .hero-copy .hero-search-light { margin-left: auto; margin-right: auto; }
   .hero-copy .hero-tags { justify-content: center; }
   .hero-copy .hero-trust { justify-content: center; }
-  .hero-art { order: -1; }
+  .hero-art { order: 0; margin-top: var(--space-3); }
   .hero-art svg { max-width: 300px; }
+}
+
+/* ── HERO DASHBOARD MOCKUP ─────────────────────────────────── */
+.hero-mock {
+  width: 100%;
+  max-width: 600px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 34px 64px -32px rgba(47, 42, 38, 0.38), 0 2px 8px rgba(47, 42, 38, 0.06);
+  overflow: hidden;
+}
+.hero-mock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+.hero-mock-body { display: grid; grid-template-columns: 38% 1fr; }
+.hero-mock-filters {
+  padding: 16px;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+.hero-mock-results { padding: 16px; min-width: 0; }
+.hero-mock-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.hero-mock-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 16px 16px;
+  padding: 12px 14px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+@media (max-width: 1100px) {
+  .hero-mock-body { grid-template-columns: 1fr; }
+  .hero-mock-filters { display: none; }
+}
+
+/* ── BENEFIT BAR (floats over the hero seam) ───────────────── */
+.benefit-bar-wrap {
+  max-width: var(--max-width-content);
+  margin: calc(-1 * var(--space-8)) auto 0;
+  padding: 0 var(--space-10);
+  position: relative;
+  z-index: 3;
+}
+.benefit-bar {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hover);
+  padding: var(--space-6);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+}
+.benefit-item { display: flex; align-items: flex-start; gap: var(--space-3); }
+.benefit-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.benefit-title { font-family: var(--font-display); font-weight: 600; font-size: var(--text-sm); color: var(--color-ink); margin-bottom: 2px; }
+.benefit-desc { font-size: var(--text-xs); color: var(--color-muted); line-height: 1.5; }
+@media (max-width: 900px) {
+  .benefit-bar-wrap { padding: 0 var(--space-6); margin-top: var(--space-4); }
+  .benefit-bar { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .benefit-bar { grid-template-columns: 1fr; }
 }
 
 /* Subtle dot texture, fading out toward the bottom */

@@ -6,11 +6,11 @@ import type { TrainerCard as TrainerCardType } from '@/features/trainers/types'
 import { MALAYSIAN_STATES } from '@/types'
 import { ScrollReveal, ScrollRevealGroup } from '@/components/ScrollReveal'
 import { HowItWorks } from '@/components/HowItWorks'
-import { HeroIllustration } from '@/components/HeroIllustration'
+import { HeroDashboardMockup } from '@/components/HeroDashboardMockup'
 import {
   Target, Bot, MessageCircle, Brain, TrendingUp, Leaf, Search,
   Compass, ShieldAlert, Sparkles, Package, DollarSign, Users,
-  Settings2, BookOpen, MapPin, ShieldCheck, BadgeCheck,
+  Settings2, BookOpen, MapPin, ShieldCheck, BadgeCheck, Award,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -139,10 +139,17 @@ export default async function HomePage() {
           <form action="/trainers" method="GET" className="hero-search-light">
             <div className="hsl-field">
               <Search size={18} strokeWidth={2} />
-              <input name="q" type="text" placeholder="Search by topic, trainer name…" />
+              <input name="q" type="text" placeholder="Search by topic or trainer name…" />
             </div>
             <div className="search-sep" />
-            <select name="state">
+            <select name="topic" aria-label="Category">
+              <option value="">All categories</option>
+              {Object.keys(TOPIC_ICONS).map(t => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+            <div className="search-sep" />
+            <select name="state" aria-label="Location">
               <option value="">All states</option>
               {MALAYSIAN_STATES.map(s => (
                 <option key={s.slug} value={s.slug}>{s.name}</option>
@@ -171,42 +178,36 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Qualitative trust row — no inflated numbers */}
-          <div className="hero-trust">
-            <span><ShieldCheck size={16} strokeWidth={1.9} /> HRDC-certified trainers</span>
-            <span><BadgeCheck size={16} strokeWidth={1.9} /> Verifiable profiles</span>
-            <span><MessageCircle size={16} strokeWidth={1.9} /> Contact trainers directly</span>
-          </div>
         </div>
 
-        {/* Illustration */}
+        {/* Dashboard mockup */}
         <div className="hero-art">
-          <HeroIllustration />
+          <HeroDashboardMockup />
         </div>
         </div>
       </section>
 
-      {/* ── WHY USE THIS DIRECTORY ── */}
-      <section className="home-section">
-        <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto' }}>
-          <ScrollRevealGroup className="why-grid">
-            {[
-              { Icon: ShieldCheck,   color: 'var(--color-accent)',    bg: 'var(--color-accent-light)', title: 'HRDC Focused',     desc: 'Built specifically for HRDC-certified trainers and training professionals.' },
-              { Icon: BadgeCheck,    color: 'var(--color-sage-dark)', bg: 'var(--color-sage-light)',   title: 'Verified Profiles', desc: 'Profiles show certifications, expertise, experience and training specialities.' },
-              { Icon: Search,        color: 'var(--color-gold-dark)', bg: 'var(--color-gold-light)',   title: 'Smart Discovery',   desc: 'Find the right trainer by category, location, industry and more.' },
-              { Icon: MessageCircle, color: 'var(--color-accent)',    bg: 'var(--color-accent-light)', title: 'Direct Connection', desc: 'Reach out to trainers directly and discuss your training requirements.' },
-            ].map(item => (
-              <div key={item.title} className="reveal why-card">
-                <span className="why-icon" style={{ background: item.bg, color: item.color }}>
-                  <item.Icon size={22} strokeWidth={1.9} />
-                </span>
-                <h3 className="why-title">{item.title}</h3>
-                <p className="why-desc">{item.desc}</p>
+      {/* ── BENEFIT BAR — floats over the hero seam ── */}
+      <div className="benefit-bar-wrap">
+        <ScrollRevealGroup className="benefit-bar">
+          {[
+            { Icon: ShieldCheck,   color: 'var(--color-accent)',    bg: 'var(--color-accent-light)', title: 'HRDC-certified',      desc: 'All trainers are HRDC registered and verified.' },
+            { Icon: BadgeCheck,    color: 'var(--color-sage-dark)', bg: 'var(--color-sage-light)',   title: 'Verified profiles',   desc: 'View qualifications, experience and training specialities.' },
+            { Icon: MessageCircle, color: 'var(--color-gold-dark)', bg: 'var(--color-gold-light)',   title: 'Connect directly',    desc: 'Contact trainers directly and discuss your training needs.' },
+            { Icon: Award,         color: 'var(--color-sage-dark)', bg: 'var(--color-sage-light)',   title: 'Curated for quality', desc: 'A focused directory to help you find the right trainer faster.' },
+          ].map(item => (
+            <div key={item.title} className="reveal benefit-item">
+              <span className="benefit-icon" style={{ background: item.bg, color: item.color }}>
+                <item.Icon size={20} strokeWidth={1.9} />
+              </span>
+              <div>
+                <div className="benefit-title">{item.title}</div>
+                <div className="benefit-desc">{item.desc}</div>
               </div>
-            ))}
-          </ScrollRevealGroup>
-        </div>
-      </section>
+            </div>
+          ))}
+        </ScrollRevealGroup>
+      </div>
 
       {/* ── FEATURED TRAINERS ── */}
       {featured.length > 0 && (
