@@ -7,7 +7,8 @@ import type { TrainerProfile } from '@/features/trainers/types'
 import { InquiryButtonClient } from '@/features/search/components/InquiryButtonClient'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { WriteReviewClient } from '@/features/reviews/WriteReviewClient'
-import { MapPin, Clock, Globe, Star, Monitor, ShieldCheck, Check, MessageCircle, Zap, BadgeCheck, ArrowLeft } from 'lucide-react'
+import { AvailabilityCalendar } from '@/features/trainers/components/AvailabilityCalendar'
+import { MapPin, Clock, Globe, Star, Monitor, ShieldCheck, Check, MessageCircle, Zap, BadgeCheck, ArrowLeft, CalendarDays } from 'lucide-react'
 
 // ISR: revalidate each profile page every hour
 export const dynamic = 'force-dynamic'
@@ -102,6 +103,22 @@ async function getReviews(trainerId: string, page: number): Promise<{ reviews: R
   }
 }
 
+/* Busy dates for the availability calendar. Admin client (server-side) so we
+   read only the public-safe date columns — the private `note` is never selected. */
+async function getBusyDates(trainerId: string): Promise<{ start_date: string; end_date: string | null }[]> {
+  try {
+    const supabase = createAdminClient()
+    const { data } = await supabase
+      .from('trainer_schedule' as any)
+      .select('start_date, end_date')
+      .eq('trainer_id', trainerId)
+      .order('start_date', { ascending: true }) as { data: { start_date: string; end_date: string | null }[] | null }
+    return data ?? []
+  } catch {
+    return []
+  }
+}
+
 /* ── Page ───────────────────────────────────────────────── */
 export default async function TrainerProfilePage({ params, searchParams }: PageProps) {
   const { slug } = await params
@@ -113,6 +130,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
 
   const { reviews, total: reviewTotal } = await getReviews(trainer.id, reviewPage)
   const totalReviewPages = Math.ceil(reviewTotal / REVIEWS_PER_PAGE)
+  const busyDates = await getBusyDates(trainer.id)
 
   const user = (trainer as any).users ?? (trainer as any).user
   const name = user?.full_name ?? ''
@@ -366,6 +384,17 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                 </div>
               </section>
             )}
+
+            {/* Availability */}
+            <section id="availability" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)' }}>
+              <h2 className="profile-section-heading" style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                <CalendarDays size={18} strokeWidth={1.75} style={{ color: 'var(--color-accent)' }} /> Availability
+              </h2>
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-5)' }}>
+                Dates marked unavailable are already booked. Free dates are open — send an inquiry to confirm.
+              </p>
+              <AvailabilityCalendar busy={busyDates} />
+            </section>
 
             {/* Reviews */}
             <section id="reviews" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)' }}>
