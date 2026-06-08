@@ -186,9 +186,9 @@ function TimelineConnector() {
       >
         <defs>
           <linearGradient id="hiw-timeline-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%"   stopColor="#C2410C" stopOpacity="0.18" />
-            <stop offset="50%"  stopColor="#C2410C" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#C2410C" stopOpacity="0.18" />
+            <stop offset="0%"   stopColor="#C65D3B" stopOpacity="0.18" />
+            <stop offset="50%"  stopColor="#C65D3B" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#C65D3B" stopOpacity="0.18" />
           </linearGradient>
         </defs>
         <path
@@ -199,8 +199,8 @@ function TimelineConnector() {
           strokeLinecap="round"
           fill="none"
         />
-        <circle className="hiw-timeline-dot hiw-timeline-dot-1" cx="333" cy="6" r="3" fill="#C2410C" />
-        <circle className="hiw-timeline-dot hiw-timeline-dot-2" cx="666" cy="6" r="3" fill="#C2410C" />
+        <circle className="hiw-timeline-dot hiw-timeline-dot-1" cx="333" cy="6" r="3" fill="#C65D3B" />
+        <circle className="hiw-timeline-dot hiw-timeline-dot-2" cx="666" cy="6" r="3" fill="#C65D3B" />
       </svg>
     </div>
   )

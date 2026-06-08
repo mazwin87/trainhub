@@ -10,14 +10,14 @@ import { HeroIllustration } from '@/components/HeroIllustration'
 import {
   Target, Bot, MessageCircle, Brain, TrendingUp, Leaf, Search,
   Compass, ShieldAlert, Sparkles, Package, DollarSign, Users,
-  Settings2, BookOpen, MapPin, ShieldCheck, Star,
+  Settings2, BookOpen, MapPin, ShieldCheck, BadgeCheck,
   type LucideIcon,
 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'TrainHub Malaysia — Find Verified HRDC Trainers',
+  title: 'TrainHub — HRDC Trainer Directory Malaysia',
   description:
-    "Malaysia's #1 HRDC trainer directory. Discover and connect with 500+ verified, certified trainers. All HRDC SBL-Khas claimable.",
+    'A curated directory of HRDC-certified trainers in Malaysia. Search by expertise, industry, location and training category.',
 }
 
 export const revalidate = 1800
@@ -122,17 +122,17 @@ export default async function HomePage() {
         <div className="hero-animate hero-copy" style={{ position: 'relative', zIndex: 1 }}>
 
           <div className="hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={14} strokeWidth={1.75} /> Malaysia&apos;s HRDC Trainer Directory
+            <MapPin size={14} strokeWidth={1.75} /> Curated HRDC Trainer Directory · Malaysia
           </div>
 
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 5.2vw, var(--text-3xl))', fontWeight: 600, lineHeight: 1.1, marginBottom: 'var(--space-4)', letterSpacing: '-0.025em', color: 'var(--color-ink)' }}>
-            Find verified{' '}
-            <em className="hero-accent-text" style={{ fontStyle: 'normal' }}>HRDC-certified</em>{' '}
-            trainers, instantly
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 5.2vw, var(--text-3xl))', fontWeight: 600, lineHeight: 1.12, marginBottom: 'var(--space-4)', letterSpacing: '-0.025em', color: 'var(--color-ink)' }}>
+            Find the Right{' '}
+            <em className="hero-accent-text" style={{ fontStyle: 'normal' }}>HRDC Trainer</em>{' '}
+            for Your Training Needs
           </h1>
 
           <p style={{ fontSize: 'var(--text-md)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)', maxWidth: '540px', margin: '0 auto var(--space-7)' }}>
-            Discover, compare, and connect with 500+ certified trainers across Malaysia. Every profile verified. Every program HRDC-claimable.
+            Search HRDC-certified trainers by expertise, industry, location and training category.
           </p>
 
           {/* Search bar */}
@@ -171,11 +171,11 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Trust row */}
+          {/* Qualitative trust row — no inflated numbers */}
           <div className="hero-trust">
-            <span><ShieldCheck size={16} strokeWidth={1.9} /> HRD Corp verified</span>
-            <span><Star size={16} strokeWidth={1.9} /> 4.9 average rating</span>
-            <span><Users size={16} strokeWidth={1.9} /> 2,400+ companies served</span>
+            <span><ShieldCheck size={16} strokeWidth={1.9} /> HRDC-certified trainers</span>
+            <span><BadgeCheck size={16} strokeWidth={1.9} /> Verifiable profiles</span>
+            <span><MessageCircle size={16} strokeWidth={1.9} /> Contact trainers directly</span>
           </div>
         </div>
 
@@ -183,6 +183,28 @@ export default async function HomePage() {
         <div className="hero-art">
           <HeroIllustration />
         </div>
+        </div>
+      </section>
+
+      {/* ── WHY USE THIS DIRECTORY ── */}
+      <section className="home-section">
+        <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto' }}>
+          <ScrollRevealGroup className="why-grid">
+            {[
+              { Icon: ShieldCheck,   color: 'var(--color-accent)',    bg: 'var(--color-accent-light)', title: 'HRDC Focused',     desc: 'Built specifically for HRDC-certified trainers and training professionals.' },
+              { Icon: BadgeCheck,    color: 'var(--color-sage-dark)', bg: 'var(--color-sage-light)',   title: 'Verified Profiles', desc: 'Profiles show certifications, expertise, experience and training specialities.' },
+              { Icon: Search,        color: 'var(--color-gold-dark)', bg: 'var(--color-gold-light)',   title: 'Smart Discovery',   desc: 'Find the right trainer by category, location, industry and more.' },
+              { Icon: MessageCircle, color: 'var(--color-accent)',    bg: 'var(--color-accent-light)', title: 'Direct Connection', desc: 'Reach out to trainers directly and discuss your training requirements.' },
+            ].map(item => (
+              <div key={item.title} className="reveal why-card">
+                <span className="why-icon" style={{ background: item.bg, color: item.color }}>
+                  <item.Icon size={22} strokeWidth={1.9} />
+                </span>
+                <h3 className="why-title">{item.title}</h3>
+                <p className="why-desc">{item.desc}</p>
+              </div>
+            ))}
+          </ScrollRevealGroup>
         </div>
       </section>
 
@@ -213,25 +235,24 @@ export default async function HomePage() {
         <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto' }}>
           <ScrollReveal>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-6)', gap: 'var(--space-4)' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)' }}>Browse by topic</h2>
-              <Link href="/trainers" style={{ fontSize: 'var(--text-sm)', color: 'var(--color-accent)', whiteSpace: 'nowrap', flexShrink: 0 }}>All topics →</Link>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)' }}>Browse by expertise</h2>
+              <Link href="/trainers" style={{ fontSize: 'var(--text-sm)', color: 'var(--color-accent)', whiteSpace: 'nowrap', flexShrink: 0 }}>View all categories →</Link>
             </div>
           </ScrollReveal>
           <ScrollRevealGroup className="topics-grid">
-            {Object.entries(TOPIC_COUNTS).map(([topic, count]) => {
+            {Object.keys(TOPIC_COUNTS).map((topic) => {
               const TopicIcon = TOPIC_ICONS[topic] ?? BookOpen
               return (
                 <Link
                   key={topic}
                   href={`/trainers?topic=${encodeURIComponent(topic)}`}
                   className="reveal topic-card"
-                  style={{ padding: 'var(--space-5) var(--space-3)', border: '1px solid transparent', borderRadius: 'var(--radius-lg)', background: 'var(--color-surface)', boxShadow: '0 1px 2px rgba(58,36,26,0.04), 0 10px 28px -18px rgba(58,36,26,0.16)', textAlign: 'center', transition: 'box-shadow 0.2s ease, transform 0.2s ease', textDecoration: 'none', display: 'block' }}
+                  style={{ padding: 'var(--space-6) var(--space-3)', border: '1px solid transparent', borderRadius: 'var(--radius-lg)', background: 'var(--color-surface)', boxShadow: '0 1px 2px rgba(47,42,38,0.04), 0 10px 28px -18px rgba(47,42,38,0.16)', textAlign: 'center', transition: 'box-shadow 0.2s ease, transform 0.2s ease', textDecoration: 'none', display: 'block' }}
                 >
-                  <div className="topic-icon" style={{ marginBottom: 'var(--space-2)', lineHeight: 1, display: 'flex', justifyContent: 'center', color: 'var(--color-accent)' }}>
-                    <TopicIcon size={24} strokeWidth={1.5} />
-                  </div>
-                  <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-ink)', marginBottom: '0.15rem' }}>{topic}</div>
-                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>{count} trainers</div>
+                  <span className="topic-icon" style={{ width: 54, height: 54, margin: '0 auto var(--space-3)', borderRadius: '50%', background: 'var(--color-accent-light)', color: 'var(--color-accent)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <TopicIcon size={23} strokeWidth={1.75} />
+                  </span>
+                  <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-ink)' }}>{topic}</div>
                 </Link>
               )
             })}
@@ -248,12 +269,12 @@ export default async function HomePage() {
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.4rem, 4vw, var(--text-2xl))', color: '#fff', marginBottom: 'var(--space-3)', fontWeight: 500, lineHeight: 1.2 }}>
             Are you an HRDC-certified trainer?
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 'var(--text-base)', marginBottom: 'var(--space-6)', lineHeight: 'var(--leading-relaxed)' }}>
-            Join Malaysia&apos;s largest HRDC trainer directory. Get discovered by companies actively looking for your expertise.
+          <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 'var(--text-base)', marginBottom: 'var(--space-6)', lineHeight: 'var(--leading-relaxed)' }}>
+            Create your profile, showcase your expertise, and connect with organisations looking for trainers.
           </p>
           <div className="cta-buttons">
             <Link href="/register" className="cta-btn cta-btn--white">
-              Create your profile — it&apos;s free
+              List your profile
             </Link>
             <Link href="/about" className="cta-btn cta-btn--ghost">
               Learn more

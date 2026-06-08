@@ -112,7 +112,7 @@ export function TrainerCard({ trainer }: Props) {
             </div>
             <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '0.1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
-                <Star size={11} strokeWidth={1.75} fill="var(--color-accent)" color="var(--color-accent)" />
+                <Star size={11} strokeWidth={1.75} fill="var(--color-gold)" color="var(--color-gold)" />
                 {trainer.avg_rating.toFixed(1)}
               </span>
               <span style={{ color: 'var(--color-border)' }}>·</span>

@@ -1,6 +1,6 @@
 /* ============================================================
    TRAINHUB MALAYSIA — DESIGN TOKENS
-   Terracotta & Clay Theme
+   Warm Sand & Terracotta Theme
    ============================================================ */
 
 :root {
@@ -8,24 +8,24 @@
   /* ── COLORS ─────────────────────────────────────────── */
 
   /* Surfaces */
-  --color-bg:            #FCF7F2;   /* warm cream */
-  --color-surface:       #ffffff;
-  --color-surface-alt:   #FAE1D0;   /* soft clay — pills, hovers */
-  --color-ink:           #3A241A;   /* warm charcoal — primary text */
+  --color-bg:            #F8F4EE;   /* warm sand */
+  --color-surface:       #ffffff;   /* card background */
+  --color-surface-alt:   #EFE5D7;   /* soft sand — pills, hovers */
+  --color-ink:           #2F2A26;   /* warm charcoal — primary text */
 
   /* Text */
-  --color-muted:         #8A6F5E;
-  --color-subtle:        #B8A593;
+  --color-muted:         #6B645F;
+  --color-subtle:        #9B938B;
 
   /* Borders */
-  --color-border:        #F2DEC9;   /* soft clay border */
-  --color-border-strong: #E8C3A6;
+  --color-border:        #EADFCF;   /* warm sand border */
+  --color-border-strong: #DBCBB4;
 
   /* ── PRIMARY ACCENT — Terracotta ────────────────────── */
-  --color-accent:        #C2410C;
-  --color-accent-light:  #FCEDE2;
-  --color-accent-dark:   #9A3412;
-  --color-accent-text:   #9A3412;
+  --color-accent:        #C65D3B;
+  --color-accent-light:  #F7E7DD;
+  --color-accent-dark:   #A4472A;
+  --color-accent-text:   #A4472A;
 
   /* ── CTA — Green (WhatsApp / positive actions) ───────── */
   --color-cta:           #97C459;
@@ -33,31 +33,42 @@
   --color-cta-dark:      #639922;
   --color-cta-text:      #3B6D11;
 
-  /* ── SECONDARY — Warm Clay accent ──────────────────── */
-  --color-secondary:       #EA8A4B;
-  --color-secondary-light: #FCEDE2;
-  --color-secondary-dark:  #C2410C;
-  --color-secondary-text:  #9A3412;
+  /* ── SECONDARY — Warm Terracotta (gradients) ─────────── */
+  --color-secondary:       #D9805E;
+  --color-secondary-light: #F7E7DD;
+  --color-secondary-dark:  #C65D3B;
+  --color-secondary-text:  #A4472A;
+
+  /* ── SAGE GREEN — calm accent (categories, icons) ────── */
+  --color-sage:        #7A8B6F;
+  --color-sage-light:  #EAEEE5;
+  --color-sage-dark:   #5F6E55;
+
+  /* ── GOLD — ratings, highlights ──────────────────────── */
+  --color-gold:        #D9A441;
+  --color-gold-light:  #F7EDD6;
+  --color-gold-dark:   #B0822C;
 
   /* ── SEMANTIC BADGES ──────────────────────────────────── */
   --color-verified:        var(--color-cta-light);
   --color-verified-text:   var(--color-cta-dark);
 
-  --color-featured:        #FCEDE2;
-  --color-featured-text:   #9A3412;
+  --color-featured:        #F7E7DD;
+  --color-featured-text:   #A4472A;
 
-  --color-top:             #FAEEDA;
-  --color-top-text:        #854F0B;
+  /* Top-rated / rating badge → gold */
+  --color-top:             var(--color-gold-light);
+  --color-top-text:        var(--color-gold-dark);
 
   /* ── STATES ───────────────────────────────────────────── */
   --color-error:           #FCEBEB;
   --color-error-text:      #A32D2D;
 
-  --color-warning:         #FAEEDA;
-  --color-warning-text:    #854F0B;
+  --color-warning:         #F7EDD6;
+  --color-warning-text:    #B0822C;
 
-  --color-info:            #FCEDE2;
-  --color-info-text:       #9A3412;
+  --color-info:            #F7E7DD;
+  --color-info-text:       #A4472A;
 
 
   /* ── TYPOGRAPHY ─────────────────────────────────────── */
@@ -112,10 +123,10 @@
 
 
   /* ── SHADOWS ─────────────────────────────────────────── */
-  --shadow-sm:    0 1px 3px rgba(194, 65, 12, 0.07);
-  --shadow-md:    0 4px 12px rgba(194, 65, 12, 0.12);
-  --shadow-hover: 0 6px 24px rgba(194, 65, 12, 0.20);
-  --shadow-focus: 0 0 0 4px rgba(234, 138, 75, 0.18);
+  --shadow-sm:    0 1px 3px rgba(47, 42, 38, 0.06);
+  --shadow-md:    0 6px 16px -6px rgba(47, 42, 38, 0.12);
+  --shadow-hover: 0 18px 40px -18px rgba(47, 42, 38, 0.20);
+  --shadow-focus: 0 0 0 4px rgba(198, 93, 59, 0.16);
 
 
   /* ── TRANSITIONS ─────────────────────────────────────── */

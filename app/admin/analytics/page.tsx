@@ -61,10 +61,10 @@ export default async function AdminAnalyticsPage() {
   const sparklineMax = Math.max(...sparklineData, 1)
 
   const stats = [
-    { label: 'Total trainers', value: totalTrainers.count ?? 0, sub: `+${newTrainers.count ?? 0} this month`, Icon: Users, accent: '#C2410C', href: '/admin/trainers' },
+    { label: 'Total trainers', value: totalTrainers.count ?? 0, sub: `+${newTrainers.count ?? 0} this month`, Icon: Users, accent: '#C65D3B', href: '/admin/trainers' },
     { label: 'Approved trainers', value: approvedTrainers.count ?? 0, sub: `${pendingTrainers.count ?? 0} pending`, Icon: UserCheck, accent: '#059669', href: '/admin/trainers?status=approved' },
     { label: 'Pending approvals', value: pendingTrainers.count ?? 0, sub: 'Needs review', Icon: Clock, accent: '#D97706', href: '/admin/approvals' },
-    { label: 'Total users', value: totalUsers.count ?? 0, sub: `+${newUsers.count ?? 0} this month`, Icon: Users, accent: '#C2410C', href: '/admin/users' },
+    { label: 'Total users', value: totalUsers.count ?? 0, sub: `+${newUsers.count ?? 0} this month`, Icon: Users, accent: '#C65D3B', href: '/admin/users' },
     { label: 'Total inquiries', value: totalInquiries.count ?? 0, sub: `+${newInquiries.count ?? 0} this month`, Icon: Mailbox, accent: '#059669', href: '/admin/inquiries' },
     { label: 'Searches this month', value: (searchLogsData ?? []).length, sub: `${topSearches.length} unique queries`, Icon: Search, accent: '#D97706', href: null },
   ]
@@ -173,7 +173,7 @@ export default async function AdminAnalyticsPage() {
                     <div style={{
                       height: '100%',
                       width: `${(count / maxSearchCount) * 100}%`,
-                      background: 'linear-gradient(90deg, #C2410C, #EA8A4B)',
+                      background: 'linear-gradient(90deg, #C65D3B, #D9805E)',
                       borderRadius: '2px',
                     }} />
                   </div>

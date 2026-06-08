@@ -52,7 +52,7 @@ export function Navbar() {
           padding: '0 var(--space-10)',
           height: 'var(--nav-height)',
           // Frosted translucent bar — content faintly shows through on scroll
-          background: 'linear-gradient(135deg, rgba(154,52,18,0.88) 0%, rgba(194,65,12,0.88) 100%)',
+          background: 'linear-gradient(135deg, rgba(154,52,18,0.88) 0%, rgba(198,93,59,0.88) 100%)',
           backdropFilter: 'blur(12px) saturate(140%)',
           WebkitBackdropFilter: 'blur(12px) saturate(140%)',
           borderBottom: '1px solid rgba(255,255,255,0.10)',
@@ -73,7 +73,7 @@ export function Navbar() {
             color: '#fff',
           }}
         >
-          Train<span style={{ color: '#E8C3A6' }}>Hub</span>
+          Train<span style={{ color: '#DBCBB4' }}>Hub</span>
           <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.65)', fontWeight: 400, marginLeft: '0.35rem', fontFamily: 'var(--font-body)' }}>
             Malaysia
           </span>

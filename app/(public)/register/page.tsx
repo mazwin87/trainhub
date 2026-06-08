@@ -84,13 +84,13 @@ export default function RegisterPage() {
         background: '#fff',
         borderRadius: '16px',
         padding: 'var(--space-8) var(--space-7)',
-        boxShadow: '0 8px 40px rgba(154, 52, 18, 0.15)',
+        boxShadow: '0 8px 40px rgba(164, 71, 42, 0.15)',
       }}>
         <h1 style={{
           fontFamily: 'var(--font-display)',
           fontSize: '2.5rem',
           fontWeight: 600,
-          color: '#9A3412',
+          color: '#A4472A',
           marginBottom: 'var(--space-2)',
           lineHeight: 1.15,
         }}>
@@ -185,7 +185,7 @@ export default function RegisterPage() {
 
         <p style={{ textAlign: 'center', marginTop: 'var(--space-6)', fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
           Already have an account?{' '}
-          <Link href="/login" style={{ color: '#EA8A4B', fontWeight: 600, transition: 'color 0.3s ease' }}>
+          <Link href="/login" style={{ color: '#D9805E', fontWeight: 600, transition: 'color 0.3s ease' }}>
             Sign in
           </Link>
         </p>

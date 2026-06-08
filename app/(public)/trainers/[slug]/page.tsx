@@ -183,7 +183,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                 color: '#fff',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 600,
-                boxShadow: '0 6px 20px rgba(194,65,12,0.28)',
+                boxShadow: '0 6px 20px rgba(198,93,59,0.28)',
               }}>
                 {user?.avatar_url
                   ? <img src={user.avatar_url} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
@@ -266,7 +266,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                 </div>
                 <div className="profile-stat-card">
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)', fontWeight: 600, color: 'var(--color-accent)', lineHeight: 1 }}>
-                    <Star size={18} strokeWidth={1.75} fill="var(--color-accent)" color="var(--color-accent)" />
+                    <Star size={18} strokeWidth={1.75} fill="var(--color-gold)" color="var(--color-gold)" />
                     {trainer.avg_rating > 0 ? trainer.avg_rating.toFixed(1) : '—'}
                   </div>
                   <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '4px' }}>
@@ -402,7 +402,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                 <h2 className="profile-section-heading" style={{ marginBottom: 0 }}>Reviews</h2>
                 {trainer.review_count > 0 && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--color-accent-light)', padding: '0.4rem 0.9rem', borderRadius: 'var(--radius-pill)' }}>
-                    <Star size={15} strokeWidth={1.75} fill="var(--color-accent)" color="var(--color-accent)" />
+                    <Star size={15} strokeWidth={1.75} fill="var(--color-gold)" color="var(--color-gold)" />
                     <strong style={{ fontSize: 'var(--text-md)', color: 'var(--color-accent)', fontFamily: 'var(--font-display)' }}>{trainer.avg_rating.toFixed(1)}</strong>
                     <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>({trainer.review_count})</span>
                   </div>
@@ -428,7 +428,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                                 key={n}
                                 size={15}
                                 strokeWidth={1.5}
-                                fill={review.rating >= n ? 'var(--color-accent)' : 'none'}
+                                fill={review.rating >= n ? 'var(--color-gold)' : 'none'}
                                 color={review.rating >= n ? 'var(--color-accent)' : 'var(--color-border)'}
                               />
                             ))}
