@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createServerClient } from '@/lib/supabase/server'
 import { ProfileEditor } from './ProfileEditor'
+import type { Certification } from '@/features/trainers/types/trainer'
 
 export default async function ProfilePage() {
   const supabase = await createServerClient()
@@ -28,11 +29,10 @@ export default async function ProfilePage() {
     .single() as { data: { full_name: string; email: string; avatar_url: string | null } | null }
   
   const { data: existingCerts } = await supabase
-  .from('certifications')
-  .select('name')
-  .eq('trainer_id', profile?.id) as { data: { name: string }[] | null }
-
-  const certsText = (existingCerts ?? []).map(c => c.name).join('\n')
+    .from('certifications')
+    .select('id, trainer_id, name, issuing_body, issue_date, expiry_date, cert_file_url, is_verified')
+    .eq('trainer_id', profile?.id)
+    .order('created_at', { ascending: false }) as { data: Certification[] | null }
 
   return (
     <ProfileEditor
@@ -40,7 +40,7 @@ export default async function ProfilePage() {
         userInfo={userInfo}
         profile={profile}
         selectedTopicIds={(trainerTopics ?? []).map(t => t.topic_id)}
-        certsText={certsText}
+        certifications={existingCerts ?? []}
     />
 )
 }

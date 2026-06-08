@@ -1,5 +1,6 @@
 import { createServerClient } from '@/lib/supabase/server'
 import { ApprovalActions } from './ApprovalActions'
+import { CertReview } from './CertReview'
 import { CheckCircle } from 'lucide-react'
 
 export default async function ApprovalsPage() {
@@ -10,7 +11,8 @@ export default async function ApprovalsPage() {
     .select(`
       id, slug, bio, tagline, hrdf_cert_number, location_state, location_city,
       created_at, user_id,
-      users(full_name, email)
+      users(full_name, email),
+      certifications(id, trainer_id, name, issuing_body, issue_date, expiry_date, cert_file_url, is_verified)
     `)
     .eq('approval_status', 'pending')
     .order('created_at', { ascending: false }) as { data: any[] | null }
@@ -64,6 +66,8 @@ export default async function ApprovalsPage() {
                   {trainer.bio}
                 </p>
               )}
+
+              <CertReview certs={trainer.certifications ?? []} />
 
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)', marginTop: 'var(--space-3)' }}>
                 Registered: {new Date(trainer.created_at).toLocaleDateString('en-MY')}
