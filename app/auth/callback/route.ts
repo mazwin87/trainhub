@@ -6,6 +6,8 @@ import { createAdminClient } from '@/lib/supabase/admin'
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url)
   const code = searchParams.get('code')
+  // Role chosen on the register page, carried through OAuth via redirectTo.
+  const requestedRole = searchParams.get('role') === 'company' ? 'company' : 'trainer'
 
   if (!code) {
     return NextResponse.redirect(`${origin}/login?error=oauth_failed`)
@@ -56,11 +58,11 @@ export async function GET(req: NextRequest) {
       id: user.id,
       email: user.email!,
       full_name: fullName,
-      role: 'trainer',
+      role: requestedRole,
     } as any)
   }
 
-  const role = existingUser?.role ?? 'trainer'
+  const role = existingUser?.role ?? requestedRole
   if (role === 'admin') return NextResponse.redirect(`${origin}/admin`)
   if (role === 'company') return NextResponse.redirect(`${origin}/company/saved`)
 

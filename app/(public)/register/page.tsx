@@ -134,7 +134,7 @@ export default function RegisterPage() {
           })}
         </div>
 
-        <OAuthButtons />
+        <OAuthButtons role={role} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', margin: 'var(--space-2) 0' }}>
           <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
