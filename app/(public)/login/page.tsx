@@ -11,6 +11,7 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const registered = searchParams.get('registered') === 'true'
+  const next = searchParams.get('next')
 
   const [formData, setFormData] = useState({
     email: '',
@@ -24,11 +25,12 @@ function LoginForm() {
     const supabase = createBrowserClient()
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) {
+        if (next) { router.replace(next); return }
         const role = data.user.user_metadata?.role
-        router.replace(role === 'admin' ? '/admin' : '/trainer/dashboard')
+        router.replace(role === 'admin' ? '/admin' : role === 'company' ? '/company/saved' : '/trainer/dashboard')
       }
     })
-  }, [router])
+  }, [router, next])
 
   useEffect(() => {
     if (registered) {
@@ -87,8 +89,14 @@ function LoginForm() {
         userProfile = newUser
       }
 
+      if (next) { router.push(next); return }
+
       if (userProfile?.role === 'admin') {
         router.push('/admin')
+        return
+      }
+      if (userProfile?.role === 'company') {
+        router.push('/company/saved')
         return
       }
 

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Star, Check, MapPin } from 'lucide-react'
 import type { TrainerCard as TrainerCardType } from '../types'
 import { formatPrice, getWhatsAppUrl, truncate } from '@/lib/utils'
+import { FavouriteButton } from './FavouriteButton'
 
 interface Props {
   trainer: TrainerCardType
@@ -54,6 +55,7 @@ export function TrainerCard({ trainer }: Props) {
               {truncate(trainer.tagline, 72)}
             </p>
           </div>
+          <FavouriteButton trainerId={trainer.id} />
         </div>
 
         {/* Badges */}

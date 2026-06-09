@@ -16,13 +16,14 @@ export default function RegisterPage() {
   })
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [role, setRole] = useState<'trainer' | 'company'>('trainer')
 
   useEffect(() => {
     const supabase = createBrowserClient()
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) {
-        const role = data.user.user_metadata?.role
-        router.replace(role === 'admin' ? '/admin' : '/trainer/dashboard')
+        const r = data.user.user_metadata?.role
+        router.replace(r === 'admin' ? '/admin' : r === 'company' ? '/company/saved' : '/trainer/dashboard')
       }
     })
   }, [router])
@@ -54,7 +55,7 @@ export default function RegisterPage() {
         options: {
           data: {
             full_name: formData.full_name,
-            role: 'trainer',
+            role,
           },
         },
       })
@@ -94,11 +95,44 @@ export default function RegisterPage() {
           marginBottom: 'var(--space-2)',
           lineHeight: 1.15,
         }}>
-          Create your profile
+          Create your account
         </h1>
-        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-6)' }}>
-          Join Malaysia&apos;s HRDC trainer directory. It&apos;s free.
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', marginBottom: 'var(--space-5)' }}>
+          {role === 'trainer'
+            ? 'List your profile on the HRDC trainer directory. It’s free.'
+            : 'Find, shortlist and compare HRDC-certified trainers. It’s free.'}
         </p>
+
+        {/* Role choice */}
+        <div role="tablist" aria-label="Account type" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-2)', marginBottom: 'var(--space-5)' }}>
+          {([
+            { key: 'trainer', label: "I'm a Trainer", sub: 'List my profile' },
+            { key: 'company', label: "I'm hiring (HR)", sub: 'Find trainers' },
+          ] as const).map(opt => {
+            const active = role === opt.key
+            return (
+              <button
+                key={opt.key}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setRole(opt.key)}
+                style={{
+                  textAlign: 'left',
+                  padding: 'var(--space-3) var(--space-4)',
+                  borderRadius: 'var(--radius-md)',
+                  cursor: 'pointer',
+                  background: active ? 'var(--color-accent-light)' : 'var(--color-surface)',
+                  border: `1.5px solid ${active ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                  fontFamily: 'var(--font-body)',
+                }}
+              >
+                <div style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: active ? 'var(--color-accent-text)' : 'var(--color-ink)' }}>{opt.label}</div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>{opt.sub}</div>
+              </button>
+            )
+          })}
+        </div>
 
         <OAuthButtons />
 

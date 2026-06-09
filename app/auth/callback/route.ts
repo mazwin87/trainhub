@@ -62,6 +62,7 @@ export async function GET(req: NextRequest) {
 
   const role = existingUser?.role ?? 'trainer'
   if (role === 'admin') return NextResponse.redirect(`${origin}/admin`)
+  if (role === 'company') return NextResponse.redirect(`${origin}/company/saved`)
 
   // Redirect based on trainer profile status
   const { data: profile } = await admin

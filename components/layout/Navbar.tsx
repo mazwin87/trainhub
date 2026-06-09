@@ -39,7 +39,8 @@ export function Navbar() {
   }
 
   const firstName = user?.user_metadata?.full_name?.split(' ')[0] ?? user?.email?.split('@')[0] ?? 'Account'
-  const dashboardHref = user?.user_metadata?.role === 'admin' ? '/admin' : '/trainer/dashboard'
+  const userRole = user?.user_metadata?.role
+  const dashboardHref = userRole === 'admin' ? '/admin' : userRole === 'company' ? '/company/saved' : '/trainer/dashboard'
 
   return (
     <>
@@ -102,6 +103,16 @@ export function Navbar() {
           {authReady && (
             user ? (
               <>
+                {userRole === 'company' && (
+                  <Link
+                    href="/company/saved"
+                    style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.85)', transition: 'color 0.3s ease' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
+                  >
+                    Saved
+                  </Link>
+                )}
                 {/* Account chip — avatar + name links to the dashboard */}
                 <Link
                   href={dashboardHref}
