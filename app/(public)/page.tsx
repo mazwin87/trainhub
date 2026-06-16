@@ -17,12 +17,12 @@ const WHY = [
   {
     Icon: Search,
     title: 'Opaque & slow',
-    body: 'Employers chase quotes from agencies for weeks, with little visibility into who’s actually good or what they charge.',
+    body: 'Finding the right trainer means weeks of back-and-forth, with little visibility into who’s genuinely good or what they charge.',
   },
   {
     Icon: Users,
     title: 'Hard to get found',
-    body: 'Brilliant independent trainers rely on word of mouth and lose a cut to agencies and middlemen on every booking.',
+    body: 'Great trainers and providers rely on word of mouth, so the companies who need them often never find them.',
   },
   {
     Icon: ShieldCheck,
@@ -45,7 +45,7 @@ const STEPS = [
   {
     num: '3',
     title: 'Connect directly',
-    body: 'They message you on WhatsApp and book — no agency, no commission, fully HRD Corp claimable.',
+    body: 'They message you on WhatsApp and book directly — simple, transparent, and fully HRD Corp claimable.',
   },
 ]
 
