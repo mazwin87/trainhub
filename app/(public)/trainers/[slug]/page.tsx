@@ -174,6 +174,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
           borderRadius: 'var(--radius-lg)',
           padding: 'var(--space-6)',
           marginBottom: 'var(--space-6)',
+          position: 'relative',
         }}>
           <div className="profile-hero-inner">
 
@@ -282,6 +283,11 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Quick save — same heart as the directory cards, pinned top-right of the hero */}
+          <div style={{ position: 'absolute', top: 'var(--space-5)', right: 'var(--space-5)' }}>
+            <FavouriteButton trainerId={trainer.id} />
           </div>
         </div>
 
