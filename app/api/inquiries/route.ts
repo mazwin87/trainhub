@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 // Rate limit: simple in-memory store (use Upstash Redis in production)
 const rateLimitMap = new Map<string, { count: number; reset: number }>()
@@ -39,7 +40,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 })
     }
 
-    const supabase = await createServerClient()
+    // Public contact form: insert with the service-role client so the
+    // submission isn't blocked by RLS (inquiries has no public-insert
+    // policy by design — only trainers can read their own). This route
+    // already validates the payload and rate-limits by IP.
+    const supabase = createAdminClient()
 
     const { data, error } = await supabase
       .from('inquiries')
