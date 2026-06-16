@@ -7,7 +7,7 @@ export default async function CompanyLayout({ children }: { children: React.Reac
   if (!user) redirect('/login?next=/company/saved')
 
   return (
-    <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto', padding: 'var(--space-8) var(--space-10)' }}>
+    <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto', padding: 'var(--space-8) clamp(var(--space-4), 4vw, var(--space-10))' }}>
       {children}
     </div>
   )

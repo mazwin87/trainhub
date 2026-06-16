@@ -35,7 +35,7 @@ export default async function SavedPage() {
   return (
     <div>
       <div style={{ marginBottom: 'var(--space-6)' }}>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(var(--text-xl), 6vw, var(--text-2xl))', fontWeight: 600, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
           Your shortlist
           <span style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-muted)', background: 'var(--color-surface-alt)', padding: '2px 10px', borderRadius: 999 }}>{trainers.length}</span>
         </h1>
@@ -60,41 +60,44 @@ export default async function SavedPage() {
           </div>
 
           {trainers.length >= 2 && (
-            <section style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)', overflowX: 'auto' }}>
+            <section style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'clamp(var(--space-4), 3vw, var(--space-6))' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', fontWeight: 600, marginBottom: 'var(--space-4)' }}>Compare</h2>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--text-sm)', minWidth: 480 }}>
-                <thead>
-                  <tr>
-                    <th style={{ textAlign: 'left', padding: 'var(--space-2) var(--space-3)', color: 'var(--color-muted)', fontWeight: 500 }}></th>
-                    {trainers.map((t: any) => (
-                      <th key={t.id} style={{ textAlign: 'left', padding: 'var(--space-2) var(--space-3)', borderBottom: '1px solid var(--color-border)' }}>
-                        <Link href={`/trainers/${t.slug}`} style={{ fontWeight: 600, color: 'var(--color-ink)' }}>{t.users?.full_name ?? 'Trainer'}</Link>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { label: 'Day rate', render: (t: any) => formatPrice(t.pricing_mode, t.pricing_from, t.pricing_to) },
-                    { label: 'Rating', render: (t: any) => `★ ${Number(t.avg_rating ?? 0).toFixed(1)} (${t.review_count ?? 0})` },
-                    { label: 'Experience', render: (t: any) => `${t.years_experience ?? 0} yrs` },
-                    { label: 'Location', render: (t: any) => t.location_state ?? '—' },
-                    { label: 'HRDC verified', render: (t: any) => t.is_verified_hrdf ? '✓' : '—' },
-                    { label: 'Delivery', render: (t: any) => [t.is_online && 'Online', t.is_offline && 'On-site'].filter(Boolean).join(' · ') || '—' },
-                  ].map(row => (
-                    <tr key={row.label}>
-                      <td style={{ padding: 'var(--space-2) var(--space-3)', color: 'var(--color-muted)', whiteSpace: 'nowrap', borderBottom: '1px solid var(--color-border)' }}>{row.label}</td>
+              {/* Horizontal scroll lives on this wrapper so the page itself never overflows on mobile */}
+              <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', margin: '0 calc(-1 * clamp(var(--space-4), 3vw, var(--space-6)))', padding: '0 clamp(var(--space-4), 3vw, var(--space-6))' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--text-sm)', minWidth: 420 }}>
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: 'left', padding: 'var(--space-2) var(--space-3)', color: 'var(--color-muted)', fontWeight: 500, position: 'sticky', left: 0, background: 'var(--color-surface)', zIndex: 1 }}></th>
                       {trainers.map((t: any) => (
-                        <td key={t.id} style={{ padding: 'var(--space-2) var(--space-3)', color: 'var(--color-ink)', borderBottom: '1px solid var(--color-border)' }}>
-                          {row.label === 'HRDC verified' && t.is_verified_hrdf
-                            ? <span style={{ color: 'var(--color-cta-dark)', display: 'inline-flex', alignItems: 'center', gap: 4 }}><Check size={13} strokeWidth={2.5} /> Yes</span>
-                            : row.render(t)}
-                        </td>
+                        <th key={t.id} style={{ textAlign: 'left', padding: 'var(--space-2) var(--space-3)', borderBottom: '1px solid var(--color-border)', whiteSpace: 'nowrap' }}>
+                          <Link href={`/trainers/${t.slug}`} style={{ fontWeight: 600, color: 'var(--color-ink)' }}>{t.users?.full_name ?? 'Trainer'}</Link>
+                        </th>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {[
+                      { label: 'Day rate', render: (t: any) => formatPrice(t.pricing_mode, t.pricing_from, t.pricing_to) },
+                      { label: 'Rating', render: (t: any) => `★ ${Number(t.avg_rating ?? 0).toFixed(1)} (${t.review_count ?? 0})` },
+                      { label: 'Experience', render: (t: any) => `${t.years_experience ?? 0} yrs` },
+                      { label: 'Location', render: (t: any) => t.location_state ?? '—' },
+                      { label: 'HRDC verified', render: (t: any) => t.is_verified_hrdf ? '✓' : '—' },
+                      { label: 'Delivery', render: (t: any) => [t.is_online && 'Online', t.is_offline && 'On-site'].filter(Boolean).join(' · ') || '—' },
+                    ].map(row => (
+                      <tr key={row.label}>
+                        <td style={{ padding: 'var(--space-2) var(--space-3)', color: 'var(--color-muted)', whiteSpace: 'nowrap', borderBottom: '1px solid var(--color-border)', position: 'sticky', left: 0, background: 'var(--color-surface)', zIndex: 1 }}>{row.label}</td>
+                        {trainers.map((t: any) => (
+                          <td key={t.id} style={{ padding: 'var(--space-2) var(--space-3)', color: 'var(--color-ink)', borderBottom: '1px solid var(--color-border)', whiteSpace: 'nowrap' }}>
+                            {row.label === 'HRDC verified' && t.is_verified_hrdf
+                              ? <span style={{ color: 'var(--color-cta-dark)', display: 'inline-flex', alignItems: 'center', gap: 4 }}><Check size={13} strokeWidth={2.5} /> Yes</span>
+                              : row.render(t)}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </section>
           )}
         </>
