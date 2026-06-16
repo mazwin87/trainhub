@@ -12,12 +12,12 @@ export default async function SavedPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?next=/company/saved')
 
-  const { data: favs } = await supabase
+  const { data: favs, error } = await supabase
     .from('favourites')
     .select(`
       created_at,
       trainer_profiles!inner (
-        id, slug, tagline, avatar_url, location_state, location_city,
+        id, slug, tagline, location_state, location_city,
         is_online, is_offline, is_verified_hrdf, is_featured,
         pricing_mode, pricing_from, pricing_to, whatsapp_number,
         avg_rating, review_count, years_experience,
@@ -26,7 +26,9 @@ export default async function SavedPage() {
       )
     `)
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false }) as { data: any[] | null }
+    .order('created_at', { ascending: false }) as { data: any[] | null; error: any }
+
+  if (error) console.error('Saved trainers query failed:', error)
 
   const trainers = (favs ?? []).map(f => f.trainer_profiles).filter(Boolean)
 
