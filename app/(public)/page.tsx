@@ -1,287 +1,249 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { createServerClient } from '@/lib/supabase/server'
-import { TrainerCard } from '@/features/trainers/components'
-import type { TrainerCard as TrainerCardType } from '@/features/trainers/types'
-import { MALAYSIAN_STATES } from '@/types'
-import { ScrollReveal, ScrollRevealGroup } from '@/components/ScrollReveal'
-import { HowItWorks } from '@/components/HowItWorks'
-import { HeroDashboardMockup } from '@/components/HeroDashboardMockup'
 import {
-  Target, Bot, MessageCircle, Brain, TrendingUp, Leaf, Search,
-  Compass, ShieldAlert, Sparkles, Package, DollarSign, Users,
-  Settings2, BookOpen, MapPin, ShieldCheck, BadgeCheck, Award,
-  type LucideIcon,
+  Check, Star, Search, Users, ShieldCheck, MessageCircle, Plus,
 } from 'lucide-react'
+import { FoundingTrainerForm } from '@/components/FoundingTrainerForm'
 
 export const metadata: Metadata = {
-  title: 'TrainHub — HRDC Trainer Directory Malaysia',
+  title: 'TrainHub — The HRD Corp-Claimable Training Marketplace',
   description:
-    'A curated directory of HRDC-certified trainers in Malaysia. Search by expertise, industry, location and training category.',
+    'An independent marketplace connecting Malaysian employers with verified, HRD Corp-claimable corporate trainers. We’re onboarding our founding cohort now.',
 }
 
-export const revalidate = 1800
+/* ── Static content ────────────────────────────────────────── */
 
-const TOPIC_ICONS: Record<string, LucideIcon> = {
-  'Leadership':          Target,
-  'AI & Data':           Bot,
-  'Communication':       MessageCircle,
-  'Mental Health':       Brain,
-  'Sales & Marketing':   TrendingUp,
-  'Sustainability & ESG': Leaf,
-  'Audit & Compliance':  Search,
-  'Strategy':            Compass,
-  'Health & Safety':     ShieldAlert,
-  'Personal Development': Sparkles,
-  'Procurement':         Package,
-  'Finance':             DollarSign,
-  'Human Resources':     Users,
-  'Operations':          Settings2,
-}
-
-const TOPIC_COUNTS: Record<string, number> = {
-  'Leadership': 98, 'AI & Data': 42, 'Communication': 76,
-  'Mental Health': 55, 'Sales & Marketing': 64, 'Sustainability & ESG': 29,
-  'Audit & Compliance': 47, 'Strategy': 38,
-}
-
-const DEFAULT_POPULAR = [
-  'Leadership', 'AI & Data', 'Sales & Marketing',
-  'Mental Health', 'Audit & Compliance', 'Sustainability & ESG', 'Health & Safety',
+const WHY = [
+  {
+    Icon: Search,
+    title: 'Opaque & slow',
+    body: 'Employers chase quotes from agencies for weeks, with little visibility into who’s actually good or what they charge.',
+  },
+  {
+    Icon: Users,
+    title: 'Hard to get found',
+    body: 'Brilliant independent trainers rely on word of mouth and lose a cut to agencies and middlemen on every booking.',
+  },
+  {
+    Icon: ShieldCheck,
+    title: 'Claims left on the table',
+    body: 'HRD Corp levy goes unused because teams aren’t sure which trainers and programmes are claimable.',
+  },
 ]
 
-async function getFeaturedTrainers(): Promise<TrainerCardType[]> {
-  try {
-    const supabase = await createServerClient()
-    const { data } = await supabase
-      .from('trainer_profiles')
-      .select(`
-        id, slug, tagline, avatar_url, location_state, location_city,
-        is_online, is_offline, is_verified_hrdf, is_featured,
-        pricing_mode, pricing_from, pricing_to, whatsapp_number,
-        avg_rating, review_count, years_experience,
-        users!inner(full_name),
-        trainer_topics(topics(id, name, slug))
-      `)
-      .eq('is_published', true)
-      .eq('approval_status', 'approved')
-      .eq('is_featured', true)
-      .order('avg_rating', { ascending: false })
-      .limit(3)
-    return (data ?? []) as unknown as TrainerCardType[]
-  } catch {
-    return []
-  }
-}
+const STEPS = [
+  {
+    num: '1',
+    title: 'Trainers list free',
+    body: 'Create a verified profile with your topics, certifications, rate and availability — keep it as your own shareable page.',
+  },
+  {
+    num: '2',
+    title: 'Employers search',
+    body: 'L&D teams filter by topic, state, language and budget, then compare verified trainers side by side.',
+  },
+  {
+    num: '3',
+    title: 'Connect directly',
+    body: 'They message you on WhatsApp and book — no agency, no commission, fully HRD Corp claimable.',
+  },
+]
 
-async function getPopularSearches(): Promise<string[]> {
-  try {
-    const supabase = await createServerClient()
-    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
-    const { data } = await supabase
-      .from('search_logs')
-      .select('query')
-      .gte('created_at', since)
-      .limit(500) as { data: { query: string }[] | null }
+const BENEFITS = [
+  { title: 'Free, forever-free founding plan', sub: 'No listing fee and no commission on the bookings you win.' },
+  { title: 'Be first in your category', sub: 'Early profiles get a “Founding Trainer” badge and top placement.' },
+  { title: 'Leads straight to your WhatsApp', sub: 'Employers contact you directly — you own the relationship.' },
+  { title: 'Help shape the product', sub: 'Founding trainers get a direct line to us and a say in what we build.' },
+]
 
-    if (!data || data.length === 0) return DEFAULT_POPULAR
-    const counts = new Map<string, number>()
-    data.forEach(row => {
-      const q = (row.query ?? '').trim()
-      if (q.length < 2) return
-      counts.set(q, (counts.get(q) ?? 0) + 1)
-    })
-    if (counts.size === 0) return DEFAULT_POPULAR
-    const popular = [...counts.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 7)
-      .map(([query]) => query.charAt(0).toUpperCase() + query.slice(1))
-    if (popular.length < 4) {
-      const fillers = DEFAULT_POPULAR.filter(d => !popular.some(p => p.toLowerCase() === d.toLowerCase()))
-      return [...popular, ...fillers].slice(0, 7)
-    }
-    return popular
-  } catch {
-    return DEFAULT_POPULAR
-  }
-}
+const CATEGORIES = [
+  'Leadership', 'AI & Data', 'Health & Safety', 'Sales & Marketing', 'Audit & Compliance',
+  'Sustainability & ESG', 'Communication', 'Human Resources', 'Finance', 'Strategy',
+  'Personal Development', 'Procurement', 'Operations', 'Mental Health',
+]
 
-export default async function HomePage() {
-  const [featured, popularSearches] = await Promise.all([
-    getFeaturedTrainers(),
-    getPopularSearches(),
-  ])
+const FAQ = [
+  {
+    q: 'Is the platform live yet?',
+    a: 'Not publicly — we’re in early access. Right now we’re hand-onboarding our first cohort of founding trainers. Apply above and you’ll be first in.',
+  },
+  {
+    q: 'What does it cost trainers?',
+    a: 'Nothing. Founding trainers get a forever-free plan with no listing fee and no commission on bookings. We’ll introduce optional paid features later, but the founding plan stays free.',
+  },
+  {
+    q: 'How do you verify trainers?',
+    a: 'We review each application — checking certifications, experience and references before a profile goes live. As the marketplace grows, employer ratings and reviews will add another layer of trust.',
+  },
+  {
+    q: 'Is the training really HRD Corp claimable?',
+    a: 'Many programmes are claimable under the HRD Corp levy, subject to scheme eligibility and your company’s status. We’re an independent marketplace, not HRD Corp — we’ll help you see what’s likely eligible, but final approval rests with HRD Corp.',
+  },
+]
 
+/* ── Page ──────────────────────────────────────────────────── */
+
+export default function HomePage() {
   return (
     <>
-      {/* ── HERO — light, search-first, two-column ── */}
-      <section className="hero-section home-hero hero-light">
-        <div className="hero-grid">
-
-        {/* Content */}
-        <div className="hero-animate hero-copy" style={{ position: 'relative', zIndex: 1 }}>
-
-          <div className="hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={14} strokeWidth={1.75} /> Curated HRDC Trainer Directory · Malaysia
-          </div>
-
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 5.2vw, var(--text-3xl))', fontWeight: 600, lineHeight: 1.12, marginBottom: 'var(--space-4)', letterSpacing: '-0.025em', color: 'var(--color-ink)' }}>
-            Find the Right{' '}
-            <em className="hero-accent-text" style={{ fontStyle: 'normal' }}>HRDC Trainer</em>{' '}
-            for Your Training Needs
-          </h1>
-
-          <p style={{ fontSize: 'var(--text-md)', color: 'var(--color-muted)', lineHeight: 'var(--leading-relaxed)', maxWidth: '540px', margin: '0 auto var(--space-7)' }}>
-            Search HRDC-certified trainers by expertise, industry, location and training category.
-          </p>
-
-          {/* Search bar */}
-          <form action="/trainers" method="GET" className="hero-search-light">
-            <div className="hsl-field">
-              <Search size={18} strokeWidth={2} />
-              <input name="q" type="text" placeholder="Search by topic or trainer name…" />
-            </div>
-            <div className="search-sep" />
-            <select name="topic" aria-label="Category">
-              <option value="">All categories</option>
-              {Object.keys(TOPIC_ICONS).map(t => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
-            <div className="search-sep" />
-            <select name="state" aria-label="Location">
-              <option value="">All states</option>
-              {MALAYSIAN_STATES.map(s => (
-                <option key={s.slug} value={s.slug}>{s.name}</option>
-              ))}
-            </select>
-            <button type="submit">
-              <Search size={16} strokeWidth={2.4} /> Search
-            </button>
-          </form>
-
-          {/* Popular searches */}
-          <div style={{ marginTop: 'var(--space-5)' }}>
-            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 'var(--space-3)' }}>
-              Most searched this month
+      {/* ── HERO ──────────────────────────────────────────── */}
+      <header className="lp-hero">
+        <div className="lp-wrap lp-hero-grid">
+          <div>
+            <span className="lp-pill">
+              <span className="lp-dotwrap"><span className="lp-dot" />Now onboarding</span>
+              Founding trainers · Malaysia
+            </span>
+            <h1 className="lp-h1">
+              The home for <span className="lp-accent">HRD Corp-claimable</span> corporate trainers.
+            </h1>
+            <p className="lp-lead">
+              We’re building a simple, honest marketplace where Malaysian employers find verified
+              trainers — and great trainers get discovered. We’re signing up our first cohort now.
             </p>
-            <div className="hero-tags">
-              {popularSearches.map(topic => (
-                <Link
-                  key={topic}
-                  href={`/trainers?q=${encodeURIComponent(topic)}`}
-                  className="hero-tag-light"
-                >
-                  {topic}
-                </Link>
+            <div className="lp-hero-cta">
+              <Link className="lp-btn lp-btn-pri" href="#trainers">Become a founding trainer</Link>
+              <Link className="lp-btn lp-btn-ghost" href="/trainers">Preview the directory</Link>
+            </div>
+            <div className="lp-ticks">
+              {['Free to list', 'No commission', 'HRD Corp claimable'].map(t => (
+                <span key={t} className="lp-tick">
+                  <span className="lp-tick-c"><Check size={12} strokeWidth={2.6} /></span>{t}
+                </span>
               ))}
             </div>
           </div>
 
+          {/* Sample profile card */}
+          <div className="lp-hero-visual">
+            <span className="lp-sample-tag">Sample profile</span>
+            <div className="lp-profile">
+              <div className="lp-pf-head">
+                <div className="lp-pf-ava">YN</div>
+                <div>
+                  <div className="lp-pf-name">Your Name Here</div>
+                  <div className="lp-pf-role">Leadership &amp; Team Development Trainer</div>
+                </div>
+              </div>
+              <div className="lp-pf-badges">
+                <span className="lp-pf-bdg lp-pf-bdg-v"><Check size={13} strokeWidth={2.6} /> HRDC Verified</span>
+                <span className="lp-pf-bdg lp-pf-bdg-t"><Star size={12} fill="currentColor" strokeWidth={0} /> Founding Trainer</span>
+              </div>
+              <div className="lp-pf-stats">
+                <div className="lp-pf-stat"><div className="lp-pf-n">Your topics</div><div className="lp-pf-l">Up to 6</div></div>
+                <div className="lp-pf-stat"><div className="lp-pf-n">Your rate</div><div className="lp-pf-l">You set it</div></div>
+                <div className="lp-pf-stat"><div className="lp-pf-n">Direct</div><div className="lp-pf-l">WhatsApp leads</div></div>
+              </div>
+              <div className="lp-pf-foot">
+                <div className="lp-pf-price">RM —<small> /day</small></div>
+                <span className="lp-pf-wa"><MessageCircle size={15} strokeWidth={2} /> WhatsApp</span>
+              </div>
+              <div className="lp-pf-float">
+                <span className="lp-pf-float-ic"><Star size={18} strokeWidth={1.9} /></span>
+                <div>
+                  <div className="lp-pf-float-t">Be one of our</div>
+                  <div className="lp-pf-float-b">first 50 trainers</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </header>
 
-        {/* Dashboard mockup */}
-        <div className="hero-art">
-          <HeroDashboardMockup />
-        </div>
+      {/* ── WHY WE’RE BUILDING THIS ───────────────────────── */}
+      <section className="lp-blk lp-why-blk">
+        <div className="lp-wrap">
+          <span className="lp-eyebrow">Why we’re building this</span>
+          <h2 className="lp-sec">Finding the right trainer is harder than it should be.</h2>
+          <div className="lp-why-grid">
+            {WHY.map(({ Icon, title, body }) => (
+              <div key={title} className="lp-why">
+                <span className="lp-why-ic"><Icon size={24} strokeWidth={1.8} /></span>
+                <h3 className="lp-why-h">{title}</h3>
+                <p className="lp-why-p">{body}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── BENEFIT BAR — floats over the hero seam ── */}
-      <div className="benefit-bar-wrap">
-        <ScrollRevealGroup className="benefit-bar">
-          {[
-            { Icon: ShieldCheck,   color: 'var(--color-accent)',    bg: 'var(--color-accent-light)', title: 'HRDC-certified',      desc: 'All trainers are HRDC registered and verified.' },
-            { Icon: BadgeCheck,    color: 'var(--color-sage-dark)', bg: 'var(--color-sage-light)',   title: 'Verified profiles',   desc: 'View qualifications, experience and training specialities.' },
-            { Icon: MessageCircle, color: 'var(--color-gold-dark)', bg: 'var(--color-gold-light)',   title: 'Connect directly',    desc: 'Contact trainers directly and discuss your training needs.' },
-            { Icon: Award,         color: 'var(--color-sage-dark)', bg: 'var(--color-sage-light)',   title: 'Curated for quality', desc: 'A focused directory to help you find the right trainer faster.' },
-          ].map(item => (
-            <div key={item.title} className="reveal benefit-item">
-              <span className="benefit-icon" style={{ background: item.bg, color: item.color }}>
-                <item.Icon size={20} strokeWidth={1.9} />
-              </span>
+      {/* ── HOW IT WORKS ──────────────────────────────────── */}
+      <section className="lp-blk" id="how">
+        <div className="lp-wrap">
+          <span className="lp-eyebrow">How it will work</span>
+          <h2 className="lp-sec">Simple for both sides.</h2>
+          <div className="lp-steps">
+            {STEPS.map(({ num, title, body }) => (
+              <div key={num} className="lp-step">
+                <div className="lp-step-num">{num}</div>
+                <h3 className="lp-step-h">{title}</h3>
+                <p className="lp-step-p">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOUNDING TRAINER BAND ─────────────────────────── */}
+      <section className="lp-found-band" id="trainers">
+        <div className="lp-wrap">
+          <div className="lp-fb-card">
+            <div className="lp-fb-top">
               <div>
-                <div className="benefit-title">{item.title}</div>
-                <div className="benefit-desc">{item.desc}</div>
+                <span className="lp-eyebrow lp-eyebrow-on-clay">For trainers</span>
+                <h2 className="lp-fb-h">Become a founding trainer.</h2>
+                <p className="lp-fb-lead">
+                  We’re hand-onboarding our first 50 trainers. Get listed before anyone else, and
+                  help shape how the platform works.
+                </p>
               </div>
             </div>
-          ))}
-        </ScrollRevealGroup>
-      </div>
-
-      {/* ── FEATURED TRAINERS ── */}
-      {featured.length > 0 && (
-        <section className="home-section">
-          <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto' }}>
-            <ScrollReveal>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-6)', gap: 'var(--space-4)' }}>
-                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)' }}>Featured trainers</h2>
-                <Link href="/trainers" style={{ fontSize: 'var(--text-sm)', color: 'var(--color-accent)', whiteSpace: 'nowrap', flexShrink: 0 }}>View all →</Link>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal style={{ transitionDelay: '80ms' }}>
-              <div className="featured-grid">
-                {featured.map(t => <TrainerCard key={t.id} trainer={t} />)}
-              </div>
-            </ScrollReveal>
+            <div className="lp-fb-benefits">
+              {BENEFITS.map(({ title, sub }) => (
+                <div key={title} className="lp-fb-ben">
+                  <span className="lp-fb-ben-c"><Check size={13} strokeWidth={2.6} /></span>
+                  <div><b>{title}</b><span>{sub}</span></div>
+                </div>
+              ))}
+            </div>
+            <FoundingTrainerForm />
           </div>
-        </section>
-      )}
-
-      {/* ── TOPICS ── */}
-      <section
-        className="home-section"
-        style={{ background: 'var(--color-surface)', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}
-      >
-        <div style={{ maxWidth: 'var(--max-width-content)', margin: '0 auto' }}>
-          <ScrollReveal>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-6)', gap: 'var(--space-4)' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)' }}>Browse by expertise</h2>
-              <Link href="/trainers" style={{ fontSize: 'var(--text-sm)', color: 'var(--color-accent)', whiteSpace: 'nowrap', flexShrink: 0 }}>View all categories →</Link>
-            </div>
-          </ScrollReveal>
-          <ScrollRevealGroup className="topics-grid">
-            {Object.keys(TOPIC_COUNTS).map((topic) => {
-              const TopicIcon = TOPIC_ICONS[topic] ?? BookOpen
-              return (
-                <Link
-                  key={topic}
-                  href={`/trainers?topic=${encodeURIComponent(topic)}`}
-                  className="reveal topic-card"
-                  style={{ padding: 'var(--space-6) var(--space-3)', border: '1px solid transparent', borderRadius: 'var(--radius-lg)', background: 'var(--color-surface)', boxShadow: '0 1px 2px rgba(47,42,38,0.04), 0 10px 28px -18px rgba(47,42,38,0.16)', textAlign: 'center', transition: 'box-shadow 0.2s ease, transform 0.2s ease', textDecoration: 'none', display: 'block' }}
-                >
-                  <span className="topic-icon" style={{ width: 54, height: 54, margin: '0 auto var(--space-3)', borderRadius: '50%', background: 'var(--color-accent-light)', color: 'var(--color-accent)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <TopicIcon size={23} strokeWidth={1.75} />
-                  </span>
-                  <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-ink)' }}>{topic}</div>
-                </Link>
-              )
-            })}
-          </ScrollRevealGroup>
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
-      <HowItWorks />
-
-      {/* ── TRAINER CTA ── */}
-      <section className="home-section" style={{ background: 'linear-gradient(135deg, var(--color-accent-dark) 0%, var(--color-secondary) 100%)', textAlign: 'center' }}>
-        <ScrollReveal style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.4rem, 4vw, var(--text-2xl))', color: '#fff', marginBottom: 'var(--space-3)', fontWeight: 500, lineHeight: 1.2 }}>
-            Are you an HRDC-certified trainer?
-          </h2>
-          <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 'var(--text-base)', marginBottom: 'var(--space-6)', lineHeight: 'var(--leading-relaxed)' }}>
-            Create your profile, showcase your expertise, and connect with organisations looking for trainers.
+      {/* ── CATEGORIES ────────────────────────────────────── */}
+      <section className="lp-blk lp-cats-blk">
+        <div className="lp-wrap">
+          <span className="lp-eyebrow">Onboarding now</span>
+          <h2 className="lp-sec">Trainers we’re looking for.</h2>
+          <p className="lp-sec-lead">
+            If you train in any of these areas, we’d love to have you in the founding cohort.
           </p>
-          <div className="cta-buttons">
-            <Link href="/register" className="cta-btn cta-btn--white">
-              List your profile
-            </Link>
-            <Link href="/about" className="cta-btn cta-btn--ghost">
-              Learn more
-            </Link>
+          <div className="lp-cat-chips">
+            {CATEGORIES.map(c => (
+              <span key={c} className="lp-cat-chip">{c}</span>
+            ))}
           </div>
-        </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ── FAQ ───────────────────────────────────────────── */}
+      <section className="lp-faq-blk" id="faq">
+        <div className="lp-wrap">
+          <span className="lp-eyebrow">Questions</span>
+          <h2 className="lp-sec">Good to know.</h2>
+          <div className="lp-faq-list">
+            {FAQ.map(({ q, a }, i) => (
+              <details key={q} className="lp-faq" open={i === 0}>
+                <summary>
+                  {q}
+                  <span className="lp-faq-ix"><Plus size={14} strokeWidth={2.4} /></span>
+                </summary>
+                <div className="lp-faq-ans">{a}</div>
+              </details>
+            ))}
+          </div>
+        </div>
       </section>
     </>
   )
