@@ -75,11 +75,22 @@ export function FavouriteButton({ trainerId, initialSaved, variant = 'icon' }: P
         onClick={toggle}
         disabled={busy}
         aria-pressed={saved}
-        className={saved ? 'btn btn-cta' : 'btn btn-outline'}
-        style={{ gap: '6px' }}
+        className="btn btn-outline"
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          gap: '8px',
+          padding: 'var(--space-4)',
+          fontSize: 'var(--text-base)',
+          fontWeight: 600,
+          borderRadius: 'var(--radius-md)',
+          color: saved ? 'var(--color-accent)' : 'var(--color-ink)',
+          borderColor: saved ? 'var(--color-accent)' : 'var(--color-border-strong)',
+          background: saved ? 'var(--color-accent-light)' : 'var(--color-surface)',
+        }}
       >
-        <Heart size={15} strokeWidth={2} fill={saved ? 'currentColor' : 'none'} />
-        {saved ? 'Saved' : 'Save'}
+        <Heart size={17} strokeWidth={2} fill={saved ? 'currentColor' : 'none'} />
+        {saved ? 'Saved to shortlist' : 'Save to shortlist'}
       </button>
     )
   }

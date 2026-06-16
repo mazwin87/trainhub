@@ -8,6 +8,7 @@ import { InquiryButtonClient } from '@/features/search/components/InquiryButtonC
 import { createAdminClient } from '@/lib/supabase/admin'
 import { WriteReviewClient } from '@/features/reviews/WriteReviewClient'
 import { AvailabilityCalendar } from '@/features/trainers/components/AvailabilityCalendar'
+import { FavouriteButton } from '@/features/trainers/components/FavouriteButton'
 import { MapPin, Clock, Globe, Star, Monitor, ShieldCheck, Check, MessageCircle, Zap, BadgeCheck, ArrowLeft, CalendarDays } from 'lucide-react'
 
 // ISR: revalidate each profile page every hour
@@ -531,6 +532,7 @@ export default async function TrainerProfilePage({ params, searchParams }: PageP
                   </a>
                 )}
                 <InquiryButtonClient trainerName={name} trainerId={trainer.id} />
+                <FavouriteButton trainerId={trainer.id} variant="button" />
               </div>
 
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: 'var(--space-3)', textAlign: 'center', lineHeight: 1.5 }}>

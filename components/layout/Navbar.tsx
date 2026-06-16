@@ -103,16 +103,14 @@ export function Navbar() {
           {authReady && (
             user ? (
               <>
-                {userRole === 'company' && (
-                  <Link
-                    href="/company/saved"
-                    style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.85)', transition: 'color 0.3s ease' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
-                  >
-                    Saved
-                  </Link>
-                )}
+                <Link
+                  href="/company/saved"
+                  style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.85)', transition: 'color 0.3s ease' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
+                >
+                  Saved
+                </Link>
                 {/* Account chip — avatar + name links to the dashboard */}
                 <Link
                   href={dashboardHref}
@@ -246,6 +244,9 @@ export function Navbar() {
                   </div>
                   <Link href={dashboardHref} className="mobile-menu-link mobile-menu-link--outlined" onClick={close}>
                     Dashboard
+                  </Link>
+                  <Link href="/company/saved" className="mobile-menu-link" onClick={close}>
+                    Saved trainers
                   </Link>
                   <button
                     onClick={handleSignOut}
