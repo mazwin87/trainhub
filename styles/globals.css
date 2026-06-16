@@ -2068,6 +2068,37 @@
 }
 
 /* ============================================================
+   TRAINER INQUIRY INBOX — responsive master/detail
+   ============================================================ */
+.inquiry-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: var(--space-4);
+  min-height: 500px;
+  align-items: start;
+}
+.inquiry-back { display: none; }
+@media (max-width: 768px) {
+  .inquiry-grid { grid-template-columns: 1fr; min-height: 0; }
+  /* Stack: show the list OR the selected detail, not both */
+  .inquiry-grid.is-list .inquiry-detail { display: none; }
+  .inquiry-grid.is-detail .inquiry-list { display: none; }
+  .inquiry-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: var(--space-4);
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--color-accent);
+    font-size: var(--text-sm);
+    font-family: var(--font-body);
+    cursor: pointer;
+  }
+}
+
+/* ============================================================
    FOUNDING-TRAINER LANDING PAGE  (scoped: .lp-*)
    All values map to design tokens — see design_handoff README.
    ============================================================ */

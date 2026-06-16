@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createBrowserClient } from '@/lib/supabase/client'
-import { Inbox, Mail, MessageCircle } from 'lucide-react'
+import { Inbox, Mail, MessageCircle, ChevronRight, ArrowLeft } from 'lucide-react'
 
 interface Inquiry {
   id: string
@@ -30,6 +30,9 @@ export function InquiryInbox({ initialInquiries }: { initialInquiries: Inquiry[]
   const [inquiries, setInquiries] = useState(initialInquiries)
   const [selectedId, setSelectedId] = useState<string | null>(initialInquiries[0]?.id ?? null)
   const [filter, setFilter] = useState<'all' | 'new' | 'replied' | 'closed'>('all')
+  // On mobile the two panes stack; this controls whether the list or the
+  // selected detail is shown. Desktop ignores it (CSS shows both).
+  const [mobileDetailOpen, setMobileDetailOpen] = useState(false)
 
   const selected = inquiries.find(i => i.id === selectedId)
 
@@ -53,6 +56,7 @@ export function InquiryInbox({ initialInquiries }: { initialInquiries: Inquiry[]
 
   const handleSelect = (id: string) => {
     setSelectedId(id)
+    setMobileDetailOpen(true)
     const inq = inquiries.find(i => i.id === id)
     if (inq && inq.status === 'new') {
       markStatus(id, 'read')
@@ -107,10 +111,10 @@ export function InquiryInbox({ initialInquiries }: { initialInquiries: Inquiry[]
           </p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: 'var(--space-4)', minHeight: '500px' }}>
+        <div className={`inquiry-grid ${mobileDetailOpen ? 'is-detail' : 'is-list'}`}>
 
           {/* LEFT — list */}
-          <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
+          <div className="inquiry-list" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
             {filtered.length === 0 ? (
               <div style={{ padding: 'var(--space-6)', textAlign: 'center', color: 'var(--color-muted)', fontSize: 'var(--text-sm)' }}>
                 Nothing here
@@ -123,7 +127,9 @@ export function InquiryInbox({ initialInquiries }: { initialInquiries: Inquiry[]
                   key={inq.id}
                   onClick={() => handleSelect(inq.id)}
                   style={{
-                    display: 'block',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)',
                     width: '100%',
                     textAlign: 'left',
                     padding: 'var(--space-4)',
@@ -134,6 +140,7 @@ export function InquiryInbox({ initialInquiries }: { initialInquiries: Inquiry[]
                     fontFamily: 'var(--font-body)',
                   }}
                 >
+                  <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
                     <span style={{ fontSize: 'var(--text-sm)', fontWeight: isNew ? 600 : 500, color: 'var(--color-ink)' }}>
                       {inq.company_name || inq.contact_name}
@@ -153,13 +160,18 @@ export function InquiryInbox({ initialInquiries }: { initialInquiries: Inquiry[]
                       NEW
                     </span>
                   )}
+                  </div>
+                  <ChevronRight size={16} strokeWidth={2} style={{ color: 'var(--color-subtle)', flexShrink: 0 }} aria-hidden />
                 </button>
               )
             })}
           </div>
 
           {/* RIGHT — detail */}
-          <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)' }}>
+          <div className="inquiry-detail" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)' }}>
+            <button className="inquiry-back" onClick={() => setMobileDetailOpen(false)}>
+              <ArrowLeft size={15} strokeWidth={2} /> Back to inbox
+            </button>
             {!selected ? (
               <div style={{ padding: 'var(--space-12)', textAlign: 'center', color: 'var(--color-muted)' }}>
                 Select an inquiry to view details
