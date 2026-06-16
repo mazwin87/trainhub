@@ -59,6 +59,20 @@ async function getTrainers(filters: TrainerSearchFilters): Promise<{ data: Train
       }
     }
 
+    // Topic filter: resolve trainer IDs tagged with the selected topic (chip / homepage card)
+    if (filters.topics && filters.topics.length > 0) {
+      const { data: topicRows } = await supabase
+        .from('trainer_topics')
+        .select('trainer_id, topics!inner(name)')
+        .eq('topics.name', filters.topics[0])
+      const topicTrainerIds = [...new Set((topicRows ?? []).map((r: any) => r.trainer_id))]
+      if (topicTrainerIds.length > 0) {
+        query = query.in('id', topicTrainerIds)
+      } else {
+        return { data: [], total: 0 }
+      }
+    }
+
     switch (filters.sort) {
       case 'reviews':     query = query.order('review_count', { ascending: false }); break
       case 'experience':  query = query.order('years_experience', { ascending: false }); break
