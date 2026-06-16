@@ -38,6 +38,11 @@ export function TrainerCard({ trainer }: Props) {
             )}
           </div>
           <div style={{ minWidth: 0, flex: 1 }}>
+            {/* Floated so the tagline text wraps around it and reclaims the
+                space beneath it — avoids a tall empty gutter on the right. */}
+            <div style={{ float: 'right', marginLeft: '0.5rem' }}>
+              <FavouriteButton trainerId={trainer.id} />
+            </div>
             <h3
               style={{
                 fontFamily: 'var(--font-display)',
@@ -55,7 +60,6 @@ export function TrainerCard({ trainer }: Props) {
               {truncate(trainer.tagline, 72)}
             </p>
           </div>
-          <FavouriteButton trainerId={trainer.id} />
         </div>
 
         {/* Badges */}
