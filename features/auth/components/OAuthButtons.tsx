@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createBrowserClient } from '@/lib/supabase/client'
+import { appUrl } from '@/lib/utils'
 
 export function OAuthButtons({ role = 'trainer' }: { role?: 'trainer' | 'company' }) {
   const [loading, setLoading] = useState(false)
@@ -11,7 +12,7 @@ export function OAuthButtons({ role = 'trainer' }: { role?: 'trainer' | 'company
     const supabase = createBrowserClient()
     // Carry the chosen role through OAuth: it rides on the callback URL and is
     // read server-side when creating the user row for first-time sign-ins.
-    const redirectTo = `${window.location.origin}/auth/callback?role=${role}`
+    const redirectTo = appUrl(`/auth/callback/?role=${role}`)
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo },

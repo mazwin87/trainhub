@@ -2,6 +2,18 @@
    UTILITY FUNCTIONS
    ============================================================ */
 
+/* ── Absolute app URL that honors basePath ───────────────────
+   window.location.origin omits the Next.js basePath (e.g. "/trainhub"),
+   so manually-built redirect URLs handed to Supabase (OAuth callback,
+   password reset) must add it back — otherwise the redirect lands
+   outside the app and the OAuth flow state is consumed in the wrong
+   place ("flow_state_already_used"). Client-only (uses window). */
+export function appUrl(path: string): string {
+  const base = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
+  const origin = typeof window !== 'undefined' ? window.location.origin : ''
+  return `${origin}${base}${path}`
+}
+
 /* ── Generate initials from a full name ──────────────────── */
 export function getInitials(name: string): string {
   return name
